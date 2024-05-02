@@ -30,16 +30,28 @@ class StatusField(models.SmallIntegerField):
 
 
 class Afp(models.Model):
-    nit = models.CharField(max_length=32, unique=True)
-    nombre = models.CharField(max_length=64)
+    nit = models.CharField(max_length=32, unique=True, verbose_name='NIT')
+    nombre = models.CharField(max_length=64, verbose_name='Nombre de la entidad')
     creado = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        verbose_name = 'AFP'
+        verbose_name_plural = 'AFPs'
+
+    def __str__(self):
+        return self.nombre
 
 
 class CentroCosto(models.Model):
     nombre = models.CharField(max_length=64, unique=True)
 
     class Meta:
+        verbose_name = 'Centro de Costo'
+        verbose_name_plural = 'Centros de Costos'
         db_table = 'ccostos'
+
+    def __str__(self):
+        return self.nombre
 
 
 class ClaseIncapacidad(models.Model):
@@ -47,7 +59,12 @@ class ClaseIncapacidad(models.Model):
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
+        verbose_name = 'Clase de Incapacidad'
+        verbose_name_plural = 'Clases de Incapacidades'
         db_table = 'clases_incapacidades'
+
+    def __str__(self):
+        return self.nombre
 
 
 class Concepto(models.Model):
@@ -57,6 +74,9 @@ class Concepto(models.Model):
     class Meta:
         db_table = 'conceptos'
 
+    def __str__(self):
+        return self.nombre
+
 
 class Diagnostico(models.Model):
     nombre = models.CharField(max_length=64)
@@ -65,11 +85,21 @@ class Diagnostico(models.Model):
     class Meta:
         db_table: 'diagnosticos'
 
+    def __str__(self):
+        return self.nombre
+
 
 class Eps(models.Model):
     nit = models.CharField(max_length=32, unique=True)
     nombre = models.CharField(max_length=64)
     creado = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        verbose_name = 'EPS'
+        verbose_name_plural = 'EPSs'
+
+    def __str__(self):
+        return self.nombre
 
 
 class Empleado(models.Model):
@@ -77,7 +107,7 @@ class Empleado(models.Model):
         max_length=64,
         unique=True,
     )
-    nombre = models.CharField(max_length=128)
+    nombre = models.CharField(max_length=128, verbose_name='Nombres completos')
     genero = GenderField(
         help_text='1: Femenino, 0: Masculino',
         db_comment='Campo para el genero de la persona. 1: Femenino, 0: Masculino'
@@ -85,8 +115,8 @@ class Empleado(models.Model):
     fecha_nacimiento = models.DateTimeField()
     fecha_ingreso = models.DateTimeField()
     estado = StatusField()
-    arl_nit = models.CharField(max_length=32)
-    arl_nombre = models.CharField(max_length=64)
+    arl_nit = models.CharField(max_length=32, verbose_name='NIT de la ARL')
+    arl_nombre = models.CharField(max_length=64, verbose_name='Nombre de la ARL')
     creado = models.DateTimeField(auto_now_add=True, editable=False)
     actualizado = models.DateTimeField(auto_now=True, editable=False)
 
@@ -106,10 +136,20 @@ class Empleado(models.Model):
         related_name='ccostos_asignados',
     )
 
+    def __str__(self):
+        return self.nombre
+
 
 class EstadoIncapacidad(models.Model):
     nombre = models.CharField(max_length=64)
     creado = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        verbose_name = 'Estado de Incapacidad'
+        verbose_name_plural = 'Estados de Incapacidades'
+
+    def __str__(self):
+        return self.nombre
 
 
 class FechaDistribucion(models.Model):
@@ -122,6 +162,8 @@ class FechaDistribucion(models.Model):
     movimiento = models.ForeignKey('Movimiento', on_delete=models.CASCADE) 
 
     class Meta:
+        verbose_name = 'Fechas de Distribucion'
+        verbose_name_plural = 'Fechas de Distribucion'
         db_table = 'fechas_distribucion'
 
 
