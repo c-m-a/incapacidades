@@ -39,7 +39,7 @@ class CentroCosto(models.Model):
     nombre = models.CharField(max_length=64, unique=True)
 
     class Meta:
-        db_table: 'ccostos'
+        db_table = 'ccostos'
 
 
 class ClaseIncapacidad(models.Model):
@@ -47,7 +47,7 @@ class ClaseIncapacidad(models.Model):
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        db_table: 'clases_incapacidades'
+        db_table = 'clases_incapacidades'
 
 
 class Concepto(models.Model):
@@ -55,7 +55,7 @@ class Concepto(models.Model):
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        db_table: 'conceptos'
+        db_table = 'conceptos'
 
 
 class Diagnostico(models.Model):
@@ -122,7 +122,7 @@ class FechaDistribucion(models.Model):
     movimiento = models.ForeignKey('Movimiento', on_delete=models.CASCADE) 
 
     class Meta:
-        db_table: 'fechas_distribucion'
+        db_table = 'fechas_distribucion'
 
 
 class Movimiento(models.Model):
@@ -178,4 +178,5 @@ class Movimiento(models.Model):
 
 
     class Meta:
-        db_table: 'movimientos'
+        db_table = 'movimientos'
+
