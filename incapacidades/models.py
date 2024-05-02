@@ -30,6 +30,7 @@ class StatusField(models.SmallIntegerField):
 
 
 class Afp(models.Model):
+    codigo = models.CharField(max_length=32, verbose_name='Codigo AFP', null=True)
     nit = models.CharField(max_length=32, unique=True, verbose_name='NIT')
     nombre = models.CharField(max_length=64, verbose_name='Nombre de la entidad')
     creado = models.DateTimeField(auto_now_add=True, editable=False)
@@ -68,6 +69,7 @@ class ClaseIncapacidad(models.Model):
 
 
 class Concepto(models.Model):
+    codigo = models.CharField(max_length=3, verbose_name='Codigo del concepto', null=True)
     nombre = models.CharField(max_length=64)
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -79,6 +81,7 @@ class Concepto(models.Model):
 
 
 class Diagnostico(models.Model):
+    codigo = models.CharField(max_length=16, verbose_name='Codigo del diagnostico', null=True)
     nombre = models.CharField(max_length=64)
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -90,6 +93,7 @@ class Diagnostico(models.Model):
 
 
 class Eps(models.Model):
+    codigo = models.CharField(max_length=32, verbose_name='Codigo de la EPS', null=True)
     nit = models.CharField(max_length=32, unique=True)
     nombre = models.CharField(max_length=64)
     creado = models.DateTimeField(auto_now_add=True, editable=False)
