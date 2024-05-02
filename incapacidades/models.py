@@ -219,8 +219,14 @@ class Movimiento(models.Model):
     concepto = models.ForeignKey(
         'Concepto',
         db_column='concepto_id',
-        on_delete=models.PROTECT
-    ) 
+        on_delete=models.PROTECT,
+    )
+    incapacidad = models.ForeignKey(
+        'ClaseIncapacidad',
+        db_column='incapacidad_id',
+        on_delete=models.PROTECT,
+        null=True,
+    )
 
 
     class Meta:
