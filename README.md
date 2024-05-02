@@ -15,12 +15,10 @@
     git clone git@github.com:c-m-a/incapacidades.git
     ```
 
-    Reemplaza `<repository_url>` con la URL de tu repositorio de GitHub.
-
 2. Navega al directorio del proyecto:
 
     ```bash
-    cd <repository_name>
+    cd incapacidades
     ```
 
     Reemplaza `<repository_name>` con el nombre del directorio creado después de clonar.
@@ -28,11 +26,11 @@
 3. (Opcional) Configura un entorno virtual:
 
     ```bash
-    python3 -m venv myenv
+    python3 -m venv incapacidades-venv
     ```
 
     ```bash
-    source myenv/bin/activate   # En Unix/macOS
+    source incapacidades-venv/bin/activate   # En Unix/macOS
     ```
 
     ```bash
