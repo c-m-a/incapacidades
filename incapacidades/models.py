@@ -241,7 +241,7 @@ class FechaDistribucion(models.Model):
     )
     cuenta_cobrar = models.DecimalField(
         decimal_places=2,
-        max_digits=8,
+        max_digits=10,
         verbose_name='Cuenta x cobrar',
         help_text='Escribe el valor de la cuenta x cobrar...',
     )
@@ -275,18 +275,18 @@ class Movimiento(models.Model):
     dias = models.SmallIntegerField()
     salario = models.DecimalField(decimal_places=2, max_digits=10)
     calendario = models.CharField(max_length=32, null=True, blank=True)
-    valor_cia = models.DecimalField(decimal_places=2, max_digits=8)
-    cuenta_cobrar = models.DecimalField(decimal_places=2, max_digits=8)
-    pagado_entidad = models.DecimalField(decimal_places=2, max_digits=8)
+    valor_cia = models.DecimalField(decimal_places=2, max_digits=10)
+    cuenta_cobrar = models.DecimalField(decimal_places=2, max_digits=10)
+    pagado_entidad = models.DecimalField(decimal_places=2, max_digits=10)
     pendiente_entidad = models.DecimalField(
         decimal_places=2,
-        max_digits=8,
+        max_digits=10,
         null=True,
-        blank=True
+        blank=True,
     )
-    llevada_gasto = models.DecimalField(decimal_places=2, max_digits=8)
-    mayor_valor = models.DecimalField(decimal_places=2, max_digits=8)
-    cpto_472 = models.DecimalField(decimal_places=2, max_digits=8)
+    llevada_gasto = models.DecimalField(decimal_places=2, max_digits=10)
+    mayor_valor = models.DecimalField(decimal_places=2, max_digits=10)
+    cpto_472 = models.DecimalField(decimal_places=2, max_digits=10)
     fecha_pago = models.DateField(null=True, blank=True)
     fecha_estado = models.DateField(null=True, blank=True)
     genera_pago = models.IntegerField()
