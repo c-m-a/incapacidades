@@ -2,25 +2,39 @@ from django.contrib import admin
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto,  Diagnostico, Eps, Empleado, EstadoIncapacidad, FechaDistribucion, Movimiento
 
 class AfpAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nit', 'nombre')
+    list_display = ('id', 'codigo', 'nit', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('codigo', 'nit', 'nombre')
     search_fields = ['codigo', 'nit', 'nombre']
 
 class CentroCostoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('nombre',)
     search_fields = ['nombre']
 
 class ClaseIncapacidadAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('nombre',)
     search_fields = ['nombre']
 
 class ConceptoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nombre')
+    list_display = ('id', 'codigo', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('codigo', 'nombre')
     search_fields = ['codigo', 'nombre']
 
 class DiagnosticoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nombre')
+    list_display = ('id', 'codigo', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('codigo', 'nombre')
     search_fields = ['codigo', 'nombre']
 
 class EpsAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nit', 'nombre')
+    list_display = ('id', 'codigo', 'nit', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('codigo', 'nit', 'nombre')
     search_fields = ['codigo', 'nit', 'nombre']
 
 class EmpleadoAdmin(admin.ModelAdmin):
@@ -29,6 +43,9 @@ class EmpleadoAdmin(admin.ModelAdmin):
     search_fields = ['docto_empleado', 'nombre']
 
 class EstadoIncapacidadAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre')
+    list_display_links = ('id',)
+    list_editable = ('nombre',)
     search_fields = ['nombre']
 
 class MovimientoAdmin(admin.ModelAdmin):
