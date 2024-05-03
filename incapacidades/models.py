@@ -32,7 +32,6 @@ class StatusField(models.SmallIntegerField):
 class Afp(models.Model):
     codigo = models.CharField(
         max_length=32,
-        null=True,
         verbose_name='Codigo AFP',
         help_text='Escribe el codigo de la AFP...',
     )
@@ -94,7 +93,6 @@ class Concepto(models.Model):
     codigo = models.CharField(
         max_length=3,
         verbose_name='Codigo del concepto',
-        null=True,
         help_text='Escribe el codigo del concepto...'
     )
     nombre = models.CharField(
@@ -113,7 +111,6 @@ class Concepto(models.Model):
 class Diagnostico(models.Model):
     codigo = models.CharField(
         max_length=16,
-        null=True,
         verbose_name='Codigo del diagnostico',
         help_text='Escribe el codigo del diagnostico...'
     )
@@ -133,7 +130,6 @@ class Diagnostico(models.Model):
 class Eps(models.Model):
     codigo = models.CharField(
         max_length=32,
-        null=True,
         verbose_name='Codigo de la EPS',
         help_text='Escribe el codigo de la EPS...',
     )
@@ -230,12 +226,10 @@ class EstadoIncapacidad(models.Model):
 
 class FechaDistribucion(models.Model):
     fecha_inicial = models.DateField(
-        null=True,
         verbose_name='Fecha inicial real',
         help_text='Escribe o selecciona la fecha inicial...',
     )
     fecha_final = models.DateField(
-        null=True,
         verbose_name='Fecha final real',
         help_text='Escribe o selecciona la fecha final...',
     )
@@ -319,7 +313,6 @@ class Movimiento(models.Model):
         'ClaseIncapacidad',
         db_column='incapacidad_id',
         on_delete=models.PROTECT,
-        null=True,
     )
 
 
