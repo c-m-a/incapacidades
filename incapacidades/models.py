@@ -278,6 +278,12 @@ class Movimiento(models.Model):
     valor_cia = models.DecimalField(decimal_places=2, max_digits=8)
     cuenta_cobrar = models.DecimalField(decimal_places=2, max_digits=8)
     pagado_entidad = models.DecimalField(decimal_places=2, max_digits=8)
+    pendiente_entidad = models.DecimalField(
+        decimal_places=2,
+        max_digits=8,
+        null=True,
+        blank=True
+    )
     llevada_gasto = models.DecimalField(decimal_places=2, max_digits=8)
     mayor_valor = models.DecimalField(decimal_places=2, max_digits=8)
     cpto_472 = models.DecimalField(decimal_places=2, max_digits=8)
