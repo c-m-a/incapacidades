@@ -57,6 +57,12 @@ class Afp(models.Model):
 
 
 class CentroCosto(models.Model):
+    codigo = models.CharField(
+        max_length=16,
+        null=True,
+        verbose_name='Codigo del centro de costos',
+        help_text='Escribe el codigo de centro de costos...',
+    )
     nombre = models.CharField(
         max_length=64,
         unique=True,

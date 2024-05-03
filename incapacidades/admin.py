@@ -8,9 +8,9 @@ class AfpAdmin(admin.ModelAdmin):
     search_fields = ['codigo', 'nit', 'nombre']
 
 class CentroCostoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre')
+    list_display = ('id', 'codigo', 'nombre')
     list_display_links = ('id',)
-    list_editable = ('nombre',)
+    list_editable = ('codigo', 'nombre')
     search_fields = ['nombre']
 
 class ClaseIncapacidadAdmin(admin.ModelAdmin):
