@@ -273,7 +273,7 @@ class Movimiento(models.Model):
     fecha_fin = models.DateTimeField()
     prorroga = models.SmallIntegerField()
     dias = models.SmallIntegerField()
-    salario = models.DecimalField(decimal_places=2, max_digits=8)
+    salario = models.DecimalField(decimal_places=2, max_digits=10)
     calendario = models.CharField(max_length=32)
     valor_cia = models.DecimalField(decimal_places=2, max_digits=8)
     cuenta_cobrar = models.DecimalField(decimal_places=2, max_digits=8)
@@ -281,8 +281,8 @@ class Movimiento(models.Model):
     llevada_gasto = models.DecimalField(decimal_places=2, max_digits=8)
     mayor_valor = models.DecimalField(decimal_places=2, max_digits=8)
     cpto_472 = models.DecimalField(decimal_places=2, max_digits=8)
-    fecha_pago = models.DecimalField(decimal_places=2, max_digits=8)
-    fecha_estado = models.DecimalField(decimal_places=2, max_digits=8)
+    fecha_pago = models.DateField()
+    fecha_estado = models.DateField()
     genera_pago = models.IntegerField()
 
     empleado = models.ForeignKey(
