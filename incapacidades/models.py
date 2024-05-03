@@ -284,6 +284,7 @@ class Movimiento(models.Model):
     fecha_pago = models.DateField(null=True)
     fecha_estado = models.DateField(null=True)
     genera_pago = models.IntegerField()
+    observaciones = models.TextField(max_length=500, null=True, blank=True)
 
     empleado = models.ForeignKey(
         'Empleado',
