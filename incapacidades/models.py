@@ -320,7 +320,6 @@ class Movimiento(models.Model):
         'ClaseIncapacidad',
         db_column='clase_inc_id',
         on_delete=models.PROTECT,
-        default=0,
     )
     estado_incapacidad = models.ForeignKey(
         'EstadoIncapacidad',
