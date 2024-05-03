@@ -268,9 +268,9 @@ class Movimiento(models.Model):
         unique=True,
         help_text='Escribe el numero de serie',
     )
-    fecha_recepcion = models.DateTimeField()
-    fecha_inicio = models.DateTimeField()
-    fecha_fin = models.DateTimeField()
+    fecha_recepcion = models.DateField()
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
     prorroga = models.SmallIntegerField()
     dias = models.SmallIntegerField()
     salario = models.DecimalField(decimal_places=2, max_digits=10)
