@@ -318,8 +318,16 @@ class Movimiento(models.Model):
     )
     incapacidad = models.ForeignKey(
         'ClaseIncapacidad',
-        db_column='incapacidad_id',
+        db_column='clase_inc_id',
         on_delete=models.PROTECT,
+        default=0,
+    )
+    estado_incapacidad = models.ForeignKey(
+        'EstadoIncapacidad',
+        db_column='estado_inc_id',
+        on_delete=models.PROTECT,
+        default=0,
+        verbose_name='Estado de incapacidad',
     )
 
 
