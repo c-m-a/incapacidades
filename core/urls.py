@@ -17,6 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+APP_NAME = 'Administrador de incapacidades'
+
+admin.site.site_header = APP_NAME
+admin.site.site_title = APP_NAME
+admin.site.index_title = APP_NAME
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
