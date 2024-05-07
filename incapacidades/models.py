@@ -32,12 +32,12 @@ class StatusField(models.SmallIntegerField):
 class Afp(models.Model):
     codigo = models.CharField(
         max_length=32,
+        unique=True,
         verbose_name='Codigo AFP',
         help_text='Escribe el codigo de la AFP...',
     )
     nit = models.CharField(
         max_length=32,
-        unique=True,
         verbose_name='NIT',
         help_text='Escribe el NIT de la AFP..'
     )
