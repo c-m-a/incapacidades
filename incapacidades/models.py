@@ -117,6 +117,7 @@ class Concepto(models.Model):
 class Diagnostico(models.Model):
     codigo = models.CharField(
         max_length=16,
+        unique=True,
         verbose_name='Codigo del diagnostico',
         help_text='Escribe el codigo del diagnostico...'
     )
