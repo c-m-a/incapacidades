@@ -136,12 +136,12 @@ class Diagnostico(models.Model):
 class Eps(models.Model):
     codigo = models.CharField(
         max_length=32,
+        unique=True,
         verbose_name='Codigo de la EPS',
         help_text='Escribe el codigo de la EPS...',
     )
     nit = models.CharField(
         max_length=32,
-        unique=True,
         help_text='Escribe el NIT de la EPS...',
     )
     nombre = models.CharField(
