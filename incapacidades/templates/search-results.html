@@ -1,0 +1,12 @@
+{% for empleado in empleados %}
+<div class="border-gray-700 rounded-lg w-full">
+  <div class="flex bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <div scope="row" class="flex-1 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      CC: {{ empleado.docto_empleado }} - {{ empleado.nombre }}
+    </div>
+    <div class="px-6 py-4 text-right">
+      <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+    </div>
+  </div>
+</div>
+{% endfor %}
