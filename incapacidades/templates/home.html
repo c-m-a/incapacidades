@@ -2,17 +2,14 @@
 {% block title %} App Incapacidades | Inicio {% endblock %}
 {% block content %}
 <article>
-  <div class="px-10 flex justify-between items-center">
-  <h2 class="text-xl font-bold dark:text-white">Listado incapacidades</h2>
-  <div class="relative max-w-md mx-auto">
+    <div class="px-10 flex justify-between items-center">
+    <h2 class="text-xl font-bold dark:text-white">Listado incapacidades</h2>
+    <div class="relative max-w-md mx-auto">
     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-        fill="none" viewBox="0 0 20 20">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-      </svg>
+        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+        </svg>
     </div>
-    {% csrf_token %}
     <input
       id="default-search"
       name="query"
@@ -20,12 +17,11 @@
       class="ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       placeholder="Buscar nombre de empleado o cedula..."
       required
-      hx-get="/b/resultados/"
+      hx-get="/b/empleados/movimientos"
       hx-trigger="keyup changed, search"
-      hx-target="#search-results"
+      hx-target="#personas-movimientos"
       hx-indicator=".htmx-indicator"
     />
-    <div id="search-results" class="absolute z-50 bg-transparent shadow-md"></div>
   </div>
     <a href="agregar-movimiento" class="flex gap-1 items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
       <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -35,71 +31,33 @@
     </a>
   </div>
   <hr class="divide-y divide-gray-100 mb-4" />
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div id="personas-movimientos" class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                  <th scope="col" class="px-6 py-3">Serie</th>
-                  <th scope="col" class="px-6 py-3">Persona</th>
-                  <th scope="col" class="px-6 py-3">Fecha</th>
-                  <th scope="col" class="px-6 py-3">Total</th>
+                  <th scope="col" class="px-6 py-3">serie</th>
+                  <th scope="col" class="px-6 py-3">cedula</th>
+                  <th scope="col" class="px-6 py-3">persona</th>
+                  <th scope="col" class="px-6 py-3">fecha inicial</th>
+                  <th scope="col" class="px-6 py-3">dias otorgados</th>
                   <th scope="col" class="px-6 py-3">
                       <span class="sr-only">Edit</span>
                   </th>
               </tr>
           </thead>
           <tbody>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      Apple MacBook Pro 17"
-                  </th>
-                  <td class="px-6 py-4">
-                      Silver
-                  </td>
-                  <td class="px-6 py-4">
-                      Laptop
-                  </td>
-                  <td class="px-6 py-4">
-                      $2999
-                  </td>
-                  <td class="px-6 py-4 text-right">
-                      <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  </td>
-              </tr>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      Microsoft Surface Pro
-                  </th>
-                  <td class="px-6 py-4">
-                      White
-                  </td>
-                  <td class="px-6 py-4">
-                      Laptop PC
-                  </td>
-                  <td class="px-6 py-4">
-                      $1999
-                  </td>
-                  <td class="px-6 py-4 text-right">
-                      <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  </td>
-              </tr>
-              <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      Magic Mouse 2
-                  </th>
-                  <td class="px-6 py-4">
-                      Black
-                  </td>
-                  <td class="px-6 py-4">
-                      Accessories
-                  </td>
-                  <td class="px-6 py-4">
-                      $99
-                  </td>
-                  <td class="px-6 py-4 text-right">
-                      <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  </td>
-              </tr>
+            {% for movimiento in movimientos %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ movimiento.serie }}</th>
+                <td class="px-6 py-4">{{ movimiento.empleado.docto_empleado }}</td>
+                <td class="px-6 py-4">{{ movimiento.empleado.nombre}}</td>
+                <td class="px-6 py-4">{{ movimiento.fecha_inicio}}</td>
+                <td class="px-6 py-4 text-center">{{ movimiento.dias}}</td>
+                <td class="px-6 py-4 text-right">
+                    <a href="empleados/{{ movimiento.empleado.id }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consultar</a>
+                </td>
+            </tr>
+            {% endfor %}
           </tbody>
       </table>
   </div>
