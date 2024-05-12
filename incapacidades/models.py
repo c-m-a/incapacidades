@@ -290,7 +290,7 @@ class Movimiento(models.Model):
     cpto_472 = models.DecimalField(decimal_places=2, max_digits=10)
     fecha_pago = models.DateField(null=True, blank=True)
     fecha_estado = models.DateField(null=True, blank=True)
-    genera_pago = models.IntegerField()
+    genera_pago = models.BooleanField(default=False)
     observaciones = models.TextField(max_length=500, null=True, blank=True)
 
     empleado = models.ForeignKey(
