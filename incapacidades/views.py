@@ -1,5 +1,4 @@
-from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, Movimiento
 
 # Create your views here.
@@ -40,6 +39,32 @@ def buscar_personas(request):
       empleados = []
 
    return render(request, 'search-results.html', {'empleados': empleados})
+
+
+def empleado_detalles(request, id):
+   # Obtener el empleado con el ID proporcionado
+   afps = Afp.objects.all()
+   ccostos = CentroCosto.objects.all()
+   incapacidades = ClaseIncapacidad.objects.all()
+   empleado = get_object_or_404(Empleado, pk=id) 
+   centro_costos_asignados = empleado.centro_costos.all()
+   epss = Eps.objects.all()
+   estados_incapacidades = EstadoIncapacidad.objects.all()
+
+   movimientos = Movimiento.objects.filter(empleado=empleado)
+
+   context = {
+      'empleado': empleado,
+      'movimientos': movimientos,
+      'afps': afps,
+      'epss': epss,
+      'incapacidades': incapacidades,
+      'ccostos': ccostos,
+      'centro_costos_asignados': centro_costos_asignados,
+      'estados_incapacidades': estados_incapacidades,
+   }
+
+   return render(request, 'empleado-detalles.html', context)
 
 
 def buscar_personas_movimientos(request):
