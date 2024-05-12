@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %} Incapacidades | Agregar Movimiento {% endblock %}
+{% block content %}
+<article>
+  <div class="px-10">
+    <h2 class="text-xl font-bold dark:text-white">Empleado Detalles</h2>
+  </div>
+</article>
+<article>
+  <hr class="divide-y divide-gray-100 mb-4" />
+  <h2 class="text-lg font-bold dark:text-white">Datos empleado</h2>
+  <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+  <form class="max-w-md mx-auto">
+    <div class="mb-2 mt-3">
+      <label for="docto-empleado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
+        documento</label>
+      <input type="text" id="docto-empleado" name="docto_empleado" value="{{ empleado.docto_empleado }}"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
+        completo</label>
+      <input type="text" id="nombre" name="nombre" value="{{ empleado.nombre }}"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
+      <select id="estado"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option {% if empleado.estado is not 0 and empleado.estado is not 1 %}selected{% endif %}>Selecciona el estado
+          de la persona</option>
+        <option value="0" {% if empleado.estado is 0 %}selected{% endif %}>Activo</option>
+        <option value="1" {% if empleado.estado is 1 %}selected{% endif %}>Retirado</option>
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genero</label>
+      <select id="genero" name="genero"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option {% if empleado.genero is not 0 and empleado.genero is not 1 %}selected{% endif %}>Selecciona el genero
+          de la persona</option>
+        <option value="0" {% if empleado.genero is 0 %}selected{% endif %}>Masculino</option>
+        <option value="1" {% if empleado.genero is 1 %}selected{% endif %}>Femenino</option>
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
+        Costos</label>
+      <select multiple id="centro_costos"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el centro de costos</option>
+        {% for ccosto in ccostos %}
+        {% for ccosto_asignado in centro_costos_asignados %}
+        {{ ccosto_asignado.id }}
+        <option value="{{ ccosto.id }}" {% if ccosto.id is ccosto_asignado.id %}selected{% endif %}>
+          {{ ccosto.nombre }}</option>
+        {% endfor %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIT ARL</label>
+      <input type="text" id="" name="" value="{{ empleado.arl_nit }}"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        disabled>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
+      <input type="text" id="" name="" value="{{ empleado.arl_nombre }}"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        disabled>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona la EPS</option>
+        {% for eps in epss %}
+        <option value="{{ eps.id }}" {% if eps.id is empleado.eps.id %}selected{% endif %}>{{ eps.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el Fondo de Pension</option>
+        {% for afp in afps %}
+        <option value="{{ afp.id }}" {% if afp.id is empleado.afp.id %}selected{% endif %}>{{ afp.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+</article>
+<article>
+  <h2 class="text-lg font-bold dark:text-white">Incapacidades</h2>
+  <hr class="divide-y divide-gray-100 my-4" />
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3">serie</th>
+        <th scope="col" class="px-6 py-3">fecha inicial</th>
+        <th scope="col" class="px-6 py-3">dias otorgados</th>
+        <th scope="col" class="px-6 py-3">
+          <span class="sr-only">Edit</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for movimiento in movimientos %}
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {{ movimiento.serie }}
+        </th>
+        <td class="px-6 py-4">{{ movimiento.fecha_inicio}}</td>
+        <td class="px-6 py-4 text-center">{{ movimiento.dias}}</td>
+        <td class="px-6 py-4 text-right">
+          <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consultar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</article>
+{% endblock %}
