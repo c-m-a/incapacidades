@@ -272,7 +272,7 @@ class Movimiento(models.Model):
     fecha_recepcion = models.DateField()
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
-    prorroga = models.SmallIntegerField()
+    prorroga = models.BooleanField(default=False)
     dias = models.SmallIntegerField()
     salario = models.DecimalField(decimal_places=2, max_digits=10)
     calendario = models.CharField(max_length=32, null=True, blank=True)
