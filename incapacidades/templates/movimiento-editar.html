@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% block title %} Incapacidades | Agregar Movimiento {% endblock %}
+{% block content %}
+<article>
+  <div class="px-10">
+    <h2 class="text-xl font-bold dark:text-white">Agregar Incapacidad</h2>
+  </div>
+</article>
+<article>
+  <hr class="divide-y divide-gray-100 mb-4" />
+  <h2 class="text-lg font-bold dark:text-white">Datos empleado</h2>
+  <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+  <form class="max-w-md mx-auto">
+    <div class="mb-2 mt-3">
+      <label for="docto-empleado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
+        documento</label>
+      <input type="text" id="docto-empleado" name="docto_empleado"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
+        completo</label>
+      <input type="text" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el estado de la persona</option>
+        <option value="0">Activo</option>
+        <option value="1">Retirado</option>
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genero</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el genero de la persona</option>
+        <option value="0">Masculino</option>
+        <option value="1">Femenino</option>
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
+        Costos</label>
+      <select multiple id="countries_multiple"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el centro de costos</option>
+        {% for ccosto in ccostos %}
+        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIT ARL</label>
+      <input type="text" id="" name="" value="890903790"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        disabled>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
+      <input type="text" id="" name="" value="Compania Suramericana de Riesgos Profesionales"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        disabled>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona la EPS</option>
+        {% for eps in epss %}
+        <option value="{{ eps.id }}">{{ eps.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el Fondo de Pension</option>
+        {% for afp in afps %}
+        <option value="{{ afp.id }}">{{ afp.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+</article>
+<article>
+  <h2 class="text-lg font-bold dark:text-white">Datos Generales</h2>
+  <hr class="divide-y divide-gray-100 my-4" />
+  <form class="max-w-md mx-auto mb-5">
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        Concepto
+      </label>
+      <div class="relative">
+        <input
+          id="default-search"
+          name="query"
+          type="search"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Buscar numero o concepto..."
+          required
+          hx-get="/b/conceptos/"
+          hx-trigger="keyup changed, search"
+          hx-target="#resultados-conceptos"
+          hx-indicator=".htmx-indicator"
+        />
+        <div id="resultados-conceptos" class="absolute z-50 bg-transparent shadow-md"></div>
+      </div>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
+      <div class="relative max-w-md">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+          </svg>
+        </div>
+        <input datepicker type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date">
+      </div>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
+      <input type="number" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
+      <input type="text" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        disabled>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
+      <input type="text" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero incapacidad</label>
+      <div class="relative">
+        <input
+          id="cod-incapacidad"
+          name="cod_incapacidad"
+          type="search"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Digita el numero de la incapacidad..."
+          required
+        />
+      </div>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de expedicion</label>
+      <div class="relative max-w-md">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+          </svg>
+        </div>
+        <input datepicker type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date">
+      </div>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
+      <div class="relative">
+        <input
+          id="codigo-diagnostico"
+          name="query"
+          type="search"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Buscar numero o concepto..."
+          required
+          hx-get="/b/diagnosticos/"
+          hx-trigger="keyup changed, search"
+          hx-target="#resultados-diagnosticos"
+          hx-indicator=".htmx-indicator"
+        />
+        <div id="resultados-diagnosticos" class="absolute z-50 bg-transparent shadow-md"></div>
+      </div>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona la clase de incapacidad</option>
+        {% for incapacidad in incapacidades %}
+        <option value="{{ incapacidad.id }}">{{ incapacidad.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="flex items-center mb-4">
+      <input id="default-checkbox" type="checkbox" value=""
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+      <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
+        prorroga?</label>
+    </div>
+    <div class="mb-5">
+      <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
+      <textarea id="message" rows="4"
+        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Escribe tus observaciones en este campo..."></textarea>
+    </div>
+    <h2 class="text-lg font-bold dark:text-white">Valorizacion</h2>
+    <hr class="divide-y divide-gray-100 my-4" />
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario</label>
+      <input
+        type="number"
+        id=""
+        name=""
+        value="0"
+        min="0"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Calendario</label>
+      <input type="text" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor compania</label>
+      <input type="number" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cuenta x cobrar entidad</label>
+      <input type="number" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pagado por entidad Elimina</label>
+      <input type="number" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pendiente entidad Elimina</label>
+      <input type="number" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Llevada al gasto Calculo por sistema</label>
+      <input type="number" id="" name=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mayor valor Eliminar</label>
+      <input type="number" id="" name="" value="0"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto 472</label>
+      <input type="number" id="" name="" value="0"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado Incapacidad</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el estado de la incapacidad</option>
+        {% for estado_incapacidad in estados_incapacidades %}
+        <option value="{{ estado_incapacidad.id }}">{{ estado_incapacidad.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de pago</label>
+      <div class="relative max-w-md">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+          </svg>
+        </div>
+        <input datepicker type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date">
+      </div>
+    </div>
+    <div class="flex items-center mb-4">
+      <input id="default-checkbox" type="checkbox" value=""
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+      <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
+        pago?</label>
+    </div>
+    <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
+    <hr class="divide-y divide-gray-100 my-4" />
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
+      <div class="relative max-w-md">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+          </svg>
+        </div>
+        <input datepicker type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date">
+      </div>
+    </div>
+    <div class="mb-5">
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
+      <div class="relative max-w-md">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+          </svg>
+        </div>
+        <input datepicker type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date">
+      </div>
+    </div>
+    <h2 class="text-lg font-bold dark:text-white">Distribuciones</h2>
+    <hr class="divide-y divide-gray-100 my-4" />
+    <div class="mb-5">
+      <div class="flex justify-between">
+        <div>10/10/2023</div>
+        <div>15/10/2023</div>
+        <div>Si/No</div>
+        <div>Emp: $77.333</div>
+        <div>Eps/Arl: $151.498</div>
+      </div>
+    </div>
+    <button type="submit" <button type="submit"
+      class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
+  </form>
+</article>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+{% endblock %}
