@@ -13,14 +13,16 @@ def agregar_movimiento(request):
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
    ccostos = CentroCosto.objects.all().order_by('nombre')
+   conceptos = Concepto.objects.all().order_by('codigo')
    incapacidades = ClaseIncapacidad.objects.all()
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
    context = {
       'afps': afps,
+      'ccostos': ccostos,
+      'conceptos': conceptos,
       'epss': epss,
       'incapacidades': incapacidades,
-      'ccostos': ccostos,
       'estados_incapacidades': estados_incapacidades,
    }
 

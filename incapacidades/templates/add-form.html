@@ -91,24 +91,14 @@
   <hr class="divide-y divide-gray-100 my-4" />
   <form class="max-w-md mx-auto mb-5">
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        Concepto
-      </label>
-      <div class="relative">
-        <input
-          id="default-search"
-          name="query"
-          type="search"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Buscar numero o concepto..."
-          required
-          hx-get="/b/conceptos/"
-          hx-trigger="keyup changed, search"
-          hx-target="#resultados-conceptos"
-          hx-indicator=".htmx-indicator"
-        />
-        <div id="resultados-conceptos" class="absolute z-50 bg-transparent shadow-md"></div>
-      </div>
+      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el concepto</option>
+        {% for concepto in conceptos %}
+        <option value="{{ concepto.codigo }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
+        {% endfor %}
+      </select>
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
