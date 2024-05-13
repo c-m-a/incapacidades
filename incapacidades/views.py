@@ -121,3 +121,8 @@ def buscar_diagnosticos(request):
       diagnosticos = []
 
    return render(request, 'resultados-diagnosticos.html', {'diagnosticos': diagnosticos})
+
+
+def editar_movimiento(request, empleado_id, movimiento_id):
+   context = {}
+   return render(request, 'movimiento-editar.html', context)
