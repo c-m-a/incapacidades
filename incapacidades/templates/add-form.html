@@ -161,21 +161,13 @@
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
-      <div class="relative">
-        <input
-          id="codigo-diagnostico"
-          name="query"
-          type="search"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Buscar numero o concepto..."
-          required
-          hx-get="/b/diagnosticos/"
-          hx-trigger="keyup changed, search"
-          hx-target="#resultados-diagnosticos"
-          hx-indicator=".htmx-indicator"
-        />
-        <div id="resultados-diagnosticos" class="absolute z-50 bg-transparent shadow-md"></div>
-      </div>
+      <select id="countries"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el concepto</option>
+        {% for diagnostico in diagnosticos %}
+        <option value="{{ diagnostico.codigo }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
+        {% endfor %}
+      </select>
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>

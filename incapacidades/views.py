@@ -14,6 +14,7 @@ def agregar_movimiento(request):
    epss = Eps.objects.all().order_by('nombre')
    ccostos = CentroCosto.objects.all().order_by('nombre')
    conceptos = Concepto.objects.all().order_by('codigo')
+   diagnosticos = Diagnostico.objects.all().order_by('codigo')
    incapacidades = ClaseIncapacidad.objects.all()
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
@@ -21,6 +22,7 @@ def agregar_movimiento(request):
       'afps': afps,
       'ccostos': ccostos,
       'conceptos': conceptos,
+      'diagnosticos': diagnosticos,
       'epss': epss,
       'incapacidades': incapacidades,
       'estados_incapacidades': estados_incapacidades,
