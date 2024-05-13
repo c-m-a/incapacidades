@@ -10,11 +10,11 @@ def inicio(request):
 
 
 def agregar_movimiento(request):
-   afps = Afp.objects.all()
-   epss = Eps.objects.all()
-   ccostos = CentroCosto.objects.all()
+   afps = Afp.objects.all().order_by('nombre')
+   epss = Eps.objects.all().order_by('nombre')
+   ccostos = CentroCosto.objects.all().order_by('nombre')
    incapacidades = ClaseIncapacidad.objects.all()
-   estados_incapacidades = EstadoIncapacidad.objects.all()
+   estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
    context = {
       'afps': afps,
@@ -43,12 +43,12 @@ def buscar_personas(request):
 
 def empleado_detalles(request, id):
    # Obtener el empleado con el ID proporcionado
-   afps = Afp.objects.all()
-   ccostos = CentroCosto.objects.all()
+   afps = Afp.objects.all().order_by('nombre')
+   ccostos = CentroCosto.objects.all().order_by('nombre')
    incapacidades = ClaseIncapacidad.objects.all()
    empleado = get_object_or_404(Empleado, pk=id) 
-   centro_costos_asignados = empleado.centro_costos.all()
-   epss = Eps.objects.all()
+   centro_costos_asignados = empleado.centro_costos.all().order_by('nombre')
+   epss = Eps.objects.all().order_by('nombre')
    estados_incapacidades = EstadoIncapacidad.objects.all()
 
    movimientos = Movimiento.objects.filter(empleado=empleado)
