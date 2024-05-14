@@ -98,9 +98,9 @@ class ClaseIncapacidadAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
 
 class ConceptoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'codigo', 'nombre')
+    list_display = ('id', 'codigo', 'nombre', 'responsable')
     list_display_links = ('id',)
-    list_editable = ('codigo', 'nombre')
+    list_editable = ('codigo', 'nombre', 'responsable')
     search_fields = ['codigo', 'nombre']
 
 class CSVUploadForm(forms.Form):

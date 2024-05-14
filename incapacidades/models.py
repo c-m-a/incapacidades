@@ -1,6 +1,22 @@
 from django.db import models
 
 # Create your models here.
+class EntityField(models.SmallIntegerField):
+    ARL = 0
+    EMPRESA = 1
+    EPS = 2
+
+    CHOICES = (
+        (ARL, 'Arl'),
+        (EMPRESA, 'Empresa'),
+        (EPS, 'Eps'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs['choices'] = self.CHOICES
+        super().__init__(*args, **kwargs)
+
+
 class GenderField(models.SmallIntegerField):
     FEMALE = 1
     MALE = 0
@@ -104,6 +120,11 @@ class Concepto(models.Model):
     nombre = models.CharField(
         max_length=64,
         help_text='Escribe el nombre del concepto...'
+    )
+    responsable = EntityField(
+        default=1,
+        help_text='0: ARL, 1: Empresa y 2: EPS',
+        db_comment='Campo para almacenar el responsable del pago de la incapacidad, si el responsable es la empresa cubrira los dos primeros dias, para el resto de los casos lo cubre la entidad.'
     )
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
