@@ -100,6 +100,11 @@ class ClaseIncapacidad(models.Model):
         verbose_name='Nombre de la incapacidad',
         help_text='Escribe la incapacidad',
     )
+    dias_empresa = models.SmallIntegerField(
+        default=0,
+        verbose_name='# dias asume empresa',
+        help_text='Escribe el numero de dias que va a pagar la empresa',
+    )
     creado = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:

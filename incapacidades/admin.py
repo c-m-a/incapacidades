@@ -92,9 +92,9 @@ class CentroCostoAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
 
 class ClaseIncapacidadAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre')
+    list_display = ('id', 'nombre', 'dias_empresa')
     list_display_links = ('id',)
-    list_editable = ('nombre',)
+    list_editable = ('nombre','dias_empresa')
     search_fields = ['nombre']
 
 class ConceptoAdmin(admin.ModelAdmin):
