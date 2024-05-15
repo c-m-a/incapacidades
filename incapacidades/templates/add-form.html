@@ -60,7 +60,11 @@
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
-      <input type="text" id="" name="" value="Compania Suramericana de Riesgos Profesionales"
+      <input
+        type="text"
+        id=""
+        name=""
+        value="Compania Suramericana de Riesgos Profesionales"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         disabled>
     </div>
@@ -86,10 +90,22 @@
     </div>
   </form>
 </article>
-<article>
+<article x-data="{
+    fechaInicial: '',
+    numeroDias: 0,
+    fechaFinal: '',
+    prorroga: false,
+    salario: 0,
+    valorCompania: 0,
+    cuentaXCobrar: 0,
+    pagadoXEntidad: 0,
+    pedienteEntidad: 0,
+    generaPago: false,
+    fechasDistribucion: [],
+  }">
   <h2 class="text-lg font-bold dark:text-white">Datos Generales</h2>
   <hr class="divide-y divide-gray-100 my-4" />
-  <form class="max-w-md mx-auto mb-5">
+  <form class="max-w-xl mx-auto mb-5">
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
       <select id="countries"
@@ -103,28 +119,34 @@
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
       <div class="relative max-w-md">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path
-              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-          </svg>
-        </div>
-        <input datepicker type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Select date">
+        <input
+          type="date"
+          x-model="fechaInicial"
+          x-on:change="updateResultDate"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Selecciona una fecha de inicio..." />
       </div>
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
-      <input type="number" id="" name=""
+      <input
+        type="number"
+        id=""
+        name=""
+        x-model="numeroDias"
+        x-on:change="updateResultDate"
+        min="0"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
-      <input type="text" id="" name=""
+      <input
+        type="text"
+        id=""
+        name=""
+        x-model="fechaFinal"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        disabled>
+        readonly>
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
@@ -147,15 +169,9 @@
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de expedicion</label>
       <div class="relative max-w-md">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path
-              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-          </svg>
-        </div>
-        <input datepicker type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        <input
+          type="date"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date">
       </div>
     </div>
@@ -163,7 +179,7 @@
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
       <select id="countries"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona el concepto</option>
+        <option selected>Selecciona el diagnostico</option>
         {% for diagnostico in diagnosticos %}
         <option value="{{ diagnostico.codigo }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
         {% endfor %}
@@ -180,13 +196,22 @@
       </select>
     </div>
     <div class="flex items-center mb-4">
-      <input id="default-checkbox" type="checkbox" value=""
+      <input
+        id="default-checkbox"
+        type="checkbox"
+        value=""
+        x-on:change="calcularValorIncapacidad"
+        x-model="prorroga"
         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-      <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
+      <label
+        for="default-checkbox"
+        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
         prorroga?</label>
     </div>
     <div class="mb-5">
-      <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
+      <label
+        for="message"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
       <textarea id="message" rows="4"
         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Escribe tus observaciones en este campo..."></textarea>
@@ -201,6 +226,8 @@
         name=""
         value="0"
         min="0"
+        x-on:change="calcularValorIncapacidad"
+        x-model="salario"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
@@ -210,17 +237,30 @@
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor compania</label>
-      <input type="number" id="" name=""
+      <input
+        type="number"
+        id=""
+        name=""
+        x-model="valorCompania"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cuenta x cobrar entidad</label>
-      <input type="number" id="" name=""
+      <input
+        type="number"
+        id=""
+        name=""
+        x-model="cuentaXCobrar"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pagado por entidad Elimina</label>
-      <input type="number" id="" name=""
+      <label
+        for=""
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pagado por entidad Elimina</label>
+      <input
+        type="number"
+        id=""
+        name=""
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
@@ -256,15 +296,9 @@
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de pago</label>
       <div class="relative max-w-md">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path
-              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-          </svg>
-        </div>
-        <input datepicker type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        <input
+          type="date"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date">
       </div>
     </div>
@@ -276,50 +310,59 @@
     </div>
     <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
     <hr class="divide-y divide-gray-100 my-4" />
-    <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
-      <div class="relative max-w-md">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path
-              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-          </svg>
-        </div>
-        <input datepicker type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Select date">
-      </div>
-    </div>
-    <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
-      <div class="relative max-w-md">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path
-              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-          </svg>
-        </div>
-        <input datepicker type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Select date">
-      </div>
-    </div>
     <h2 class="text-lg font-bold dark:text-white">Distribuciones</h2>
     <hr class="divide-y divide-gray-100 my-4" />
     <div class="mb-5">
-      <div class="flex justify-between">
-        <div>10/10/2023</div>
-        <div>15/10/2023</div>
-        <div>Si/No</div>
-        <div>Emp: $77.333</div>
-        <div>Eps/Arl: $151.498</div>
-      </div>
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                  <th scope="col" class="px-6 py-3">#</th>
+                  <th scope="col" class="px-6 py-3">Fecha Inicial</th>
+                  <th scope="col" class="px-6 py-3">Fecha Final</th>
+                  <th scope="col" class="px-6 py-3">Si/No</th>
+                  <th scope="col" class="px-6 py-3">Empresa</th>
+                  <th scope="col" class="px-6 py-3">Entidad</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</th>
+                <td class="px-6 py-4">fi</td>
+                <td class="px-6 py-4">ff</td>
+                <td class="px-6 py-4">S</td>
+                <td class="px-6 py-4 text-right">1.000</td>
+                <td class="px-6 py-4 text-right">2.000</td>
+            </tr>
+          </tbody>
+      </table>
     </div>
     <button type="submit" <button type="submit"
       class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
   </form>
 </article>
+<script>
+function updateResultDate() {
+  const initialDateValue = new Date(this.fechaInicial);
+  const numberOfDaysValue = parseInt(this.numeroDias);
+  const resultDateValue = new Date(initialDateValue.getTime() + numberOfDaysValue * 86400000); // 86400000 milisegundos en un día
+  const day = String(resultDateValue.getDate()).padStart(2, '0');
+  const month = String(resultDateValue.getMonth() + 1).padStart(2, '0');
+  const year = resultDateValue.getFullYear();
+  this.fechaFinal = `${day}/${month}/${year}`;
+}
+
+function calcularValorIncapacidad() {
+  const valorSalario = +this.salario || 0;
+  const valorSalarioDiario = valorSalario / 30;
+  const valorNumeroDias = +this.numeroDias || 0;
+  const diasPagadoXEmpresa = 2;
+
+  if (valorSalario && valorNumeroDias) {
+    this.valorCompania = (diasPagadoXEmpresa * valorSalarioDiario).toFixed(2);
+    this.cuentaXCobrar = (valorNumeroDias - diasPagadoXEmpresa) * valorSalarioDiario;
+    this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
+  }
+}
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
 {% endblock %}
