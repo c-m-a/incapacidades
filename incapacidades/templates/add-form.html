@@ -92,8 +92,8 @@
 </article>
 <article x-data="{
     fechaInicial: '',
-    numeroDias: 0,
     fechaFinal: '',
+    numeroDias: 1,
     prorroga: false,
     salario: 0,
     valorCompania: 0,
@@ -105,7 +105,7 @@
   }">
   <h2 class="text-lg font-bold dark:text-white">Datos Generales</h2>
   <hr class="divide-y divide-gray-100 my-4" />
-  <form class="max-w-xl mx-auto mb-5">
+  <form class="max-w-2xl mx-auto mb-5">
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
       <select id="countries"
@@ -122,7 +122,7 @@
         <input
           type="date"
           x-model="fechaInicial"
-          x-on:change="updateResultDate"
+          @input="updateResultDate"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Selecciona una fecha de inicio..." />
       </div>
@@ -134,8 +134,8 @@
         id=""
         name=""
         x-model="numeroDias"
-        x-on:change="updateResultDate"
-        min="0"
+        @input="updateResultDate"
+        min="1"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
@@ -200,7 +200,7 @@
         id="default-checkbox"
         type="checkbox"
         value=""
-        x-on:change="calcularValorIncapacidad"
+        @input="calcularValorIncapacidad"
         x-model="prorroga"
         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label
@@ -226,7 +226,7 @@
         name=""
         value="0"
         min="0"
-        x-on:change="calcularValorIncapacidad"
+        @input="calcularValorIncapacidad"
         x-model="salario"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
@@ -319,20 +319,24 @@
                   <th scope="col" class="px-6 py-3">#</th>
                   <th scope="col" class="px-6 py-3">Fecha Inicial</th>
                   <th scope="col" class="px-6 py-3">Fecha Final</th>
-                  <th scope="col" class="px-6 py-3">Si/No</th>
-                  <th scope="col" class="px-6 py-3">Empresa</th>
-                  <th scope="col" class="px-6 py-3">Entidad</th>
+                  <th scope="col" class="px-6 py-3">Dias Empresa</th>
+                  <th scope="col" class="px-6 py-3">Valor Empresa</th>
+                  <th scope="col" class="px-6 py-3">Dias Entidad</th>
+                  <th scope="col" class="px-6 py-3">Valor Entidad</th>
               </tr>
           </thead>
           <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</th>
-                <td class="px-6 py-4">fi</td>
-                <td class="px-6 py-4">ff</td>
-                <td class="px-6 py-4">S</td>
-                <td class="px-6 py-4 text-right">1.000</td>
-                <td class="px-6 py-4 text-right">2.000</td>
+            <template x-for="(seg, idx) in fechasDistribucion">
+            <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
+                <td class="px-6 py-4" x-text="seg.fechaInicial"></td>
+                <td class="px-6 py-4" x-text="seg.fechaFinal"></td>
+                <td class="px-6 py-4">1</td>
+                <td class="px-6 py-4">2</td>
+                <td class="px-6 py-4 text-right">3</td>
+                <td class="px-6 py-4 text-right">4</td>
             </tr>
+            </template>
           </tbody>
       </table>
     </div>
@@ -351,16 +355,57 @@ function updateResultDate() {
   this.fechaFinal = `${day}/${month}/${year}`;
 }
 
+function crearSegmentosQuincenales(fechaInicial, numeroDias, diasEmpresa) {
+  const segmentos = [];
+  const valorNumeroDias = parseInt(numeroDias);
+  let fechaActual = new Date(fechaInicial);
+  const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * 86400000); // 86_400_000 milisegundos en un día
+  let i = 0;
+
+  while (fechaActual <= fechaFin) {
+    const fechaInicialSegmento = new Date(fechaActual);
+    const fechaFinalSegmento = new Date(fechaActual);
+
+    fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + 14);
+
+    if (fechaFinalSegmento > fechaFin) {
+      fechaFinalSegmento.setDate(fechaFin.getDate() + 1);
+    }
+
+    const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
+
+    segmentos.push({
+      fechaInicial: fechaInicialSegmento.toLocaleDateString('es-CO'),
+      fechaFinal: fechaFinalSegmento.toLocaleDateString('es-CO'),
+      numeroDias: numeroDias,
+      diasEmpresa: i === 0 ? diasEmpresa : 0,
+      valorEmpresa: i === 0 ? diasEmpresa * salario : 0,
+      diasEntidad: 0,
+      valorEntidad: 0,
+    });
+
+    fechaActual = fechaFinalSegmento;
+  }
+
+  return segmentos;
+}
+
 function calcularValorIncapacidad() {
   const valorSalario = +this.salario || 0;
   const valorSalarioDiario = valorSalario / 30;
   const valorNumeroDias = +this.numeroDias || 0;
+  const fechaInicial = new Date(this.fechaInicial);
+  let valoresFechasDistribucion = [];
   const diasPagadoXEmpresa = 2;
 
   if (valorSalario && valorNumeroDias) {
     this.valorCompania = (diasPagadoXEmpresa * valorSalarioDiario).toFixed(2);
     this.cuentaXCobrar = (valorNumeroDias - diasPagadoXEmpresa) * valorSalarioDiario;
     this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
+
+    valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa);
+
+    this.fechasDistribucion = valoresFechasDistribucion;
   }
 }
 </script>
