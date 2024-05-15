@@ -355,7 +355,7 @@ function updateResultDate() {
   this.fechaFinal = `${day}/${month}/${year}`;
 }
 
-function crearSegmentosQuincenales(fechaInicial, numeroDias, diasEmpresa) {
+function crearSegmentosQuincenales(fechaInicial, numeroDias, diasEmpresa, salarioDiario) {
   const segmentos = [];
   const valorNumeroDias = parseInt(numeroDias);
   let fechaActual = new Date(fechaInicial);
@@ -379,7 +379,7 @@ function crearSegmentosQuincenales(fechaInicial, numeroDias, diasEmpresa) {
       fechaFinal: fechaFinalSegmento.toLocaleDateString('es-CO'),
       numeroDias: numeroDias,
       diasEmpresa: i === 0 ? diasEmpresa : 0,
-      valorEmpresa: i === 0 ? diasEmpresa * salario : 0,
+      valorEmpresa: i === 0 ? diasEmpresa * salarioDiario : 0,
       diasEntidad: 0,
       valorEntidad: 0,
     });
@@ -405,7 +405,7 @@ function calcularValorIncapacidad() {
     this.cuentaXCobrar = (totalCuentaXCobrar < 0) ? 0 : totalCuentaXCobrar;
     this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
 
-    valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa);
+    valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa, valorSalarioDiario);
 
     this.fechasDistribucion = valoresFechasDistribucion;
   }
