@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, Movimiento
 
 # Create your views here.
@@ -10,6 +10,88 @@ def inicio(request):
 
 
 def agregar_movimiento(request):
+   if request.method == 'POST':
+      docto_empleado = request.POST.get('docto_empleado')
+      nombre = request.POST.get('nombre')
+      fecha_nacimiento = request.POST.get('fecha_nacimiento')
+      fecha_ingreso = request.POST.get('fecha_ingreso')
+      estado = request.POST.get('estado')
+      genero = request.POST.get('genero')
+      empleado_centro_costos_ids = request.POST.get('empleado_centro_costos_ids')
+      eps_id = request.POST.get('eps')
+      afp_id = request.POST.get('afp')
+      arl_nit = request.POST.get('arl_nit')
+      arl_nombre = request.POST.get('arl_nombre')
+      serie = request.POST.get('serie')
+      fecha_recepcion = request.POST.get('fecha_recepcion')
+      calendario = request.POST.get('calendario')
+      movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
+      clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
+      cod_incapacidad = request.POST.get('cod_incapacidad')
+      concepto_id = request.POST.get('concepto_id')
+      diagnostico_id = request.POST.get('diagnostico_id')
+      fecha_inicio = request.POST.get('fecha_inicio')
+      fecha_fin = request.POST.get('fecha_fin')
+      fecha_inicio_temp = '2024-05-02'
+      fecha_fin_temp = '2024-05-02'
+      dias = request.POST.get('dias')
+      prorroga = False if request.POST.get('prorroga') is '' else True
+      observaciones = request.POST.get('observaciones')
+      salario = request.POST.get('salario')
+      valor_cia = request.POST.get('valor_cia')
+      cuenta_cobrar = request.POST.get('cuenta_cobrar')
+      estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
+      genera_pago = False if request.POST.get('genera_pago') == '' else True
+
+      afp = Afp.objects.get(pk=afp_id)
+      centro_costo = CentroCosto.objects.get(pk=movimiento_centro_costos_id)
+      concepto = Concepto.objects.get(pk=concepto_id)
+      diagnostico = Diagnostico.objects.get(pk=diagnostico_id)
+      eps = Eps.objects.get(pk=eps_id)
+      clase_incapacidad = ClaseIncapacidad.objects.get(pk=clase_incapacidad_id)
+      estado_incapacidad = EstadoIncapacidad.objects.get(pk=estado_incapacidad_id)
+
+      empleado = Empleado.objects.create(
+         docto_empleado=docto_empleado,
+         nombre=nombre,
+         fecha_nacimiento=fecha_nacimiento,
+         fecha_ingreso=fecha_ingreso,
+         estado=estado,
+         genero=genero,
+         eps=eps,
+         afp=afp,
+         arl_nit=arl_nit,
+         arl_nombre=arl_nombre,
+      )
+
+      empleado.centro_costos.set(empleado_centro_costos_ids)
+
+      movimiento = Movimiento.objects.create(
+         cod_incapacidad=cod_incapacidad,
+         serie=serie,
+         fecha_recepcion=fecha_recepcion,
+         fecha_inicio=fecha_inicio_temp,
+         fecha_fin=fecha_fin_temp,
+         prorroga=prorroga,
+         dias=dias,
+         salario=salario,
+         calendario=calendario,
+         valor_cia=valor_cia,
+         cuenta_cobrar=cuenta_cobrar,
+         genera_pago=genera_pago,
+         observaciones=observaciones,
+         empleado=empleado,
+         eps=eps,
+         afp=afp,
+         diagnostico=diagnostico,
+         centro_costo=centro_costo,
+         concepto=concepto,
+         incapacidad=clase_incapacidad,
+         estado_incapacidad=estado_incapacidad,
+      )
+
+      return redirect('/')
+
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
    ccostos = CentroCosto.objects.all().order_by('nombre')
