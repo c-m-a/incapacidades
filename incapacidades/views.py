@@ -10,8 +10,17 @@ def inicio(request):
 
 
 def agregar_movimiento(request):
+   afps = Afp.objects.all().order_by('nombre')
+   epss = Eps.objects.all().order_by('nombre')
+   ccostos = CentroCosto.objects.all().order_by('nombre')
+   conceptos = Concepto.objects.all().order_by('codigo')
+   diagnosticos = Diagnostico.objects.all().order_by('codigo')
+   incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
+   estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
+
    if request.method == 'POST':
       docto_empleado = request.POST.get('docto_empleado')
+      serie = request.POST.get('serie')
       nombre = request.POST.get('nombre')
       fecha_nacimiento = request.POST.get('fecha_nacimiento')
       fecha_ingreso = request.POST.get('fecha_ingreso')
@@ -22,7 +31,6 @@ def agregar_movimiento(request):
       afp_id = request.POST.get('afp')
       arl_nit = request.POST.get('arl_nit')
       arl_nombre = request.POST.get('arl_nombre')
-      serie = request.POST.get('serie')
       fecha_recepcion = request.POST.get('fecha_recepcion')
       calendario = request.POST.get('calendario')
       movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
@@ -42,63 +50,74 @@ def agregar_movimiento(request):
       cuenta_cobrar = request.POST.get('cuenta_cobrar')
       estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
       genera_pago = False if request.POST.get('genera_pago') == '' else True
+   
+      existe_empleado = Empleado.objects.filter(docto_empleado=docto_empleado).exists()
+      existe_movimiento = Movimiento.objects.filter(serie=serie).exists()
+      error_empleado = 'Número de documento duplicado' if existe_empleado else None
+      error_movimiento = 'Número de serie duplicado' if existe_movimiento else None
+      registros_duplicados = existe_empleado or existe_movimiento
 
-      afp = Afp.objects.get(pk=afp_id)
-      centro_costo = CentroCosto.objects.get(pk=movimiento_centro_costos_id)
-      concepto = Concepto.objects.get(pk=concepto_id)
-      diagnostico = Diagnostico.objects.get(pk=diagnostico_id)
-      eps = Eps.objects.get(pk=eps_id)
-      clase_incapacidad = ClaseIncapacidad.objects.get(pk=clase_incapacidad_id)
-      estado_incapacidad = EstadoIncapacidad.objects.get(pk=estado_incapacidad_id)
+      if registros_duplicados:
+         return render(request, 'add-form.html', {
+            'error_empleado': error_empleado,
+            'error_movimiento': error_movimiento,
+            'afps': afps,
+            'ccostos': ccostos,
+            'conceptos': conceptos,
+            'diagnosticos': diagnosticos,
+            'epss': epss,
+            'incapacidades': incapacidades,
+            'estados_incapacidades': estados_incapacidades,
+         })
+      else:
+         afp = Afp.objects.get(pk=afp_id)
+         centro_costo = CentroCosto.objects.get(pk=movimiento_centro_costos_id)
+         concepto = Concepto.objects.get(pk=concepto_id)
+         diagnostico = Diagnostico.objects.get(pk=diagnostico_id)
+         eps = Eps.objects.get(pk=eps_id)
+         clase_incapacidad = ClaseIncapacidad.objects.get(pk=clase_incapacidad_id)
+         estado_incapacidad = EstadoIncapacidad.objects.get(pk=estado_incapacidad_id)
 
-      empleado = Empleado.objects.create(
-         docto_empleado=docto_empleado,
-         nombre=nombre,
-         fecha_nacimiento=fecha_nacimiento,
-         fecha_ingreso=fecha_ingreso,
-         estado=estado,
-         genero=genero,
-         eps=eps,
-         afp=afp,
-         arl_nit=arl_nit,
-         arl_nombre=arl_nombre,
-      )
+         empleado = Empleado.objects.create(
+            docto_empleado=docto_empleado,
+            nombre=nombre,
+            fecha_nacimiento=fecha_nacimiento,
+            fecha_ingreso=fecha_ingreso,
+            estado=estado,
+            genero=genero,
+            eps=eps,
+            afp=afp,
+            arl_nit=arl_nit,
+            arl_nombre=arl_nombre,
+         )
 
-      empleado.centro_costos.set(empleado_centro_costos_ids)
+         empleado.centro_costos.set(empleado_centro_costos_ids)
 
-      movimiento = Movimiento.objects.create(
-         cod_incapacidad=cod_incapacidad,
-         serie=serie,
-         fecha_recepcion=fecha_recepcion,
-         fecha_inicio=fecha_inicio_temp,
-         fecha_fin=fecha_fin_temp,
-         prorroga=prorroga,
-         dias=dias,
-         salario=salario,
-         calendario=calendario,
-         valor_cia=valor_cia,
-         cuenta_cobrar=cuenta_cobrar,
-         genera_pago=genera_pago,
-         observaciones=observaciones,
-         empleado=empleado,
-         eps=eps,
-         afp=afp,
-         diagnostico=diagnostico,
-         centro_costo=centro_costo,
-         concepto=concepto,
-         incapacidad=clase_incapacidad,
-         estado_incapacidad=estado_incapacidad,
-      )
+         movimiento = Movimiento.objects.create(
+            cod_incapacidad=cod_incapacidad,
+            serie=serie,
+            fecha_recepcion=fecha_recepcion,
+            fecha_inicio=fecha_inicio_temp,
+            fecha_fin=fecha_fin_temp,
+            prorroga=prorroga,
+            dias=dias,
+            salario=salario,
+            calendario=calendario,
+            valor_cia=valor_cia,
+            cuenta_cobrar=cuenta_cobrar,
+            genera_pago=genera_pago,
+            observaciones=observaciones,
+            empleado=empleado,
+            eps=eps,
+            afp=afp,
+            diagnostico=diagnostico,
+            centro_costo=centro_costo,
+            concepto=concepto,
+            incapacidad=clase_incapacidad,
+            estado_incapacidad=estado_incapacidad,
+         )
 
-      return redirect('/')
-
-   afps = Afp.objects.all().order_by('nombre')
-   epss = Eps.objects.all().order_by('nombre')
-   ccostos = CentroCosto.objects.all().order_by('nombre')
-   conceptos = Concepto.objects.all().order_by('codigo')
-   diagnosticos = Diagnostico.objects.all().order_by('codigo')
-   incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
-   estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
+         return redirect('/')
 
    context = {
       'afps': afps,
