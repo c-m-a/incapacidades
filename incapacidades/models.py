@@ -311,9 +311,9 @@ class Movimiento(models.Model):
         null=True,
         blank=True,
     )
-    llevada_gasto = models.DecimalField(decimal_places=2, max_digits=10)
-    mayor_valor = models.DecimalField(decimal_places=2, max_digits=10)
-    cpto_472 = models.DecimalField(decimal_places=2, max_digits=10)
+    llevada_gasto = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
+    mayor_valor = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
+    cpto_472 = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
     fecha_pago = models.DateField(null=True, blank=True)
     fecha_estado = models.DateField(null=True, blank=True)
     genera_pago = models.BooleanField(default=False)
