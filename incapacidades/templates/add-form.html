@@ -6,26 +6,61 @@
     <h2 class="text-xl font-bold dark:text-white">Agregar Incapacidad</h2>
   </div>
 </article>
+<form method="post">
 <article>
   <hr class="divide-y divide-gray-100 mb-4" />
   <h2 class="text-lg font-bold dark:text-white">Datos empleado</h2>
   <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-  <form class="max-w-md mx-auto">
+    {% csrf_token %}
     <div class="mb-2 mt-3">
       <label for="docto-empleado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
         documento</label>
-      <input type="text" id="docto-empleado" name="docto_empleado"
+      <input
+        type="text"
+        id="docto-empleado"
+        name="docto_empleado"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
         completo</label>
-      <input type="text" id="" name=""
+      <input
+        type="text"
+        name="nombre"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
+      <label
+        for="fecha-nacimiento"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha nacimiento</label>
+      <div class="relative max-w-md">
+        <input
+          type="date"
+          id="fecha-nacimiento"
+          name="fecha_nacimiento"
+          @input="updateResultDate"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Selecciona una fecha de inicio..." />
+      </div>
+    </div>
+    <div class="mb-5">
+      <label
+        for="fecha-ingreso"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha ingreso</label>
+      <div class="relative max-w-md">
+        <input
+          type="date"
+          id="fecha-ingreso"
+          name="fecha_ingreso"
+          @input="updateResultDate"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Selecciona una fecha de inicio..." />
+      </div>
+    </div>
+    <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
-      <select id="countries"
+      <select
+        name="estado"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el estado de la persona</option>
         <option value="0">Activo</option>
@@ -34,7 +69,8 @@
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genero</label>
-      <select id="countries"
+      <select
+        name="genero"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el genero de la persona</option>
         <option value="0">Masculino</option>
@@ -44,7 +80,9 @@
     <div class="mb-5">
       <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
         Costos</label>
-      <select multiple id="countries_multiple"
+      <select
+        multiple
+        name="empleado_centro_costos_ids"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el centro de costos</option>
         {% for ccosto in ccostos %}
@@ -53,24 +91,34 @@
       </select>
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIT ARL</label>
-      <input type="text" id="" name="" value="890903790"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        disabled>
-    </div>
-    <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
+      <label for="arl-nit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIT ARL</label>
       <input
         type="text"
-        id=""
-        name=""
-        value="Compania Suramericana de Riesgos Profesionales"
+        id="arl-nit"
+        name="arl_nit"
+        value="890903790"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        disabled>
+        readonly>
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
-      <select id="countries"
+      <label
+        for="arl-nombre"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
+      <input
+        type="text"
+        id="arl-nombre"
+        name="arl_nombre"
+        value="Compania Suramericana de Riesgos Profesionales"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        readonly>
+    </div>
+    <div class="mb-5">
+      <label
+        for="eps"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
+      <select
+        id="eps"
+        name="eps"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona la EPS</option>
         {% for eps in epss %}
@@ -79,8 +127,10 @@
       </select>
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
-      <select id="countries"
+      <label for="afp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
+      <select
+        id="afp"
+        name="afp"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el Fondo de Pension</option>
         {% for afp in afps %}
@@ -88,7 +138,6 @@
         {% endfor %}
       </select>
     </div>
-  </form>
 </article>
 <article x-data="{
     fechaInicial: '',
@@ -103,31 +152,55 @@
     generaPago: false,
     fechasDistribucion: [],
   }">
-  <h2 class="text-lg font-bold dark:text-white">Datos Generales</h2>
+  <h2 class="text-lg font-bold dark:text-white">Datos Generales de Incapacidad</h2>
   <hr class="divide-y divide-gray-100 my-4" />
-  <form class="max-w-2xl mx-auto mb-5">
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
-      <input type="text" id="" name=""
+      <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
+        Costos</label>
+      <select
+        name="movimiento_centro_costos_id"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el centro de costos</option>
+        {% for ccosto in ccostos %}
+        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-5">
+      <label
+        for="serie"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
+      <input
+        type="text"
+        id="serie"
+        name="serie"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de recepcion</label>
+      <label
+        for="fecha_recepcion"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de recepcion</label>
       <div class="relative max-w-md">
         <input
           type="date"
+          name="fecha_recepcion"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date">
       </div>
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Calendario</label>
-      <input type="text" id="" name=""
+      <input
+        type="text"
+        id=""
+        name="calendario"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>
-      <select id="countries"
+      <select
+        id="incapacidad"
+        name="clase_incapacidad_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona la clase de incapacidad</option>
         {% for incapacidad in incapacidades %}
@@ -136,7 +209,9 @@
       </select>
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero incapacidad</label>
+      <label
+        for="cod-incapacidad"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero incapacidad</label>
       <div class="relative">
         <input
           id="cod-incapacidad"
@@ -150,29 +225,37 @@
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
-      <select id="countries"
+      <select
+        id="concepto-id"
+        name="concepto_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el concepto</option>
         {% for concepto in conceptos %}
-        <option value="{{ concepto.codigo }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
+        <option value="{{ concepto.id }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
         {% endfor %}
       </select>
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
-      <select id="countries"
+      <label
+        for="diagnostico" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
+      <select
+        id="diagnostico"
+        name="diagnostico_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el diagnostico</option>
         {% for diagnostico in diagnosticos %}
-        <option value="{{ diagnostico.codigo }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
+        <option value="{{ diagnostico.id }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
         {% endfor %}
       </select>
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
+      <label
+        for=""
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
       <div class="relative max-w-md">
         <input
           type="date"
+          name="fecha_inicio"
           x-model="fechaInicial"
           @input="updateResultDate"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -183,8 +266,8 @@
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
       <input
         type="number"
-        id=""
-        name=""
+        id="dias"
+        name="dias"
         x-model="numeroDias"
         @input="updateResultDate"
         min="1"
@@ -194,15 +277,16 @@
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
       <input
         type="text"
-        id=""
-        name=""
+        id="fecha-inicio"
+        name="fecha_fin"
         x-model="fechaFinal"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         readonly>
     </div>
     <div class="flex items-center mb-4">
       <input
-        id="default-checkbox"
+        id="prorroga"
+        name="prorroga"
         type="checkbox"
         value=""
         @input="calcularValorIncapacidad"
@@ -215,20 +299,23 @@
     </div>
     <div class="mb-5">
       <label
-        for="message"
+        for="observaciones"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
-      <textarea id="message" rows="4"
+      <textarea
+        id="observaciones"
+        name="observaciones"
+        rows="4"
         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Escribe tus observaciones en este campo..."></textarea>
     </div>
     <h2 class="text-lg font-bold dark:text-white">Valorizacion</h2>
     <hr class="divide-y divide-gray-100 my-4" />
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario</label>
+      <label for="salario" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario</label>
       <input
         type="number"
-        id=""
-        name=""
+        id="salario"
+        name="salario"
         value="0"
         min="0"
         @input="calcularValorIncapacidad"
@@ -236,26 +323,34 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor compania</label>
+      <label for="valor-cia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor compania</label>
       <input
         type="number"
-        id=""
-        name=""
+        id="valor-cia"
+        name="valor_cia"
+        step="0.01"
         x-model="valorCompania"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cuenta x cobrar entidad</label>
+      <label
+        for="cuenta-cobrar"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cuenta x cobrar entidad</label>
       <input
         type="number"
-        id=""
-        name=""
+        id="cuenta-cobrar"
+        name="cuenta_cobrar"
+        step="0.01"
         x-model="cuentaXCobrar"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
     </div>
     <div class="mb-5">
-      <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado Incapacidad</label>
-      <select id="countries"
+      <label
+        for="estado-incapacidad"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado Incapacidad</label>
+      <select
+        id="estado-incapacidad"
+        name="estado_incapacidad_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Selecciona el estado de la incapacidad</option>
         {% for estado_incapacidad in estados_incapacidades %}
@@ -264,7 +359,11 @@
       </select>
     </div>
     <div class="flex items-center mb-4">
-      <input id="default-checkbox" type="checkbox" value=""
+      <input
+        id="genera-pago"
+        type="checkbox"
+        name="genera_pago"
+        value=""
         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
         pago?</label>
@@ -303,8 +402,8 @@
     </div>
     <button type="submit" <button type="submit"
       class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
-  </form>
 </article>
+</form>
 <script>
 function updateResultDate() {
   const initialDateValue = new Date(this.fechaInicial);
