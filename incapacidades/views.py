@@ -26,7 +26,6 @@ def agregar_movimiento(request):
       fecha_ingreso = request.POST.get('fecha_ingreso')
       estado = request.POST.get('estado')
       genero = request.POST.get('genero')
-      empleado_centro_costos_ids = request.POST.get('empleado_centro_costos_ids')
       eps_id = request.POST.get('eps')
       afp_id = request.POST.get('afp')
       arl_nit = request.POST.get('arl_nit')
@@ -90,8 +89,6 @@ def agregar_movimiento(request):
             arl_nit=arl_nit,
             arl_nombre=arl_nombre,
          )
-
-         empleado.centro_costos.set(empleado_centro_costos_ids)
 
          movimiento = Movimiento.objects.create(
             cod_incapacidad=cod_incapacidad,
