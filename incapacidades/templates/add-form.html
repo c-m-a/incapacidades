@@ -13,7 +13,7 @@
   <hr class="divide-y divide-gray-100 mb-4" />
   <div class="flex flex-wrap gap-4">
     {%if error_empleado %}
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-4">
+    <div class="flex-1">
       <label
         for="docto-empleado"
         class="block mb-2 text-sm font-medium text-red-700 dark:text-red-500">Numero de documento</label>
@@ -29,8 +29,10 @@
       <span class="font-medium">Error!</span> {{ error_empleado }}
     </div>
     {% else %}
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
-      <label for="docto-empleado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
+    <div class="flex-1">
+      <label
+          for="docto-empleado"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
         documento</label>
       <input
         type="text"
@@ -44,7 +46,7 @@
       />
     </div>
     {% endif %}
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+    <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
         completo</label>
       <input
@@ -57,7 +59,7 @@
         required
       />
     </div>
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+    <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genero</label>
       <select
         id="genero"
@@ -66,14 +68,14 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el genero</option>
+        <option selected>Selecciona...</option>
         <option value="0">Masculino</option>
         <option value="1">Femenino</option>
       </select>
     </div>
   </div>
   <div class="flex flex-wrap gap-4 mt-4">
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+    <div class="flex-1">
       <label
         for="fecha-nacimiento"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha nacimiento</label>
@@ -92,7 +94,7 @@
         />
       </div>
     </div>
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+    <div class="flex-1">
       <label
         for="fecha-ingreso"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha ingreso</label>
@@ -111,7 +113,7 @@
         />
       </div>
     </div>
-    <div class="sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+    <div class="flex-1">
       <label for="estado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
       <select
         id="estado"
@@ -120,29 +122,14 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el estado de la persona</option>
+        <option selected>Selecciona...</option>
         <option value="0">Activo</option>
         <option value="1">Retirado</option>
       </select>
     </div>
   </div>
   <div class="flex flex-wrap gap-4 mt-4">
-    <div>
-      <label for="countries_multiple" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
-        Costos</label>
-      <select
-        multiple
-        name="empleado_centro_costos_ids"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      />
-        <option selected>Selecciona el centro de costos</option>
-        {% for ccosto in ccostos %}
-        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div>
+    <div class="flex-1">
       <label
         for="eps"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
@@ -152,13 +139,13 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona la EPS</option>
+        <option selected>Selecciona...</option>
         {% for eps in epss %}
         <option value="{{ eps.id }}">{{ eps.nombre }}</option>
         {% endfor %}
       </select>
     </div>
-    <div>
+    <div class="flex-1">
       <label
         for="afp"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
@@ -168,15 +155,13 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el Fondo de Pension</option>
+        <option selected>Selecciona...</option>
         {% for afp in afps %}
         <option value="{{ afp.id }}">{{ afp.nombre }}</option>
         {% endfor %}
       </select>
     </div>
-  </div>
-  <div class="flex flex-wrap gap-4 mt-4">
-    <div>
+    <div class="flex-1">
       <label for="arl-nit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIT ARL</label>
       <input
         id="arl-nit"
@@ -187,7 +172,9 @@
         readonly
       />
     </div>
-    <div>
+  </div>
+  <div class="flex gap-4 mt-4">
+    <div class="flex-1">
       <label
         for="arl-nombre"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
@@ -202,6 +189,8 @@
         readonly
       />
     </div>
+    <div class="flex-1"></div>
+    <div class="flex-1"></div>
   </div>
 </section>
 <section
@@ -229,7 +218,7 @@
         id="movimiento-centro-costos-id"
         name="movimiento_centro_costos_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona el centro de costos</option>
+        <option selected>Selecciona...</option>
         {% for ccosto in ccostos %}
         <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
         {% endfor %}
@@ -480,7 +469,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el estado de la incapacidad</option>
+        <option selected>Selecciona...</option>
         {% for estado_incapacidad in estados_incapacidades %}
         <option value="{{ estado_incapacidad.id }}">{{ estado_incapacidad.nombre }}</option>
         {% endfor %}
