@@ -10,11 +10,11 @@ def inicio(request):
 
 
 def agregar_movimiento(request):
-   diagnosticos = Diagnostico.objects.all().order_by('codigo')
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
    ccostos = CentroCosto.objects.all().order_by('nombre')
    conceptos = Concepto.objects.all().order_by('codigo')
+   diagnosticos = Diagnostico.objects.all().order_by('codigo')
    incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
@@ -42,7 +42,7 @@ def agregar_movimiento(request):
       fecha_inicio_temp = '2024-05-02'
       fecha_fin_temp = '2024-05-02'
       dias = request.POST.get('dias')
-      prorroga = False if request.POST.get('prorroga') is '' else True
+      prorroga = False if request.POST.get('prorroga') == '' else True
       observaciones = request.POST.get('observaciones')
       salario = request.POST.get('salario')
       valor_cia = request.POST.get('valor_cia')
