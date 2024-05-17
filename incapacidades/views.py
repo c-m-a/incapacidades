@@ -149,7 +149,6 @@ def empleado_detalles(request, id):
    empleado = get_object_or_404(Empleado, pk=id) 
    epss = Eps.objects.all().order_by('nombre')
    ccostos = CentroCosto.objects.all().order_by('nombre')
-   centro_costos_asignados = empleado.centro_costos.all().order_by('nombre')
    incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
@@ -158,7 +157,6 @@ def empleado_detalles(request, id):
    context = {
       'afps': afps,
       'ccostos': ccostos,
-      'centro_costos_asignados': centro_costos_asignados,
       'empleado': empleado,
       'epss': epss,
       'estados_incapacidades': estados_incapacidades,
