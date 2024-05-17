@@ -210,7 +210,7 @@
   }"
   >
   <h2 class="text-lg font-bold dark:text-white">Datos Generales de Incapacidad</h2>
-  <hr class="divide-y divide-gray-100 mb-4" />
+  <hr class="divide-y divide-gray-100 my-4" />
     <div class="mb-5">
       <label for="movimiento-centro-costos-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
         Costos</label>
@@ -319,6 +319,21 @@
         {% endfor %}
       </select>
     </div>
+    <div class="flex items-center mb-4">
+      <input
+        id="prorroga"
+        name="prorroga"
+        value="{{ prorroga }}"
+        type="checkbox"
+        @input="calcularValorIncapacidad"
+        x-model="prorroga"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+      />
+      <label
+        for="prorroga"
+        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
+        prorroga?</label>
+    </div>
     <div class="mb-5">
       <label
         for="observaciones"
@@ -332,7 +347,7 @@
         placeholder="Escribe tus observaciones en este campo..."></textarea>
     </div>
     <h2 class="text-lg font-bold dark:text-white">Valorizacion</h2>
-    <hr class="divide-y divide-gray-100 mb-4" />
+    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
     <div class="mb-5">
       <label
         for="estado-incapacidad"
@@ -351,21 +366,6 @@
     </div>
     <div class="flex items-center mb-4">
       <input
-        id="prorroga"
-        name="prorroga"
-        value="{{ prorroga }}"
-        type="checkbox"
-        @input="calcularValorIncapacidad"
-        x-model="prorroga"
-        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-      />
-      <label
-        for="prorroga"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
-        prorroga?</label>
-    </div>
-    <div class="flex items-center mb-4">
-      <input
         id="genera-pago"
         name="genera_pago"
         value="{{ genera_pago }}"
@@ -375,6 +375,151 @@
         for="genera-pago" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
         pago?</label>
     </div>
+    <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
+    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
+    <div class="flex gap-4 mb-4">
+      <div class="flex-1">
+        <label
+          for="fecha-inicio"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
+        <div class="relative max-w-md">
+          <input
+            id="fecha-inicio"
+            name="fecha_inicio"
+            value="{{ fecha_inicio }}"
+            type="date"
+            aria-required="true"
+            title="Por favor, completa este campo"
+            x-model="fechaInicial"
+            @input="updateResultDate"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Selecciona una fecha de inicio..."
+            required
+          />
+        </div>
+      </div>
+      <div class="flex-1">
+        <label
+          for="dias"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
+        <input
+          id="dias"
+          name="dias"
+          value="{{ dias }}"
+          type="number"
+          aria-required="true"
+          title="Por favor, completa este campo"
+          x-model="numeroDias"
+          @input="updateResultDate"
+          min="1"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+      <div class="flex-1">
+        <label
+          for="fecha-fin"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
+        <input
+          id="fecha-fin"
+          name="fecha_fin"
+          value="{{ fecha_fin }}"
+          type="text"
+          x-model="fechaFinal"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                  <th scope="col" class="px-6 py-3">#</th>
+                  <th scope="col" class="px-6 py-3">Fecha Inicial</th>
+                  <th scope="col" class="px-6 py-3">Fecha Final</th>
+                  <th scope="col" class="px-6 py-3">Calendario</th>
+                  <th scope="col" class="px-6 py-3">Salario</th>
+                  <th scope="col" class="px-6 py-3">Total Dias</th>
+                  <th scope="col" class="px-6 py-3">Dias Empresa</th>
+                  <th scope="col" class="px-6 py-3">Valor Empresa</th>
+                  <th scope="col" class="px-6 py-3">Dias Entidad</th>
+                  <th scope="col" class="px-6 py-3">Valor Entidad</th>
+              </tr>
+          </thead>
+          <tbody>
+            <template x-for="(seg, idx) in fechasDistribucion">
+            <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
+                <td class="px-6 py-4" x-text="seg.fechaInicio"></td>
+                <td class="px-6 py-4" x-text="seg.fechaFin"></td>
+                <td class="px-6 py-4">
+                  <input
+                    x-model="seg.calendario"
+                    class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+                  />
+                </td>
+                <td class="px-6 py-4">
+                  <input
+                    x-model="seg.salario"
+                    class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+                  />
+                </td>
+                <td class="px-6 py-4" x-text="seg.totalDias"></td>
+                <td class="px-6 py-4" x-text="seg.empresaDias"></td>
+                <td class="px-6 py-4" x-text="seg.empresaValor"></td>
+                <td class="px-6 py-4 text-right" x-text="seg.entidadDias"></td>
+                <td class="px-6 py-4 text-right" x-text="seg.entidadValor"></td>
+            </tr>
+            </template>
+          </tbody>
+      </table>
+    </div>
+    <div class="flex justify-between">
+      <h2 class="text-lg font-bold dark:text-white">Pagos De La Entidad (EPS/ARL)</h2>
+      <button
+        type="submit"
+        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar Pago</button>
+    </div>
+    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
+    <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                  <th scope="col" class="px-6 py-3">#</th>
+                  <th scope="col" class="px-6 py-3">Fecha De Pago</th>
+                  <th scope="col" class="px-6 py-3">Valor Pagado</th>
+              </tr>
+          </thead>
+          <tbody>
+            <template x-for="(seg, idx) in fechasDistribucion">
+            <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
+                <td class="px-6 py-4">15/15/2014</td>
+                <td class="px-6 py-4 text-right">$300.000,00</td>
+            </tr>
+            </template>
+          </tbody>
+      </table>
+    </div>
+    <hr class="divide-y divide-gray-100 my-4" />
+    <div class="flex flex-col items-end">
+      <div class="flex font-semibold gap-4">
+        <div>Total Valor Empresa</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+      <div class="flex font-semibold gap-4">
+        <div>Valor Total Entidad</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+      <div class="flex font-semibold gap-4">
+        <div>Total Pagado Entidad</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+      <div class="flex font-semibold gap-4">
+        <div>Total Deuda Entidad</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+    </div>
+    <hr class="divide-y divide-gray-100 my-4" />
     <div class="text-right">
       <button
         type="submit"
