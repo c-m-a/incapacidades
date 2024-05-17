@@ -233,11 +233,6 @@ class Empleado(models.Model):
         on_delete=models.PROTECT,
     )
 
-    centro_costos = models.ManyToManyField(
-        'CentroCosto',
-        related_name='ccostos_asignados',
-    )
-
     def __str__(self):
         return self.nombre
 
