@@ -10,11 +10,11 @@ def inicio(request):
 
 
 def agregar_movimiento(request):
+   diagnosticos = Diagnostico.objects.all().order_by('codigo')
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
    ccostos = CentroCosto.objects.all().order_by('nombre')
    conceptos = Concepto.objects.all().order_by('codigo')
-   diagnosticos = Diagnostico.objects.all().order_by('codigo')
    incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
