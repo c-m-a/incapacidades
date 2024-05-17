@@ -194,14 +194,14 @@
   </div>
 </section>
 <section
-  class="mt-4"
+  class="my-4"
   x-data="{
     fechaInicial: '',
     fechaFinal: '',
     numeroDias: 1,
     prorroga: false,
     salario: 0,
-    valorCompania: 0,
+    valorPagadoEmpresa: 0,
     cuentaXCobrar: 0,
     pagadoXEntidad: 0,
     pedienteEntidad: 0,
@@ -256,19 +256,6 @@
           required
         >
       </div>
-    </div>
-    <div class="mb-5">
-      <label for="calendario" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Calendario</label>
-      <input
-        id="calendario"
-        name="calendario"
-        value="{{ calendario }}"
-        type="text"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      >
     </div>
     <div class="mb-5">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>
@@ -332,56 +319,6 @@
         {% endfor %}
       </select>
     </div>
-    <div class="mb-5">
-      <label
-        for="fecha-inicio"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
-      <div class="relative max-w-md">
-        <input
-          id="fecha-inicio"
-          name="fecha_inicio"
-          value="{{ fecha_inicio }}"
-          type="date"
-          aria-required="true"
-          title="Por favor, completa este campo"
-          x-model="fechaInicial"
-          @input="updateResultDate"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Selecciona una fecha de inicio..."
-          required
-        />
-      </div>
-    </div>
-    <div class="mb-5">
-      <label
-        for="dias"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
-      <input
-        id="dias"
-        name="dias"
-        value="{{ dias }}"
-        type="number"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        x-model="numeroDias"
-        @input="updateResultDate"
-        min="1"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-    </div>
-    <div class="mb-5">
-      <label
-        for="fecha-fin"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
-      <input
-        id="fecha-fin"
-        name="fecha_fin"
-        value="{{ fecha_fin }}"
-        type="text"
-        x-model="fechaFinal"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        readonly
-      />
-    </div>
     <div class="flex items-center mb-4">
       <input
         id="prorroga"
@@ -410,55 +347,7 @@
         placeholder="Escribe tus observaciones en este campo..."></textarea>
     </div>
     <h2 class="text-lg font-bold dark:text-white">Valorizacion</h2>
-    <hr class="divide-y divide-gray-100 my-4" />
-    <div class="mb-5">
-      <label for="salario" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salario</label>
-      <input
-        id="salario"
-        name="salario"
-        value="{{ salario }}"
-        type="number"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        min="0"
-        @input="calcularValorIncapacidad"
-        x-model="salario"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required 
-      />
-    </div>
-    <div class="mb-5">
-      <label for="valor-cia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor compania</label>
-      <input
-        id="valor-cia"
-        name="valor_cia"
-        value="{{ valor_cia }}"
-        type="number"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        step="0.01"
-        x-model="valorCompania"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      />
-    </div>
-    <div class="mb-5">
-      <label
-        for="cuenta-cobrar"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cuenta x cobrar entidad</label>
-      <input
-        id="cuenta-cobrar"
-        name="cuenta_cobrar"
-        value="{{ cuenta_cobrar }}"
-        type="number"
-        step="0.01"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        x-model="cuentaXCobrar"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      />
-    </div>
+    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
     <div class="mb-5">
       <label
         for="estado-incapacidad"
@@ -487,16 +376,69 @@
         pago?</label>
     </div>
     <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
-    <hr class="divide-y divide-gray-100 my-4" />
-    <h2 class="text-lg font-bold dark:text-white">Distribuciones</h2>
-    <hr class="divide-y divide-gray-100 my-4" />
-    <div class="mb-5">
+    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
+    <div class="flex gap-4 mb-4">
+      <div class="flex-1">
+        <label
+          for="fecha-inicio"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
+        <div class="relative max-w-md">
+          <input
+            id="fecha-inicio"
+            name="fecha_inicio"
+            value="{{ fecha_inicio }}"
+            type="date"
+            aria-required="true"
+            title="Por favor, completa este campo"
+            x-model="fechaInicial"
+            @input="updateResultDate"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Selecciona una fecha de inicio..."
+            required
+          />
+        </div>
+      </div>
+      <div class="flex-1">
+        <label
+          for="dias"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
+        <input
+          id="dias"
+          name="dias"
+          value="{{ dias }}"
+          type="number"
+          aria-required="true"
+          title="Por favor, completa este campo"
+          x-model="numeroDias"
+          @input="updateResultDate"
+          min="1"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+      <div class="flex-1">
+        <label
+          for="fecha-fin"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
+        <input
+          id="fecha-fin"
+          name="fecha_fin"
+          value="{{ fecha_fin }}"
+          type="text"
+          x-model="fechaFinal"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                   <th scope="col" class="px-6 py-3">#</th>
                   <th scope="col" class="px-6 py-3">Fecha Inicial</th>
                   <th scope="col" class="px-6 py-3">Fecha Final</th>
+                  <th scope="col" class="px-6 py-3">Calendario</th>
+                  <th scope="col" class="px-6 py-3">Salario</th>
+                  <th scope="col" class="px-6 py-3">Total Dias</th>
                   <th scope="col" class="px-6 py-3">Dias Empresa</th>
                   <th scope="col" class="px-6 py-3">Valor Empresa</th>
                   <th scope="col" class="px-6 py-3">Dias Entidad</th>
@@ -507,35 +449,115 @@
             <template x-for="(seg, idx) in fechasDistribucion">
             <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
-                <td class="px-6 py-4" x-text="seg.fechaInicial"></td>
-                <td class="px-6 py-4" x-text="seg.fechaFinal"></td>
-                <td class="px-6 py-4">1</td>
-                <td class="px-6 py-4">2</td>
-                <td class="px-6 py-4 text-right">3</td>
-                <td class="px-6 py-4 text-right">4</td>
+                <td class="px-6 py-4" x-text="seg.fechaInicio"></td>
+                <td class="px-6 py-4" x-text="seg.fechaFin"></td>
+                <td class="px-6 py-4">
+                  <input
+                    x-model="seg.calendario"
+                    class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+                  />
+                </td>
+                <td class="px-6 py-4">
+                  <input
+                    x-model="seg.salario"
+                    class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+                  />
+                </td>
+                <td class="px-6 py-4" x-text="seg.totalDias"></td>
+                <td class="px-6 py-4" x-text="seg.empresaDias"></td>
+                <td class="px-6 py-4" x-text="seg.empresaValor"></td>
+                <td class="px-6 py-4 text-right" x-text="seg.entidadDias"></td>
+                <td class="px-6 py-4 text-right" x-text="seg.entidadValor"></td>
             </tr>
             </template>
           </tbody>
       </table>
     </div>
-    <button type="submit" <button type="submit"
-      class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
+    <div class="flex justify-between">
+      <h2 class="text-lg font-bold dark:text-white">Pagos De La Entidad (EPS/ARL)</h2>
+      <button
+        type="submit"
+        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar Pago</button>
+    </div>
+    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
+    <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                  <th scope="col" class="px-6 py-3">#</th>
+                  <th scope="col" class="px-6 py-3">Fecha De Pago</th>
+                  <th scope="col" class="px-6 py-3">Valor Pagado</th>
+              </tr>
+          </thead>
+          <tbody>
+            <template x-for="(seg, idx) in fechasDistribucion">
+            <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
+                <td class="px-6 py-4">15/15/2014</td>
+                <td class="px-6 py-4 text-right">$300.000,00</td>
+            </tr>
+            </template>
+          </tbody>
+      </table>
+    </div>
+    <hr class="divide-y divide-gray-100 my-4" />
+    <div class="flex flex-col items-end">
+      <div class="flex font-semibold gap-4">
+        <div>Total Valor Empresa</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+      <div class="flex font-semibold gap-4">
+        <div>Valor Total Entidad</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+      <div class="flex font-semibold gap-4">
+        <div>Total Pagado Entidad</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+      <div class="flex font-semibold gap-4">
+        <div>Total Deuda Entidad</div>
+        <div>$$$.$$$,$$</div>
+      </div>
+    </div>
+    <hr class="divide-y divide-gray-100 my-4" />
+    <div class="text-right">
+      <button
+        type="submit"
+        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
+    </div>
 </section>
 </form>
 <script>
-function updateResultDate() {
-  const initialDateValue = new Date(this.fechaInicial);
-  const numberOfDaysValue = parseInt(this.numeroDias);
-  const resultDateValue = new Date(initialDateValue.getTime() + numberOfDaysValue * 86400000); // 86400000 milisegundos en un día
-  const day = String(resultDateValue.getDate()).padStart(2, '0');
-  const month = String(resultDateValue.getMonth() + 1).padStart(2, '0');
-  const year = resultDateValue.getFullYear();
-  this.fechaFinal = `${day}/${month}/${year}`;
+function calcularValorIncapacidad() {
+  let valorPagadoEmpresa = 0;
+  const valorSalario = +this.salario || 0;
+  const valorSalarioDiario = valorSalario / 30;
+  const valorNumeroDias = +this.numeroDias || 0;
+  const fechaInicial = new Date(this.fechaInicial);
+  const valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias);
+  const diasPagadoXEmpresa = 2;
+
+  console.log('valoresFechasDistribucion', valoresFechasDistribucion);
+
+  // if (valorSalario && valorNumeroDias) {
+  //   if (porroga)
+  //     valorPagadoEmpresa = (diasPagadoXEmpresa * valorSalarioDiario).toFixed(2);
+  //
+  //   this.valorPagadoEmpresa = valorPagadoEmpresa;
+  //
+  //   diasPagadoXEntidad = valorNumeroDias - diasPagadoXEmpresa;
+  //   totalCuentaXCobrar = (valorNumeroDias - diasPagadoXEmpresa) * valorSalarioDiario;
+  //   this.cuentaXCobrar = (totalCuentaXCobrar < 0) ? 0 : totalCuentaXCobrar;
+  //   this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
+  //
+  //   valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa, valorSalarioDiario);
+  //
+  //   this.fechasDistribucion = valoresFechasDistribucion;
+  // }
 }
 
-function crearSegmentosQuincenales(fechaInicial, numeroDias, diasEmpresa, salarioDiario) {
+function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
   const segmentos = [];
-  const valorNumeroDias = parseInt(numeroDias);
   let fechaActual = new Date(fechaInicial);
   const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * 86400000); // 86_400_000 milisegundos en un día
   let i = 0;
@@ -553,40 +575,35 @@ function crearSegmentosQuincenales(fechaInicial, numeroDias, diasEmpresa, salari
     const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
 
     segmentos.push({
-      fechaInicial: fechaInicialSegmento.toLocaleDateString('es-CO'),
-      fechaFinal: fechaFinalSegmento.toLocaleDateString('es-CO'),
-      numeroDias: numeroDias,
-      diasEmpresa: i === 0 ? diasEmpresa : 0,
-      valorEmpresa: i === 0 ? diasEmpresa * salarioDiario : 0,
-      diasEntidad: 0,
-      valorEntidad: 0,
+      fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
+      fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
+      calendario: 'digita...',
+      salario: 0,
+      totalDias: 0,
+      empresaDias: 0,
+      empresaValor: 0,
+      entidadDias: 0,
+      entidadValor: 0,
     });
 
     fechaActual = fechaFinalSegmento;
   }
 
+  console.log('segmentos', segmentos);
   return segmentos;
 }
 
-function calcularValorIncapacidad() {
-  const valorSalario = +this.salario || 0;
-  const valorSalarioDiario = valorSalario / 30;
-  const valorNumeroDias = +this.numeroDias || 0;
-  const fechaInicial = new Date(this.fechaInicial);
-  let valoresFechasDistribucion = [];
-  const diasPagadoXEmpresa = 2;
+function updateResultDate() {
+  const valorFechaInicial = new Date(this.fechaInicial);
+  const valorNumeroDias = parseInt(this.numeroDias);
+  const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
+  const day = String(valorFechaFinal.getDate()).padStart(2, '0');
+  const month = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
+  const year = valorFechaFinal.getFullYear();
+  this.fechaFinal = `${day}/${month}/${year}`;
 
-  if (valorSalario && valorNumeroDias) {
-    this.valorCompania = (diasPagadoXEmpresa * valorSalarioDiario).toFixed(2);
-    diasPagadoXEntidad = valorNumeroDias - diasPagadoXEmpresa;
-    totalCuentaXCobrar = (valorNumeroDias - diasPagadoXEmpresa) * valorSalarioDiario;
-    this.cuentaXCobrar = (totalCuentaXCobrar < 0) ? 0 : totalCuentaXCobrar;
-    this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
-
-    valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa, valorSalarioDiario);
-
-    this.fechasDistribucion = valoresFechasDistribucion;
-  }
+  const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias);
+  this.fechasDistribucion = distribucion;
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
