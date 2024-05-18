@@ -210,21 +210,9 @@
   }"
   >
   <h2 class="text-lg font-bold dark:text-white">Datos Generales de Incapacidad</h2>
-  <hr class="divide-y divide-gray-100 my-4" />
-    <div class="mb-5">
-      <label for="movimiento-centro-costos-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
-        Costos</label>
-      <select
-        id="movimiento-centro-costos-id"
-        name="movimiento_centro_costos_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona...</option>
-        {% for ccosto in ccostos %}
-        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="mb-5">
+  <hr class="divide-y divide-gray-100 mb-4" />
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
       <label
         for="serie"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
@@ -239,7 +227,7 @@
         required
       >
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
       <label
         for="fecha-recepcion"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de recepcion</label>
@@ -257,7 +245,22 @@
         >
       </div>
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
+      <label for="movimiento-centro-costos-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
+        Costos</label>
+      <select
+        id="movimiento-centro-costos-id"
+        name="movimiento_centro_costos_id"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona...</option>
+        {% for ccosto in ccostos %}
+        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>
       <select
         id="incapacidad"
@@ -271,7 +274,7 @@
         {% endfor %}
       </select>
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
       <label
         for="cod-incapacidad"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero incapacidad</label>
@@ -288,67 +291,7 @@
         />
       </div>
     </div>
-    <div class="mb-5">
-      <label
-        for="concepto-id"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
-      <select
-        id="concepto-id"
- e      name="concepto_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      >
-        <option selected>Selecciona el concepto</option>
-        {% for concepto in conceptos %}
-        <option value="{{ concepto.id }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="mb-5">
-      <label
-        for="diagnostico"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
-      <select
-        id="diagnostico"
-        name="diagnostico_id"
-        value="{{ diagnostico_id }}"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona el diagnostico</option>
-        {% for diagnostico in diagnosticos %}
-        <option value="{{ diagnostico.id }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="flex items-center mb-4">
-      <input
-        id="prorroga"
-        name="prorroga"
-        value="{{ prorroga }}"
-        type="checkbox"
-        @input="calcularValorIncapacidad"
-        x-model="prorroga"
-        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-      />
-      <label
-        for="prorroga"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
-        prorroga?</label>
-    </div>
-    <div class="mb-5">
-      <label
-        for="observaciones"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
-      <textarea
-        id="observaciones"
-        name="observaciones"
-        value="{{ observaciones }}"
-        rows="4"
-        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Escribe tus observaciones en este campo..."></textarea>
-    </div>
-    <h2 class="text-lg font-bold dark:text-white">Valorizacion</h2>
-    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
-    <div class="mb-5">
+    <div class="flex-1">
       <label
         for="estado-incapacidad"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado Incapacidad</label>
@@ -364,7 +307,40 @@
         {% endfor %}
       </select>
     </div>
-    <div class="flex items-center mb-4">
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
+      <label
+        for="concepto-id"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
+      <select
+        id="concepto-id"
+ e      name="concepto_id"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        required
+      >
+        <option selected>Selecciona el concepto</option>
+        {% for concepto in conceptos %}
+        <option value="{{ concepto.id }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="flex-1">
+      <label
+        for="diagnostico"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
+      <select
+        id="diagnostico"
+        name="diagnostico_id"
+        value="{{ diagnostico_id }}"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona el diagnostico</option>
+        {% for diagnostico in diagnosticos %}
+        <option value="{{ diagnostico.id }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="flex flex-1 justify-center pt-10">
       <input
         id="genera-pago"
         name="genera_pago"
@@ -375,8 +351,21 @@
         for="genera-pago" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
         pago?</label>
     </div>
+  </div>
+    <div class="mb-5">
+      <label
+        for="observaciones"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
+      <textarea
+        id="observaciones"
+        name="observaciones"
+        value="{{ observaciones }}"
+        rows="4"
+        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Escribe tus observaciones en este campo..."></textarea>
+    </div>
     <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
-    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
+    <hr class="divide-y divide-gray-100 mb-4" />
     <div class="flex gap-4 mb-4">
       <div class="flex-1">
         <label
@@ -428,6 +417,21 @@
           readonly
         />
       </div>
+    <div class="flex flex-1 pt-10 justify-center">
+      <input
+        id="prorroga"
+        name="prorroga"
+        value="{{ prorroga }}"
+        type="checkbox"
+        @input="calcularValorIncapacidad"
+        x-model="prorroga"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+      />
+      <label
+        for="prorroga"
+        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
+        prorroga?</label>
+    </div>
     </div>
     <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -473,52 +477,7 @@
           </tbody>
       </table>
     </div>
-    <div class="flex justify-between">
-      <h2 class="text-lg font-bold dark:text-white">Pagos De La Entidad (EPS/ARL)</h2>
-      <button
-        type="submit"
-        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar Pago</button>
-    </div>
     <hr class="divide-y divide-gray-100 mt-2 mb-4" />
-    <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                  <th scope="col" class="px-6 py-3">#</th>
-                  <th scope="col" class="px-6 py-3">Fecha De Pago</th>
-                  <th scope="col" class="px-6 py-3">Valor Pagado</th>
-              </tr>
-          </thead>
-          <tbody>
-            <template x-for="(seg, idx) in fechasDistribucion">
-            <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
-                <td class="px-6 py-4">15/15/2014</td>
-                <td class="px-6 py-4 text-right">$300.000,00</td>
-            </tr>
-            </template>
-          </tbody>
-      </table>
-    </div>
-    <hr class="divide-y divide-gray-100 my-4" />
-    <div class="flex flex-col items-end">
-      <div class="flex font-semibold gap-4">
-        <div>Total Valor Empresa</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-      <div class="flex font-semibold gap-4">
-        <div>Valor Total Entidad</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-      <div class="flex font-semibold gap-4">
-        <div>Total Pagado Entidad</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-      <div class="flex font-semibold gap-4">
-        <div>Total Deuda Entidad</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-    </div>
     <hr class="divide-y divide-gray-100 my-4" />
     <div class="text-right">
       <button
@@ -536,40 +495,32 @@ function calcularValorIncapacidad() {
   const fechaInicial = new Date(this.fechaInicial);
   const valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias);
   const diasPagadoXEmpresa = 2;
-
-  console.log('valoresFechasDistribucion', valoresFechasDistribucion);
-
-  // if (valorSalario && valorNumeroDias) {
-  //   if (porroga)
-  //     valorPagadoEmpresa = (diasPagadoXEmpresa * valorSalarioDiario).toFixed(2);
-  //
-  //   this.valorPagadoEmpresa = valorPagadoEmpresa;
-  //
-  //   diasPagadoXEntidad = valorNumeroDias - diasPagadoXEmpresa;
-  //   totalCuentaXCobrar = (valorNumeroDias - diasPagadoXEmpresa) * valorSalarioDiario;
-  //   this.cuentaXCobrar = (totalCuentaXCobrar < 0) ? 0 : totalCuentaXCobrar;
-  //   this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
-  //
-  //   valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa, valorSalarioDiario);
-  //
-  //   this.fechasDistribucion = valoresFechasDistribucion;
-  // }
 }
 
 function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
   const segmentos = [];
   let fechaActual = new Date(fechaInicial);
-  const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * 86400000); // 86_400_000 milisegundos en un día
+  const microSegDia = 86_400_000;
+  const diasXSegmento = 15;
+  fechaActual = fechaActual.getTime() + microSegDia;
+  const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * microSegDia); // 86400000 milisegundos en un día
   let i = 0;
 
   while (fechaActual <= fechaFin) {
     const fechaInicialSegmento = new Date(fechaActual);
     const fechaFinalSegmento = new Date(fechaActual);
+    const diaSegmento = fechaFinalSegmento.getDate();
+    const diaFinalMes = new Date(fechaFinalSegmento.getFullYear(), fechaFinalSegmento.getMonth() + 1, 0);
+    const diasFaltantesFinMes = diaFinalMes.getDate() - diaSegmento;
 
-    fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + 14);
+    if (diaSegmento <= diasXSegmento) {
+      fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + diasXSegmento - 1);
+    } else {
+      fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + diasFaltantesFinMes);
+    } 
 
     if (fechaFinalSegmento > fechaFin) {
-      fechaFinalSegmento.setDate(fechaFin.getDate() + 1);
+      fechaFinalSegmento.setDate(fechaFin.getDate());
     }
 
     const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
@@ -586,10 +537,8 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
       entidadValor: 0,
     });
 
-    fechaActual = fechaFinalSegmento;
+    fechaActual = fechaFinalSegmento.getTime() + microSegDia;
   }
-
-  console.log('segmentos', segmentos);
   return segmentos;
 }
 
