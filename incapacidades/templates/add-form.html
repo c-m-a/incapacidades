@@ -206,16 +206,17 @@
     pedienteEntidad: 0,
     generaPago: false,
     empresaTotalPagado: 0,
-    entidadCuentaXCrobrar: 0,
+    entidadCuentaXCobrar: 0,
     fechasDistribucion: [],
+
     calcularValoresXPagar(index) {
       const { empresaDias, empresaValor, entidadDias, entidadValor } = this.calcularPago(index);
       this.fechasDistribucion[index].empresaDias = empresaDias;
       this.fechasDistribucion[index].empresaValor = empresaValor;
       this.fechasDistribucion[index].entidadDias = entidadDias;
       this.fechasDistribucion[index].entidadValor = entidadValor;
-      this.calcularTotalesXPagar(this.fechasDistribucion);
     },
+
     calcularPrimerPago() {
       index = 0;
       const { empresaDias, empresaValor, entidadDias, entidadValor } =
@@ -224,19 +225,23 @@
       this.fechasDistribucion[index].empresaValor = empresaValor;
       this.fechasDistribucion[index].entidadDias = entidadDias;
       this.fechasDistribucion[index].entidadValor = entidadValor;
-      this.calcularTotalesXPagar(this.fechasDistribucion);
     },
+
     calcularPago(index) {
       const prorroga = this.prorroga;
       const salarioDiario = this.fechasDistribucion[index].salario / 30;
       const totalDias = this.fechasDistribucion[index].totalDias;
       const empresaTotalDias = 2;
       let empresaDias = totalDias < empresaTotalDias ? totalDias : empresaTotalDias;
-      empresaDias = prorroga ? 0 : empresaTotalDias;
-      // if (index === 1) {
-      //  const totalDiasAntSeg = this.fechasDistribucion[index-1].totalDias;
-      //  if (totalDias < em)
-      //}
+      if (index === 0) {
+        empresaDias = prorroga ? 0 : empresaDias;
+      }
+      if (index === 1) {
+        const totalDiasAntSeg = this.fechasDistribucion[0].totalDias;
+        const empresaDiasAntSeg = this.fechasDistribucion[0].empresaDias;
+        if (totalDiasAntSeg < empresaTotalDias)
+          empresaDias = 1;
+      }
       if (index > 1) empresasDias = 0;
       const empresaValor = (empresaDias * salarioDiario).toFixed(2);
       const entidadDias = (totalDias > empresaDias) ? totalDias - empresaDias : 0;
@@ -248,19 +253,22 @@
         entidadValor,
       }
     },
-    calcularTotalesXPagar(fechasDistribucion) {
-      console.log('calcularTotalesXPagar');
-      const fechas = this.fechasDistribucion;
-      let empresaTotalPago = 0;
-      let entidadCuentaXPagar = 0;
 
-      for (const fecha in fechas) {
-        console.log('fecha', fecha);
-        console.log('dias empresa', fecha.empresaDias);
-      }
+    calcularTotalesXPagar() {
+      return this.$watch('fechasDistribucion', (newValue, oldValue) => {
+        const fechas = JSON.parse(JSON.stringify(newValue, null, 2));
+        let empresaTotalPagado = 0;
+        let entidadTotalCuentaXCobrar = 0;
+        for (const f of fechas) {
+          empresaTotalPagado += +f.empresaValor;
+          entidadTotalCuentaXCobrar += +f.entidadValor;
+        }
+        this.empresaTotalPagado = empresaTotalPagado;
+        this.entidadCuentaXCobrar = entidadTotalCuentaXCobrar;
+      });
     },
   }"
-  >
+  x-init="calcularTotalesXPagar()">
   <h2 class="text-lg font-bold dark:text-white">Datos Generales de Incapacidad</h2>
   <hr class="divide-y divide-gray-100 mb-4" />
   <div class="flex gap-4 mb-4">
@@ -538,7 +546,7 @@
         <div class="flex gap-4">
           <div>Total Cuenta por Cobrar Entidad</div>
           <div>
-            $ <span x-text="entidadCuentaXCrobrar"></span>
+            $ <span x-text="entidadCuentaXCobrar"></span>
           </div>
         </div>
       </div>
@@ -550,8 +558,8 @@
         class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
     </div>
 </section>
-  <input type="hidden" name="valor_cia" value="0" />
-  <input type="hidden" name="cuenta_cobrar" value="0" />
+  <input type="hidden" name="valor_cia" value="0" x-text="empresaTotalPagado" />
+  <input type="hidden" name="cuenta_cobrar" value="0" x-text="entidadCuentaXCobrar" />
 </form>
 <script>
 function calcularValorIncapacidad() {
