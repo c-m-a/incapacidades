@@ -233,9 +233,10 @@
       const empresaTotalDias = 2;
       let empresaDias = totalDias < empresaTotalDias ? totalDias : empresaTotalDias;
       empresaDias = prorroga ? 0 : empresaTotalDias;
-      if (index === 1) {
-        const empresa
-      }
+      // if (index === 1) {
+      //  const totalDiasAntSeg = this.fechasDistribucion[index-1].totalDias;
+      //  if (totalDias < em)
+      //}
       if (index > 1) empresasDias = 0;
       const empresaValor = (empresaDias * salarioDiario).toFixed(2);
       const entidadDias = (totalDias > empresaDias) ? totalDias - empresaDias : 0;
