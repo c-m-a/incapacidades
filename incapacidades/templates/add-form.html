@@ -230,7 +230,9 @@
       const prorroga = this.prorroga;
       const salarioDiario = this.fechasDistribucion[index].salario / 30;
       const totalDias = this.fechasDistribucion[index].totalDias;
-      let empresaDias = prorroga ? 0 : 2;
+      const empresaTotalDias = 2;
+      let empresaDias = totalDias < empresaTotalDias ? totalDias : empresaTotalDias;
+      empresaDias = prorroga ? 0 : empresaTotalDias;
       empresaDias = index > 0 ? 0 : empresaDias; 
       const empresaValor = (empresaDias * salarioDiario).toFixed(2);
       const entidadDias = (totalDias > empresaDias) ? totalDias - empresaDias : 0;
@@ -249,6 +251,7 @@
       let entidadCuentaXPagar = 0;
 
       for (const fecha in fechas) {
+        console.log('fecha', fecha);
         console.log('dias empresa', fecha.empresaDias);
       }
     },
