@@ -44,7 +44,6 @@ def agregar_movimiento(request):
       dias = request.POST.get('dias')
       prorroga = False if request.POST.get('prorroga') == '' else True
       observaciones = request.POST.get('observaciones')
-      salario = request.POST.get('salario')
       valor_cia = request.POST.get('valor_cia')
       cuenta_cobrar = request.POST.get('cuenta_cobrar')
       estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
@@ -98,7 +97,6 @@ def agregar_movimiento(request):
             fecha_fin=fecha_fin_temp,
             prorroga=prorroga,
             dias=dias,
-            salario=salario,
             calendario=calendario,
             valor_cia=valor_cia,
             cuenta_cobrar=cuenta_cobrar,
