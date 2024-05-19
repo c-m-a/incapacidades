@@ -498,11 +498,11 @@ function calcularValorIncapacidad() {
 }
 
 function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
-  const segmentos = [];
-  let fechaActual = new Date(fechaInicial);
-  const microSegDia = 86_400_000;
   const diasXSegmento = 15;
-  fechaActual = fechaActual.getTime() + microSegDia;
+  const microSegDia = 86_400_000;
+  const segmentos = [];
+  let fechaActual = new Date(fechaInicial.getTime() + microSegDia);
+  const fechaCorte = new Date(fechaInicial.getFullYear(), fechaInicial.getMonth() + 1, 15);
   const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * microSegDia); // 86400000 milisegundos en un día
   let i = 0;
 
@@ -514,7 +514,7 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
     const diasFaltantesFinMes = diaFinalMes.getDate() - diaSegmento;
 
     if (diaSegmento <= diasXSegmento) {
-      fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + diasXSegmento - 1);
+      fechaFinalSegmento.setDate(fechaCorte.getDate());
     } else {
       fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + diasFaltantesFinMes);
     } 
@@ -528,9 +528,9 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
     segmentos.push({
       fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
       fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
-      calendario: 'digita...',
+      calendario: '',
       salario: 0,
-      totalDias: 0,
+      totalDias: numeroDias + 1,
       empresaDias: 0,
       empresaValor: 0,
       entidadDias: 0,
