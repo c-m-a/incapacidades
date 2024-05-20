@@ -1,3 +1,5 @@
+import pandas as pd
+from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, Movimiento
 
@@ -141,8 +143,80 @@ def buscar_personas(request):
    return render(request, 'search-results.html', {'empleados': empleados})
 
 
-def cargar_archivo(request):
-   return render(request, 'cargar-archivo.html')
+def cargar_movimientos(request):
+   msg = ''
+   if request.method == 'POST':
+      file = request.FILES['file']
+      try:
+         df = pd.read_excel(file)
+         docto_empleado_ant = 0
+
+         for index, row in df.iterrows():
+            clase_incapacidad_nombre = row['Clase de incapacidad'].strip()
+            diagnostico_codigo = row['Código diagnóstico'].strip()
+            centro_costos_nombre = row['Desc.Proyecto'].strip()
+            docto_empleado = row['Cédula']
+            concepto_codigo = str(row['Concepto']).zfill(3)
+            eps_nombre = row['Desc.EPS Contrato'].strip()
+
+            clase_incapacidad = ClaseIncapacidad.objects.get(nombre=clase_incapacidad_nombre)
+            diagnostico = Diagnostico.objects.get(codigo=diagnostico_codigo)
+            centro_costos = CentroCosto.objects.get(nombre=centro_costos_nombre)
+            concepto = Concepto.objects.get(codigo=concepto_codigo)
+            eps = Eps.objects.get(nombre=eps_nombre)
+            afp = Afp.objects.get(pk=1)
+
+            if docto_empleado != docto_empleado_ant:
+               try:
+                  new_empleado = {
+                     'nombre': row['Nombres y apellidos'],
+                     # 'genero': row['genero'],
+                     # 'genero': 0,
+                     'fecha_nacimiento': '2024-01-01',
+                     'fecha_ingreso': '2024-01-01',
+                     'estado': 0,
+                     'arl_nit': '890903790',
+                     'arl_nombre': 'Compania Suramericana de Riesgos Profesionales',
+                     'eps': eps,
+                     'afp': afp,
+                  }
+                  fecha_inicial = row['Fecha Inicial']
+                  fecha_final = row['Fecha Final']
+                  salario = row['Valor IBC']
+                  new_movimiento = {
+                     'serie': int(row['Serie incapacidad']),
+                     'fecha_recepcion': row['FECHA RECEPCION'],
+                     'concepto': row[''],
+                     'cod_incapacidad': row['Nro.incapacidad'],
+                     'diagnostico': 'diagnostico',
+                     'prorroga': True if row['Es prorroga'] == 'Si' else False,
+                     'observaciones': row['notas'],
+                     # '': row[''],
+                  }
+                  # Verificar si el empleado existe
+                  empleado, created = Empleado.objects.get_or_create(
+                     docto_empleado=docto_empleado,
+                     defaults=new_empleado,
+                  )
+                  print(new_empleado)
+                  print(empleado)
+                  print(created)
+
+               except Empleado.DoesNotExist:
+                  msg = f"Empleado con documento {docto_empleado} no existe y no pudo ser creado."
+                  messages.error(request, msg)
+               except Exception as e:
+                  msg = f"Error al procesar la fila {index + 1}: {e}"
+                  messages.error(request, msg)
+            # 
+            # messages.success(request, "Datos cargados exitosamente.")
+            return redirect('/')
+
+      except Exception as e:
+         msg = f"Error al cargar el archivo: {e}"
+         messages.error(request, msg)
+
+   return render(request, 'cargar-archivo.html', {'msg': msg})
 
 def empleado_detalles(request, id):
    # Obtener el empleado con el ID proporcionado
