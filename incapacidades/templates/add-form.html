@@ -210,48 +210,56 @@
     fechasDistribucion: [],
 
     calcularValoresXPagar(index) {
-      const { empresaDias, empresaValor, entidadDias, entidadValor } = this.calcularPago(index);
+      const [empresaDias, empresaValor, entidadDias, entidadValor] = this.calcularPago(index);
       this.fechasDistribucion[index].empresaDias = empresaDias;
       this.fechasDistribucion[index].empresaValor = empresaValor;
       this.fechasDistribucion[index].entidadDias = entidadDias;
       this.fechasDistribucion[index].entidadValor = entidadValor;
     },
 
-    calcularPrimerPago() {
-      index = 0;
-      const { empresaDias, empresaValor, entidadDias, entidadValor } =
-        this.calcularPago(index);
-      this.fechasDistribucion[index].empresaDias = empresaDias;
-      this.fechasDistribucion[index].empresaValor = empresaValor;
-      this.fechasDistribucion[index].entidadDias = entidadDias;
-      this.fechasDistribucion[index].entidadValor = entidadValor;
+    asignarEmpresaDiasCero() {
+      let index = 0;
+      [ this.fechasDistribucion[index].empresaDias,
+        this.fechasDistribucion[index].empresaValor,
+        this.fechasDistribucion[index].entidadDias,
+        this.fechasDistribucion[index].entidadValor,
+      ] = this.calcularPago(index);
+
+      index = 1;
+      [ this.fechasDistribucion[index].empresaDias,
+        this.fechasDistribucion[index].empresaValor,
+        this.fechasDistribucion[index].entidadDias,
+        this.fechasDistribucion[index].entidadValor,
+      ] = this.calcularPago(index);
     },
 
     calcularPago(index) {
+      const empresaTotalDias = 2;
       const prorroga = this.prorroga;
       const salarioDiario = this.fechasDistribucion[index].salario / 30;
       const totalDias = this.fechasDistribucion[index].totalDias;
-      const empresaTotalDias = 2;
       let empresaDias = totalDias < empresaTotalDias ? totalDias : empresaTotalDias;
-      if (index === 0) {
-        empresaDias = prorroga ? 0 : empresaDias;
-      }
+      empresaDias = (index === 0 && prorroga) ? 0 : empresaDias;
+
       if (index === 1) {
         const totalDiasAntSeg = this.fechasDistribucion[0].totalDias;
         const empresaDiasAntSeg = this.fechasDistribucion[0].empresaDias;
-        if (totalDiasAntSeg < empresaTotalDias)
-          empresaDias = 1;
+        if (totalDiasAntSeg <= empresaTotalDias)
+          empresaDias = empresaTotalDias - totalDiasAntSeg;
+        empresaDias = prorroga ? 0 : empresaDias;
       }
-      if (index > 1) empresasDias = 0;
+
+      if (index > 1) empresaDias = 0;
+
       const empresaValor = (empresaDias * salarioDiario).toFixed(2);
       const entidadDias = (totalDias > empresaDias) ? totalDias - empresaDias : 0;
       const entidadValor = (entidadDias * salarioDiario).toFixed(2);
-      return {
+      return [
         empresaDias,
         empresaValor,
         entidadDias,
         entidadValor,
-      }
+      ];
     },
 
     calcularTotalesXPagar() {
@@ -484,7 +492,7 @@
           value="{{ prorroga }}"
           type="checkbox"
           x-model="prorroga"
-          @change="calcularPrimerPago"
+          @change="asignarEmpresaDiasCero"
           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
         />
         <label
