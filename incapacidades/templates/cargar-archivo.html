@@ -2,7 +2,8 @@
 {% block title %} Incapacidades | Agregar Movimiento {% endblock %}
 {% block content %}
 <section class="max-w-lg mx-auto">
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     <div class="mb-3">
       <div class="flex items-center justify-center w-full">
         <label for="dropzone-file"
@@ -18,10 +19,13 @@
                 archivo Excel</span> o arrastralo a esta zona</p>
             <p class="text-xs text-gray-500 dark:text-gray-400">XLS, XLSX (MAX. 1MByte)</p>
           </div>
-          <input id="dropzone-file" type="file" class="hidden" />
+          <input id="dropzone-file" class="hidden" name="file" type="file" accept=".xls,.xlsx" />
         </label>
       </div>
     </div>
+    {% if msg %}
+      {{ msg }}
+    {% endif %}
     <div class="text-center">
       <button type="submit"
         class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Subir</button>
