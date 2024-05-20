@@ -141,6 +141,9 @@ def buscar_personas(request):
    return render(request, 'search-results.html', {'empleados': empleados})
 
 
+def cargar_archivo(request):
+   return render(request, 'cargar-archivo.html')
+
 def empleado_detalles(request, id):
    # Obtener el empleado con el ID proporcionado
    afps = Afp.objects.all().order_by('nombre')
