@@ -280,13 +280,6 @@ class FechaDistribucion(models.Model):
         blank=True
     )
 
-    cuenta_cobrar = models.DecimalField(
-        decimal_places=2,
-        max_digits=10,
-        verbose_name='Cuenta x cobrar',
-        help_text='Escribe el valor de la cuenta x cobrar...',
-    )
-
     creado = models.DateTimeField(auto_now_add=True, editable=False)
     actualizado = models.DateTimeField(auto_now=True, editable=False)
 
