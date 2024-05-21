@@ -211,6 +211,19 @@
     entidadCuentaXCobrar: 0,
     fechasDistribucion: [],
 
+    formatDate(date) {
+      const [day, month, year] = date.split('/');
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    },
+
+    formatFechasDistribucion() {
+      return this.fechasDistribucion.map(fecha => ({
+        ...fecha,
+        fechaInicio: this.formatDate(fecha.fechaInicio),
+        fechaFin: this.formatDate(fecha.fechaFin)
+      }));
+    },
+
     calcularValoresXPagar(index) {
       const [empresaDias, empresaValor, entidadDias, entidadValor] = this.calcularPago(index);
       this.fechasDistribucion[index].empresaDias = empresaDias;
@@ -528,6 +541,11 @@
               </tr>
           </thead>
           <tbody>
+            <input
+              type="hidden"
+              name="fechas_distribucion"
+              x-effect="$el.value = JSON.stringify(formatFechasDistribucion())"
+            />
             <template x-for="(seg, idx) in fechasDistribucion">
             <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
