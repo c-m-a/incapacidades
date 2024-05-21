@@ -2,7 +2,7 @@ import json
 import pandas as pd
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, Movimiento
+from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, FechaDistribucion, Movimiento
 
 ARL_NIT = '890903790'
 ARL_NOMBRE = 'Compania Suramericana de Riesgos Profesionales'
@@ -25,8 +25,8 @@ def agregar_movimiento(request):
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
    if request.method == 'POST':
-      fecha_distribucion = request.POST.get('fechas_distribucion')
-      fecha_distribucion = json.loads(fecha_distribucion)
+      fechas_distribucion = request.POST.get('fechas_distribucion')
+      fechas_distribucion = json.loads(fechas_distribucion)
       docto_empleado = request.POST.get('docto_empleado')
       serie = request.POST.get('serie')
       nombre = request.POST.get('nombre')
@@ -117,6 +117,20 @@ def agregar_movimiento(request):
             incapacidad=clase_incapacidad,
             estado_incapacidad=estado_incapacidad,
          )
+
+         for distribucion in fechas_distribucion:
+            fecha_distribucion = FechaDistribucion(
+               fecha_inicial=distribucion['fechaInicio'],
+               fecha_final=distribucion['fechaFin'],
+               salario=distribucion['salario'],
+               total_dias=distribucion['totalDias'],
+               empresa_dias=distribucion['empresaDias'],
+               empresa_valor=distribucion['empresaValor'],
+               entidad_dias=distribucion['entidadDias'],
+               entidad_valor=distribucion['entidadValor'],
+               movimiento=movimiento, 
+            )
+            fecha_distribucion.save()
 
          return redirect('/')
 
