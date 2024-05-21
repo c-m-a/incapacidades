@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %} Incapacidades | Agregar Movimiento {% endblock %}
+{% block title %} Incapacidades | Editar Movimiento {% endblock %}
 {% block content %}
 <section>
   <div class="px-10">
-    <h2 class="text-2xl font-bold dark:text-white">Agregar Incapacidad</h2>
+    <h2 class="text-2xl font-bold dark:text-white">Editar Incapacidad</h2>
   </div>
 </section>
 <form method="post">
@@ -38,9 +38,9 @@
         type="text"
         id="docto-empleado"
         name="docto_empleado"
-        value="{{ docto_empleado}}"
+        value="{{ movimiento.empleado.docto_empleado }}"
         aria-required="true"
-        title="Por favor, completa este campo"
+        title="Escribe el no. de documento..."
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
@@ -52,9 +52,9 @@
       <input
         type="text"
         name="nombre"
-        value="{{ nombre }}"
+        value="{{ movimiento.empleado.nombre }}"
         aria-required="true"
-        title="Por favor, completa este campo"
+        title="Escribe el nombre completo..."
         class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
@@ -64,13 +64,12 @@
       <select
         id="genero"
         name="genero"
-        value="{{ genero }}"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona...</option>
-        <option value="0">Masculino</option>
-        <option value="1">Femenino</option>
+        <option {% if movimiento.empleado.genero > 1 %}selected{% endif %}>Selecciona un genero...</option>
+        <option value="0" {% if movimiento.empleado.genero == 0 %}selected={% endif %}>Masculino</option>
+        <option value="1" {% if movimiento.empleado.genero == 1 %}selected{% endif %}>Femenino</option>
       </select>
     </div>
   </div>
@@ -84,7 +83,7 @@
           type="date"
           id="fecha-nacimiento"
           name="fecha_nacimiento"
-          value="{{ fecha_nacimiento }}"
+          value="{{ movimiento.empleado.fecha_nacimiento }}"
           aria-required="true"
           title="Por favor, completa este campo"
           @input="updateResultDate"
@@ -103,12 +102,12 @@
           type="date"
           id="fecha-ingreso"
           name="fecha_ingreso"
-          name="{{ fecha_ingreso }}"
+          name="{{ movimiento.empleado.fecha_ingreso }}"
           aria-required="true"
           title="Por favor, completa este campo"
           @input="updateResultDate"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Selecciona una fecha de inicio..."
+          placeholder="Selecciona una fecha de ingreso..."
           required
         />
       </div>
@@ -122,9 +121,9 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona...</option>
-        <option value="0">Activo</option>
-        <option value="1">Retirado</option>
+        <option {% if movimiento.empleado.estado > 1 %}selected={% endif %}>Selecciona un estado...</option>
+        <option value="0" {% if movimiento.empleado.estado == 0 %}selected={% endif %}>Activo</option>
+        <option value="1" {% if movimiento.empleado.estado == 1 %}selected={% endif %}>Retirado</option>
       </select>
     </div>
   </div>
@@ -139,9 +138,9 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona...</option>
+        <option selected>Selecciona una EPS...</option>
         {% for eps in epss %}
-        <option value="{{ eps.id }}">{{ eps.nombre }}</option>
+          <option value="{{ eps.id }}" {% if movimiento.empleado.eps.id == eps.id %}selected{% endif %}>{{ eps.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -155,9 +154,9 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona...</option>
+        <option selected>Selecciona un fondo de pensiones...</option>
         {% for afp in afps %}
-        <option value="{{ afp.id }}">{{ afp.nombre }}</option>
+          <option value="{{ afp.id }}" {% if movimiento.empleado.afp.id == afp.id %}selected{% endif %}>{{ afp.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -197,7 +196,9 @@
   class="my-4"
   x-data="{
     fechaInicial: '',
+    fechaInicialFmt: '',
     fechaFinal: '',
+    fechaFinalFmt: '',
     numeroDias: 1,
     prorroga: false,
     salario: 0,
@@ -206,25 +207,95 @@
     pagadoXEntidad: 0,
     pedienteEntidad: 0,
     generaPago: false,
+    empresaTotalPagado: 0,
+    entidadCuentaXCobrar: 0,
     fechasDistribucion: [],
+
+    formatDate(date) {
+      const [day, month, year] = date.split('/');
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    },
+
+    formatFechasDistribucion() {
+      return this.fechasDistribucion.map(fecha => ({
+        ...fecha,
+        fechaInicio: this.formatDate(fecha.fechaInicio),
+        fechaFin: this.formatDate(fecha.fechaFin)
+      }));
+    },
+
+    calcularValoresXPagar(index) {
+      const [empresaDias, empresaValor, entidadDias, entidadValor] = this.calcularPago(index);
+      this.fechasDistribucion[index].empresaDias = empresaDias;
+      this.fechasDistribucion[index].empresaValor = empresaValor;
+      this.fechasDistribucion[index].entidadDias = entidadDias;
+      this.fechasDistribucion[index].entidadValor = entidadValor;
+    },
+
+    asignarEmpresaDiasCero() {
+      let index = 0;
+      [ this.fechasDistribucion[index].empresaDias,
+        this.fechasDistribucion[index].empresaValor,
+        this.fechasDistribucion[index].entidadDias,
+        this.fechasDistribucion[index].entidadValor,
+      ] = this.calcularPago(index);
+
+      index = 1;
+      [ this.fechasDistribucion[index].empresaDias,
+        this.fechasDistribucion[index].empresaValor,
+        this.fechasDistribucion[index].entidadDias,
+        this.fechasDistribucion[index].entidadValor,
+      ] = this.calcularPago(index);
+    },
+
+    calcularPago(index) {
+      const empresaTotalDias = 2;
+      const prorroga = this.prorroga;
+      const salarioDiario = this.fechasDistribucion[index].salario / 30;
+      const totalDias = this.fechasDistribucion[index].totalDias;
+      let empresaDias = totalDias < empresaTotalDias ? totalDias : empresaTotalDias;
+      empresaDias = (index === 0 && prorroga) ? 0 : empresaDias;
+
+      if (index === 1) {
+        const totalDiasAntSeg = this.fechasDistribucion[0].totalDias;
+        const empresaDiasAntSeg = this.fechasDistribucion[0].empresaDias;
+        if (totalDiasAntSeg <= empresaTotalDias)
+          empresaDias = empresaTotalDias - totalDiasAntSeg;
+        empresaDias = prorroga ? 0 : empresaDias;
+      }
+
+      if (index > 1) empresaDias = 0;
+
+      const empresaValor = (empresaDias * salarioDiario).toFixed(2);
+      const entidadDias = (totalDias > empresaDias) ? totalDias - empresaDias : 0;
+      const entidadValor = (entidadDias * salarioDiario).toFixed(2);
+      return [
+        empresaDias,
+        empresaValor,
+        entidadDias,
+        entidadValor,
+      ];
+    },
+
+    calcularTotalesXPagar() {
+      return this.$watch('fechasDistribucion', (newValue, oldValue) => {
+        const fechas = JSON.parse(JSON.stringify(newValue, null, 2));
+        let empresaTotalPagado = 0;
+        let entidadTotalCuentaXCobrar = 0;
+        for (const f of fechas) {
+          empresaTotalPagado += +f.empresaValor;
+          entidadTotalCuentaXCobrar += +f.entidadValor;
+        }
+        this.empresaTotalPagado = empresaTotalPagado;
+        this.entidadCuentaXCobrar = entidadTotalCuentaXCobrar;
+      });
+    },
   }"
-  >
+  x-init="calcularTotalesXPagar()">
   <h2 class="text-lg font-bold dark:text-white">Datos Generales de Incapacidad</h2>
-  <hr class="divide-y divide-gray-100 my-4" />
-    <div class="mb-5">
-      <label for="movimiento-centro-costos-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
-        Costos</label>
-      <select
-        id="movimiento-centro-costos-id"
-        name="movimiento_centro_costos_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona...</option>
-        {% for ccosto in ccostos %}
-        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="mb-5">
+  <hr class="divide-y divide-gray-100 mb-4" />
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
       <label
         for="serie"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
@@ -239,7 +310,7 @@
         required
       >
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
       <label
         for="fecha-recepcion"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de recepcion</label>
@@ -252,12 +323,27 @@
           aria-required="true"
           title="Por favor, completa este campo"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Selecciona una fecha"
+          placeholder="Selecciona una fecha de recepcion..."
           required
         >
       </div>
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
+      <label for="movimiento-centro-costos-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Centro de
+        Costos</label>
+      <select
+        id="movimiento-centro-costos-id"
+        name="movimiento_centro_costos_id"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Selecciona un centro de costos...</option>
+        {% for ccosto in ccostos %}
+        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>
       <select
         id="incapacidad"
@@ -265,13 +351,13 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona la clase de incapacidad</option>
+        <option selected>Selecciona la clase de incapacidad...</option>
         {% for incapacidad in incapacidades %}
         <option value="{{ incapacidad.id }}">{{ incapacidad.nombre }}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
       <label
         for="cod-incapacidad"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero incapacidad</label>
@@ -288,7 +374,25 @@
         />
       </div>
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
+      <label
+        for="estado-incapacidad"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado de Incapacidad</label>
+      <select
+        id="estado-incapacidad"
+        name="estado_incapacidad_id"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        required
+      >
+        <option selected>Selecciona un estado de incapacidad...</option>
+        {% for estado_incapacidad in estados_incapacidades %}
+        <option value="{{ estado_incapacidad.id }}">{{ estado_incapacidad.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1">
       <label
         for="concepto-id"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
@@ -298,13 +402,13 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el concepto</option>
+        <option selected>Selecciona el concepto...</option>
         {% for concepto in conceptos %}
         <option value="{{ concepto.id }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="mb-5">
+    <div class="flex-1">
       <label
         for="diagnostico"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Codigo diagnostico</label>
@@ -313,27 +417,24 @@
         name="diagnostico_id"
         value="{{ diagnostico_id }}"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona el diagnostico</option>
+        <option selected>Selecciona el diagnostico...</option>
         {% for diagnostico in diagnosticos %}
         <option value="{{ diagnostico.id }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="flex items-center mb-4">
+    <div class="flex flex-1 justify-center pt-10">
       <input
-        id="prorroga"
-        name="prorroga"
-        value="{{ prorroga }}"
+        id="genera-pago"
+        name="genera_pago"
+        value="{{ genera_pago }}"
         type="checkbox"
-        @input="calcularValorIncapacidad"
-        x-model="prorroga"
-        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-      />
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label
-        for="prorroga"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
-        prorroga?</label>
+        for="genera-pago" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
+        pago?</label>
     </div>
+  </div>
     <div class="mb-5">
       <label
         for="observaciones"
@@ -346,37 +447,8 @@
         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Escribe tus observaciones en este campo..."></textarea>
     </div>
-    <h2 class="text-lg font-bold dark:text-white">Valorizacion</h2>
-    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
-    <div class="mb-5">
-      <label
-        for="estado-incapacidad"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado Incapacidad</label>
-      <select
-        id="estado-incapacidad"
-        name="estado_incapacidad_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      >
-        <option selected>Selecciona...</option>
-        {% for estado_incapacidad in estados_incapacidades %}
-        <option value="{{ estado_incapacidad.id }}">{{ estado_incapacidad.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="flex items-center mb-4">
-      <input
-        id="genera-pago"
-        name="genera_pago"
-        value="{{ genera_pago }}"
-        type="checkbox"
-        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-      <label
-        for="genera-pago" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
-        pago?</label>
-    </div>
     <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
-    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
+    <hr class="divide-y divide-gray-100 mb-4" />
     <div class="flex gap-4 mb-4">
       <div class="flex-1">
         <label
@@ -385,16 +457,20 @@
         <div class="relative max-w-md">
           <input
             id="fecha-inicio"
-            name="fecha_inicio"
             value="{{ fecha_inicio }}"
             type="date"
             aria-required="true"
             title="Por favor, completa este campo"
             x-model="fechaInicial"
-            @input="updateResultDate"
+            @change="updateResultDate"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Selecciona una fecha de inicio..."
             required
+          />
+          <input
+            type="hidden"
+            name="fecha_inicio"
+            x-model="fechaInicialFmt"
           />
         </div>
       </div>
@@ -427,6 +503,26 @@
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           readonly
         />
+        <input
+          type="hidden"
+          name="fecha_fin"
+          x-model="fechaFinalFmt"
+        />
+      </div>
+      <div class="flex flex-1 pt-10 justify-center">
+        <input
+          id="prorroga"
+          name="prorroga"
+          value="{{ prorroga }}"
+          type="checkbox"
+          x-model="prorroga"
+          @change="asignarEmpresaDiasCero"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+        />
+        <label
+          for="prorroga"
+          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Es
+          prorroga?</label>
       </div>
     </div>
     <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -436,7 +532,6 @@
                   <th scope="col" class="px-6 py-3">#</th>
                   <th scope="col" class="px-6 py-3">Fecha Inicial</th>
                   <th scope="col" class="px-6 py-3">Fecha Final</th>
-                  <th scope="col" class="px-6 py-3">Calendario</th>
                   <th scope="col" class="px-6 py-3">Salario</th>
                   <th scope="col" class="px-6 py-3">Total Dias</th>
                   <th scope="col" class="px-6 py-3">Dias Empresa</th>
@@ -446,80 +541,66 @@
               </tr>
           </thead>
           <tbody>
+            <input
+              type="hidden"
+              name="fechas_distribucion"
+              x-effect="$el.value = JSON.stringify(formatFechasDistribucion())"
+            />
             <template x-for="(seg, idx) in fechasDistribucion">
             <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
-                <td class="px-6 py-4" x-text="seg.fechaInicio"></td>
-                <td class="px-6 py-4" x-text="seg.fechaFin"></td>
-                <td class="px-6 py-4">
-                  <input
-                    x-model="seg.calendario"
-                    class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
-                  />
-                </td>
-                <td class="px-6 py-4">
-                  <input
-                    x-model="seg.salario"
-                    class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
-                  />
-                </td>
-                <td class="px-6 py-4" x-text="seg.totalDias"></td>
-                <td class="px-6 py-4" x-text="seg.empresaDias"></td>
-                <td class="px-6 py-4" x-text="seg.empresaValor"></td>
-                <td class="px-6 py-4 text-right" x-text="seg.entidadDias"></td>
-                <td class="px-6 py-4 text-right" x-text="seg.entidadValor"></td>
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
+              <td class="px-6 py-4" x-text="seg.fechaInicio"></td>
+              <td class="px-6 py-4" x-text="seg.fechaFin"></td>
+              <td class="px-6 py-4">
+                <input
+                  x-model="seg.salario"
+                  @input="calcularValoresXPagar(idx)"
+                  class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+                />
+              </td>
+              <td class="px-6 py-4" x-text="seg.totalDias"></td>
+              <td class="px-6 py-4" x-text="seg.empresaDias"></td>
+              <td class="px-6 py-4">
+                $ <span x-text="seg.empresaValor"></span>
+              </td>
+              <td class="px-6 py-4 text-right" x-text="seg.entidadDias"></td>
+              <td class="px-6 py-4 text-right">
+                $ <span x-text="seg.entidadValor"></span>
+              </td>
             </tr>
             </template>
           </tbody>
       </table>
     </div>
-    <div class="flex justify-between">
-      <h2 class="text-lg font-bold dark:text-white">Pagos De La Entidad (EPS/ARL)</h2>
-      <button
-        type="submit"
-        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar Pago</button>
-    </div>
-    <hr class="divide-y divide-gray-100 mt-2 mb-4" />
-    <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                  <th scope="col" class="px-6 py-3">#</th>
-                  <th scope="col" class="px-6 py-3">Fecha De Pago</th>
-                  <th scope="col" class="px-6 py-3">Valor Pagado</th>
-              </tr>
-          </thead>
-          <tbody>
-            <template x-for="(seg, idx) in fechasDistribucion">
-            <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
-                <td class="px-6 py-4">15/15/2014</td>
-                <td class="px-6 py-4 text-right">$300.000,00</td>
-            </tr>
-            </template>
-          </tbody>
-      </table>
-    </div>
-    <hr class="divide-y divide-gray-100 my-4" />
-    <div class="flex flex-col items-end">
-      <div class="flex font-semibold gap-4">
-        <div>Total Valor Empresa</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-      <div class="flex font-semibold gap-4">
-        <div>Valor Total Entidad</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-      <div class="flex font-semibold gap-4">
-        <div>Total Pagado Entidad</div>
-        <div>$$$.$$$,$$</div>
-      </div>
-      <div class="flex font-semibold gap-4">
-        <div>Total Deuda Entidad</div>
-        <div>$$$.$$$,$$</div>
+    <div class="font-medium">
+      <div class="flex justify-end gap-5">
+        <div class="flex gap-4">
+          <div>Total Valor Empresa</div>
+          <div>
+            $ <span x-text="empresaTotalPagado"></span>
+            <input
+              type="hidden"
+              name="valor_cia"
+              x-model="empresaTotalPagado"
+              x-effect="$el.value = empresaTotalPagado"
+            />
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div>Total Cuenta por Cobrar Entidad</div>
+          <div>
+            $ <span x-text="entidadCuentaXCobrar"></span>
+            <input
+              type="hidden"
+              name="cuenta_cobrar"
+              x-model="entidadCuentaXCobrar"
+              x-effect="$el.value = entidadCuentaXCobrar"
+            />
+          </div>
+        </div>
       </div>
     </div>
-    <hr class="divide-y divide-gray-100 my-4" />
+    <hr class="divide-y divide-gray-100 mt-1 mb-4" />
     <div class="text-right">
       <button
         type="submit"
@@ -536,40 +617,32 @@ function calcularValorIncapacidad() {
   const fechaInicial = new Date(this.fechaInicial);
   const valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias);
   const diasPagadoXEmpresa = 2;
-
-  console.log('valoresFechasDistribucion', valoresFechasDistribucion);
-
-  // if (valorSalario && valorNumeroDias) {
-  //   if (porroga)
-  //     valorPagadoEmpresa = (diasPagadoXEmpresa * valorSalarioDiario).toFixed(2);
-  //
-  //   this.valorPagadoEmpresa = valorPagadoEmpresa;
-  //
-  //   diasPagadoXEntidad = valorNumeroDias - diasPagadoXEmpresa;
-  //   totalCuentaXCobrar = (valorNumeroDias - diasPagadoXEmpresa) * valorSalarioDiario;
-  //   this.cuentaXCobrar = (totalCuentaXCobrar < 0) ? 0 : totalCuentaXCobrar;
-  //   this.cuentaXCobrar = this.cuentaXCobrar.toFixed(2);
-  //
-  //   valoresFechasDistribucion = crearSegmentosQuincenales(fechaInicial, valorNumeroDias, diasPagadoXEmpresa, valorSalarioDiario);
-  //
-  //   this.fechasDistribucion = valoresFechasDistribucion;
-  // }
 }
 
 function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
+  const diasXSegmento = 15;
+  const microSegDia = 86_400_000;
   const segmentos = [];
-  let fechaActual = new Date(fechaInicial);
-  const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * 86400000); // 86_400_000 milisegundos en un día
+  let fechaActual = new Date(fechaInicial.getTime() + microSegDia);
+  const fechaCorte = new Date(fechaInicial.getFullYear(), fechaInicial.getMonth() + 1, 15);
+  const fechaFin = new Date(fechaInicial.getTime() + valorNumeroDias * microSegDia); // 86400000 milisegundos en un día
   let i = 0;
 
   while (fechaActual <= fechaFin) {
     const fechaInicialSegmento = new Date(fechaActual);
     const fechaFinalSegmento = new Date(fechaActual);
+    const diaSegmento = fechaFinalSegmento.getDate();
+    const diaFinalMes = new Date(fechaFinalSegmento.getFullYear(), fechaFinalSegmento.getMonth() + 1, 0);
+    const diasFaltantesFinMes = diaFinalMes.getDate() - diaSegmento;
 
-    fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + 14);
+    if (diaSegmento <= diasXSegmento) {
+      fechaFinalSegmento.setDate(fechaCorte.getDate());
+    } else {
+      fechaFinalSegmento.setDate(fechaFinalSegmento.getDate() + diasFaltantesFinMes);
+    } 
 
     if (fechaFinalSegmento > fechaFin) {
-      fechaFinalSegmento.setDate(fechaFin.getDate() + 1);
+      fechaFinalSegmento.setDate(fechaFin.getDate());
     }
 
     const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
@@ -577,30 +650,38 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
     segmentos.push({
       fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
       fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
-      calendario: 'digita...',
       salario: 0,
-      totalDias: 0,
+      totalDias: numeroDias + 1,
       empresaDias: 0,
       empresaValor: 0,
       entidadDias: 0,
       entidadValor: 0,
     });
 
-    fechaActual = fechaFinalSegmento;
+    fechaActual = fechaFinalSegmento.getTime() + microSegDia;
   }
-
-  console.log('segmentos', segmentos);
   return segmentos;
 }
 
 function updateResultDate() {
+  const diaMicroSeg = 86_400_000;
   const valorFechaInicial = new Date(this.fechaInicial);
+  const valorFechaInicialFmt = new Date(this.fechaInicial);
+  valorFechaInicialFmt.setTime(valorFechaInicial.getTime() + diaMicroSeg);
   const valorNumeroDias = parseInt(this.numeroDias);
   const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
-  const day = String(valorFechaFinal.getDate()).padStart(2, '0');
-  const month = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
-  const year = valorFechaFinal.getFullYear();
-  this.fechaFinal = `${day}/${month}/${year}`;
+
+  const fechaInicialDay = String(valorFechaInicialFmt.getDate()).padStart(2, '0');
+  const fechaInicialMonth = String(valorFechaInicialFmt.getMonth() + 1).padStart(2, '0');
+  const fechaInicialYear = valorFechaInicialFmt.getFullYear();
+
+  const fechaFinalDay = String(valorFechaFinal.getDate()).padStart(2, '0');
+  const fechaFinalMonth = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
+  const fechaFinalYear = valorFechaFinal.getFullYear();
+
+  this.fechaInicialFmt = `${fechaInicialYear}-${fechaInicialMonth}-${fechaInicialDay}`;
+  this.fechaFinalFmt = `${fechaFinalYear}-${fechaFinalMonth}-${fechaFinalDay}`;
+  this.fechaFinal = `${fechaFinalDay}/${fechaFinalMonth}/${fechaFinalYear}`;
 
   const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias);
   this.fechasDistribucion = distribucion;
