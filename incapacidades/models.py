@@ -283,7 +283,11 @@ class FechaDistribucion(models.Model):
     creado = models.DateTimeField(auto_now_add=True, editable=False)
     actualizado = models.DateTimeField(auto_now=True, editable=False)
 
-    movimiento = models.ForeignKey('Movimiento', on_delete=models.CASCADE) 
+    movimiento = models.ForeignKey(
+        'Movimiento',
+        related_name='fechas_distribucion',
+        on_delete=models.CASCADE
+    ) 
 
     class Meta:
         verbose_name = 'Fechas de Distribucion'
