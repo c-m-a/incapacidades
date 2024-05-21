@@ -129,6 +129,22 @@ class EstadoIncapacidadAdmin(admin.ModelAdmin):
     list_editable = ('nombre',)
     search_fields = ['nombre']
 
+
+class FechaDistribucionAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'fecha_inicial',
+        'fecha_final',
+        'salario',
+        'total_dias',
+        'empresa_dias',
+        'empresa_valor',
+        'entidad_dias',
+        'entidad_valor',
+    )
+    list_display_links = ('id',)
+
+
 class MovimientoAdmin(admin.ModelAdmin):
     list_display = (
         'cod_incapacidad',
@@ -149,6 +165,6 @@ admin.site.register(Diagnostico, DiagnosticoAdmin)
 admin.site.register(Eps, EpsAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
 admin.site.register(EstadoIncapacidad, EstadoIncapacidadAdmin)
-admin.site.register(FechaDistribucion)
+admin.site.register(FechaDistribucion, FechaDistribucionAdmin)
 admin.site.register(Movimiento, MovimientoAdmin)
 
