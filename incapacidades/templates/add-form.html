@@ -196,7 +196,9 @@
   class="my-4"
   x-data="{
     fechaInicial: '',
+    fechaInicialFmt: '',
     fechaFinal: '',
+    fechaFinalFmt: '',
     numeroDias: 1,
     prorroga: false,
     salario: 0,
@@ -442,16 +444,20 @@
         <div class="relative max-w-md">
           <input
             id="fecha-inicio"
-            name="fecha_inicio"
             value="{{ fecha_inicio }}"
             type="date"
             aria-required="true"
             title="Por favor, completa este campo"
             x-model="fechaInicial"
-            @input="updateResultDate"
+            @change="updateResultDate"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Selecciona una fecha de inicio..."
             required
+          />
+          <input
+            type="hidden"
+            name="fecha_inicio"
+            x-model="fechaInicialFmt"
           />
         </div>
       </div>
@@ -483,6 +489,11 @@
           x-model="fechaFinal"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           readonly
+        />
+        <input
+          type="hidden"
+          name="fecha_fin"
+          x-model="fechaFinalFmt"
         />
       </div>
       <div class="flex flex-1 pt-10 justify-center">
@@ -549,12 +560,24 @@
           <div>Total Valor Empresa</div>
           <div>
             $ <span x-text="empresaTotalPagado"></span>
+            <input
+              type="hidden"
+              name="valor_cia"
+              x-model="empresaTotalPagado"
+              x-effect="$el.value = empresaTotalPagado"
+            />
           </div>
         </div>
         <div class="flex gap-4">
           <div>Total Cuenta por Cobrar Entidad</div>
           <div>
             $ <span x-text="entidadCuentaXCobrar"></span>
+            <input
+              type="hidden"
+              name="cuenta_cobrar"
+              x-model="entidadCuentaXCobrar"
+              x-effect="$el.value = entidadCuentaXCobrar"
+            />
           </div>
         </div>
       </div>
@@ -566,8 +589,6 @@
         class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
     </div>
 </section>
-  <input type="hidden" name="valor_cia" value="0" x-text="empresaTotalPagado" />
-  <input type="hidden" name="cuenta_cobrar" value="0" x-text="entidadCuentaXCobrar" />
 </form>
 <script>
 function calcularValorIncapacidad() {
@@ -625,13 +646,24 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
 }
 
 function updateResultDate() {
+  const diaMicroSeg = 86_400_000;
   const valorFechaInicial = new Date(this.fechaInicial);
+  const valorFechaInicialFmt = new Date(this.fechaInicial);
+  valorFechaInicialFmt.setTime(valorFechaInicial.getTime() + diaMicroSeg);
   const valorNumeroDias = parseInt(this.numeroDias);
   const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
-  const day = String(valorFechaFinal.getDate()).padStart(2, '0');
-  const month = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
-  const year = valorFechaFinal.getFullYear();
-  this.fechaFinal = `${day}/${month}/${year}`;
+
+  const fechaInicialDay = String(valorFechaInicialFmt.getDate()).padStart(2, '0');
+  const fechaInicialMonth = String(valorFechaInicialFmt.getMonth() + 1).padStart(2, '0');
+  const fechaInicialYear = valorFechaInicialFmt.getFullYear();
+
+  const fechaFinalDay = String(valorFechaFinal.getDate()).padStart(2, '0');
+  const fechaFinalMonth = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
+  const fechaFinalYear = valorFechaFinal.getFullYear();
+
+  this.fechaInicialFmt = `${fechaInicialYear}-${fechaInicialMonth}-${fechaInicialDay}`;
+  this.fechaFinalFmt = `${fechaFinalYear}-${fechaFinalMonth}-${fechaFinalDay}`;
+  this.fechaFinal = `${fechaFinalDay}/${fechaFinalMonth}/${fechaFinalYear}`;
 
   const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias);
   this.fechasDistribucion = distribucion;
