@@ -264,9 +264,21 @@ class FechaDistribucion(models.Model):
     salario = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     total_dias = models.IntegerField(default=0, null=True, blank=True)
     empresa_dias = models.IntegerField(default=0, null=True, blank=True)
-    empresa_valor = models.IntegerField(default=0, null=True, blank=True)
+    empresa_valor = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        default=0,
+        null=True,
+        blank=True
+    )
     entidad_dias = models.IntegerField(default=0, null=True, blank=True)
-    entidad_valor = models.IntegerField(default=0, null=True, blank=True)
+    entidad_valor = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        default=0,
+        null=True,
+        blank=True
+    )
 
     cuenta_cobrar = models.DecimalField(
         decimal_places=2,
