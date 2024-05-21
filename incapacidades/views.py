@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, Movimiento
 
+ARL_NIT = '890903790'
+ARL_NOMBRE = 'Compania Suramericana de Riesgos Profesionales'
+
 # Create your views here.
 def inicio(request):
    movimientos = Movimiento.objects.select_related('empleado').all()
@@ -41,8 +44,6 @@ def agregar_movimiento(request):
       diagnostico_id = request.POST.get('diagnostico_id')
       fecha_inicio = request.POST.get('fecha_inicio')
       fecha_fin = request.POST.get('fecha_fin')
-      fecha_inicio_temp = '2024-05-02'
-      fecha_fin_temp = '2024-05-02'
       dias = request.POST.get('dias')
       prorroga = False if request.POST.get('prorroga') == '' else True
       observaciones = request.POST.get('observaciones')
@@ -95,8 +96,8 @@ def agregar_movimiento(request):
             cod_incapacidad=cod_incapacidad,
             serie=serie,
             fecha_recepcion=fecha_recepcion,
-            fecha_inicio=fecha_inicio_temp,
-            fecha_fin=fecha_fin_temp,
+            fecha_inicio=fecha_inicio,
+            fecha_fin=fecha_fin,
             prorroga=prorroga,
             dias=dias,
             calendario=calendario,
@@ -175,8 +176,8 @@ def cargar_movimientos(request):
                      'fecha_nacimiento': '2024-01-01',
                      'fecha_ingreso': '2024-01-01',
                      'estado': 0,
-                     'arl_nit': '890903790',
-                     'arl_nombre': 'Compania Suramericana de Riesgos Profesionales',
+                     'arl_nit': ARL_NIT,
+                     'arl_nombre': ARL_NOMBRE,
                      'eps': eps,
                      'afp': afp,
                   }
