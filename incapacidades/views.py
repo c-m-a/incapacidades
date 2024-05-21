@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
@@ -24,6 +25,8 @@ def agregar_movimiento(request):
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
    if request.method == 'POST':
+      fecha_distribucion = request.POST.get('fechas_distribucion')
+      fecha_distribucion = json.loads(fecha_distribucion)
       docto_empleado = request.POST.get('docto_empleado')
       serie = request.POST.get('serie')
       nombre = request.POST.get('nombre')
