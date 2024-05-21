@@ -261,12 +261,20 @@ class FechaDistribucion(models.Model):
         verbose_name='Fecha final real',
         help_text='Escribe o selecciona la fecha final...',
     )
+    salario = models.DecimalField(decimal_places=2, max_digits=10, default=0)
+    total_dias = models.IntegerField(default=0, null=True, blank=True)
+    empresa_dias = models.IntegerField(default=0, null=True, blank=True)
+    empresa_valor = models.IntegerField(default=0, null=True, blank=True)
+    entidad_dias = models.IntegerField(default=0, null=True, blank=True)
+    entidad_valor = models.IntegerField(default=0, null=True, blank=True)
+
     cuenta_cobrar = models.DecimalField(
         decimal_places=2,
         max_digits=10,
         verbose_name='Cuenta x cobrar',
         help_text='Escribe el valor de la cuenta x cobrar...',
     )
+
     creado = models.DateTimeField(auto_now_add=True, editable=False)
     actualizado = models.DateTimeField(auto_now=True, editable=False)
 
