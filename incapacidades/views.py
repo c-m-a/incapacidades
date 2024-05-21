@@ -316,6 +316,30 @@ def buscar_diagnosticos(request):
    return render(request, 'resultados-diagnosticos.html', {'diagnosticos': diagnosticos})
 
 
-def editar_movimiento(request, empleado_id, movimiento_id):
-   context = {}
+def editar_movimiento(request, movimiento_id):
+   afps = Afp.objects.all().order_by('nombre')
+   epss = Eps.objects.all().order_by('nombre')
+   ccostos = CentroCosto.objects.all().order_by('nombre')
+   conceptos = Concepto.objects.all().order_by('codigo')
+   diagnosticos = Diagnostico.objects.all().order_by('codigo')
+   incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
+   estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
+
+   movimiento = get_object_or_404(
+      Movimiento.objects.select_related('empleado').prefetch_related('fechas_distribucion'),
+      id=movimiento_id
+   )
+
+   context = {
+      'afps': afps,
+      'epss': epss,
+      'ccostos': ccostos,
+      'conceptos': conceptos,
+      'diagnosticos': diagnosticos,
+      'incapacidades': incapacidades,
+      'estados_incapacidades': estados_incapacidades,
+      'movimiento': movimiento,
+   }
+
    return render(request, 'movimiento-editar.html', context)
+
