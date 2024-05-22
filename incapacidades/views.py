@@ -325,10 +325,24 @@ def editar_movimiento(request, movimiento_id):
    incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
+   if request.method == 'POST':
+      return redirect('/')
+
    movimiento = get_object_or_404(
       Movimiento.objects.select_related('empleado').prefetch_related('fechas_distribucion'),
       id=movimiento_id
    )
+
+   fechas_distribucion = list(movimiento.fechas_distribucion.all().values(
+      'fecha_inicial',
+      'fecha_final',
+      'salario',
+      'total_dias',
+      'empresa_dias',
+      'empresa_valor',
+      'entidad_dias',
+      'entidad_valor',
+   ))
 
    context = {
       'afps': afps,
@@ -339,6 +353,7 @@ def editar_movimiento(request, movimiento_id):
       'incapacidades': incapacidades,
       'estados_incapacidades': estados_incapacidades,
       'movimiento': movimiento,
+      'fechas_distribucion_json': json.dumps(fechas_distribucion, default=str),
    }
 
    return render(request, 'movimiento-editar.html', context)
