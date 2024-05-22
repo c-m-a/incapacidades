@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load l10n %}
 {% block title %} Incapacidades | Editar Movimiento {% endblock %}
 {% block content %}
 <section>
@@ -192,22 +193,36 @@
     <div class="flex-1"></div>
   </div>
 </section>
+  {{ movimiento.prorroga }}
 <section
   class="my-4"
   x-data="{
     fechaInicial: '{{ movimiento.fecha_inicio|date:'Y-m-d' }}',
     fechaInicialFmt: '{{ movimiento.fecha_inicio|date:'Y-m-d' }}',
-    fechaFinal: '{{ movimiento.fecha_fin|date:'Y-m-d' }}',
+    fechaFinal: '{{ movimiento.fecha_fin|date:'d/m/Y' }}',
     fechaFinalFmt: '{{ movimiento.fecha_fin|date:'Y-m-d' }}',
     numeroDias: {{ movimiento.dias }},
-    prorroga: true,
-    cuentaCobrar: 0,
-    pagadoEntidad: 0,
-    pedienteEntidad: 0,
-    generaPago: true,
-    empresaTotalPagado: 0,
-    entidadCuentaXCobrar: 0,
-    fechasDistribucion: [],
+    prorroga: {% if movimiento.prorroga %}true{% else %}false{% endif %},
+    pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad}}{% endif %},
+    pedienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad}}{% endif %},
+    generaPago: {% if movimiento.genera_pago %}true{% else %}false{% endif %},
+    empresaTotalPagado: {{ movimiento.valor_cia|unlocalize }},
+    entidadCuentaXCobrar: {{ movimiento.cuenta_cobrar|unlocalize }},
+    fechasDistribucion: [
+      {% for fecha in movimiento.fechas_distribucion.all %}
+      {
+        id: {{ fecha.id }},
+        fechaInicio: '{{ fecha.fecha_inicial|date:'d/m/Y' }}',
+        fechaFin: '{{ fecha.fecha_final|date:'d/m/Y' }}',
+        totalDias: {{ fecha.total_dias }},
+        salario: {{ fecha.salario|unlocalize }},
+        empresaDias: {{ fecha.empresa_dias }},
+        empresaValor: {{ fecha.empresa_valor|unlocalize }},
+        entidadDias: {{ fecha.entidad_dias }},
+        entidadValor: {{ fecha.entidad_valor|unlocalize }},
+      },
+      {% endfor %}
+    ],
 
     formatDate(date) {
       const [day, month, year] = date.split('/');
@@ -528,14 +543,14 @@
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                   <th scope="col" class="px-6 py-3">#</th>
-                  <th scope="col" class="px-6 py-3">Fecha Inicial</th>
-                  <th scope="col" class="px-6 py-3">Fecha Final</th>
-                  <th scope="col" class="px-6 py-3">Salario</th>
-                  <th scope="col" class="px-6 py-3">Total Dias</th>
-                  <th scope="col" class="px-6 py-3">Dias Empresa</th>
-                  <th scope="col" class="px-6 py-3">Valor Empresa</th>
-                  <th scope="col" class="px-6 py-3">Dias Entidad</th>
-                  <th scope="col" class="px-6 py-3">Valor Entidad</th>
+                  <th scope="col" class="px-6 py-3 text-center">Fecha Inicial</th>
+                  <th scope="col" class="px-6 py-3 text-center">Fecha Final</th>
+                  <th scope="col" class="px-6 py-3 text-center">Salario</th>
+                  <th scope="col" class="px-6 py-3 text-center">Total Dias</th>
+                  <th scope="col" class="px-6 py-3 text-center">Dias Empresa</th>
+                  <th scope="col" class="px-6 py-3 text-center">Valor Empresa</th>
+                  <th scope="col" class="px-6 py-3 text-center">Dias Entidad</th>
+                  <th scope="col" class="px-6 py-3 text-center">Valor Entidad</th>
               </tr>
           </thead>
           <tbody>
@@ -556,12 +571,12 @@
                   class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
                 />
               </td>
-              <td class="px-6 py-4" x-text="seg.totalDias"></td>
-              <td class="px-6 py-4" x-text="seg.empresaDias"></td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center" x-text="seg.totalDias"></td>
+              <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
+              <td class="px-6 py-4 text-right">
                 $ <span x-text="seg.empresaValor"></span>
               </td>
-              <td class="px-6 py-4 text-right" x-text="seg.entidadDias"></td>
+              <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>
               <td class="px-6 py-4 text-right">
                 $ <span x-text="seg.entidadValor"></span>
               </td>
