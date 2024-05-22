@@ -67,7 +67,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option {% if movimiento.empleado.genero > 1 %}selected{% endif %}>Selecciona un genero...</option>
+        <option>Selecciona un genero...</option>
         <option value="0" {% if movimiento.empleado.genero == 0 %}selected={% endif %}>Masculino</option>
         <option value="1" {% if movimiento.empleado.genero == 1 %}selected{% endif %}>Femenino</option>
       </select>
@@ -195,18 +195,16 @@
 <section
   class="my-4"
   x-data="{
-    fechaInicial: '',
-    fechaInicialFmt: '',
-    fechaFinal: '',
-    fechaFinalFmt: '',
-    numeroDias: 1,
-    prorroga: false,
-    salario: 0,
-    valorPagadoEmpresa: 0,
-    cuentaXCobrar: 0,
-    pagadoXEntidad: 0,
+    fechaInicial: '{{ movimiento.fecha_inicio|date:'Y-m-d' }}',
+    fechaInicialFmt: '{{ movimiento.fecha_inicio|date:'Y-m-d' }}',
+    fechaFinal: '{{ movimiento.fecha_fin|date:'Y-m-d' }}',
+    fechaFinalFmt: '{{ movimiento.fecha_fin|date:'Y-m-d' }}',
+    numeroDias: {{ movimiento.dias }},
+    prorroga: true,
+    cuentaCobrar: 0,
+    pagadoEntidad: 0,
     pedienteEntidad: 0,
-    generaPago: false,
+    generaPago: true,
     empresaTotalPagado: 0,
     entidadCuentaXCobrar: 0,
     fechasDistribucion: [],
@@ -335,9 +333,9 @@
         id="movimiento-centro-costos-id"
         name="movimiento_centro_costos_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona un centro de costos...</option>
+        <option>Selecciona un centro de costos...</option>
         {% for ccosto in ccostos %}
-        <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
+          <option value="{{ ccosto.id }}" {% if movimiento.centro_costo.id == ccosto.id %}selected{% endif %}>{{ ccosto.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -351,9 +349,9 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona la clase de incapacidad...</option>
+        <option>Selecciona la clase de incapacidad...</option>
         {% for incapacidad in incapacidades %}
-        <option value="{{ incapacidad.id }}">{{ incapacidad.nombre }}</option>
+          <option value="{{ incapacidad.id }}" {% if movimiento.incapacidad.id == incapacidad.id %}selected{% endif %}>{{ incapacidad.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -366,6 +364,7 @@
           id="cod-incapacidad"
           name="cod_incapacidad"
           type="text"
+          value={{ movimiento.cod_incapacidad }}
           aria-required="true"
           title="Por favor, completa este campo"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -384,9 +383,9 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona un estado de incapacidad...</option>
+        <option>Selecciona un estado de incapacidad...</option>
         {% for estado_incapacidad in estados_incapacidades %}
-        <option value="{{ estado_incapacidad.id }}">{{ estado_incapacidad.nombre }}</option>
+        <option value="{{ estado_incapacidad.id }}" {% if movimiento.estado_incapacidad.id == estado_incapacidad.id %}selected{% endif %}>{{ estado_incapacidad.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -402,9 +401,9 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el concepto...</option>
+        <option>Selecciona el concepto...</option>
         {% for concepto in conceptos %}
-        <option value="{{ concepto.id }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
+        <option value="{{ concepto.id }}" {% if movimiento.concepto.id == concepto.id %}selected{% endif %}>{{ concepto.codigo }} - {{ concepto.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -417,9 +416,9 @@
         name="diagnostico_id"
         value="{{ diagnostico_id }}"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona el diagnostico...</option>
+        <option>Selecciona el diagnostico...</option>
         {% for diagnostico in diagnosticos %}
-        <option value="{{ diagnostico.id }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
+          <option value="{{ diagnostico.id }}" {% if movimiento.diagnostico.id == diagnostico.id %}selected{% endif %}>{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
         {% endfor %}
       </select>
     </div>
@@ -427,7 +426,7 @@
       <input
         id="genera-pago"
         name="genera_pago"
-        value="{{ genera_pago }}"
+        {% if movimiento.genera_pago %}checked{% endif %}
         type="checkbox"
         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label
@@ -442,7 +441,7 @@
       <textarea
         id="observaciones"
         name="observaciones"
-        value="{{ observaciones }}"
+        value="{{ movimiento.observaciones }}"
         rows="4"
         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Escribe tus observaciones en este campo..."></textarea>
@@ -457,7 +456,7 @@
         <div class="relative max-w-md">
           <input
             id="fecha-inicio"
-            value="{{ fecha_inicio }}"
+            value="{{ movimiento.fecha_inicial }}"
             type="date"
             aria-required="true"
             title="Por favor, completa este campo"
@@ -481,7 +480,7 @@
         <input
           id="dias"
           name="dias"
-          value="{{ dias }}"
+          value="{{ movimiento.dias }}"
           type="number"
           aria-required="true"
           title="Por favor, completa este campo"
@@ -497,7 +496,7 @@
         <input
           id="fecha-fin"
           name="fecha_fin"
-          value="{{ fecha_fin }}"
+          value="{{ movimiento.fecha_final }}"
           type="text"
           x-model="fechaFinal"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -513,7 +512,7 @@
         <input
           id="prorroga"
           name="prorroga"
-          value="{{ prorroga }}"
+          {% if movimiento.prorroga %}checked{% endif %}
           type="checkbox"
           x-model="prorroga"
           @change="asignarEmpresaDiasCero"
@@ -610,7 +609,6 @@
 </form>
 <script>
 function calcularValorIncapacidad() {
-  let valorPagadoEmpresa = 0;
   const valorSalario = +this.salario || 0;
   const valorSalarioDiario = valorSalario / 30;
   const valorNumeroDias = +this.numeroDias || 0;
