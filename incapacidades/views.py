@@ -333,17 +333,6 @@ def editar_movimiento(request, movimiento_id):
       id=movimiento_id
    )
 
-   fechas_distribucion = list(movimiento.fechas_distribucion.all().values(
-      'fecha_inicial',
-      'fecha_final',
-      'salario',
-      'total_dias',
-      'empresa_dias',
-      'empresa_valor',
-      'entidad_dias',
-      'entidad_valor',
-   ))
-
    context = {
       'afps': afps,
       'epss': epss,
@@ -353,7 +342,6 @@ def editar_movimiento(request, movimiento_id):
       'incapacidades': incapacidades,
       'estados_incapacidades': estados_incapacidades,
       'movimiento': movimiento,
-      'fechas_distribucion_json': json.dumps(fechas_distribucion, default=str),
    }
 
    return render(request, 'movimiento-editar.html', context)
