@@ -21,7 +21,7 @@
         type="text"
         id="docto-empleado"
         name="docto_empleado"
-        value="{{ docto_empleado }}"
+        value="{{ movimiento.empleado.docto_empleado }}"
         aria-required="true"
         title="Por favor, completa este campo"
         class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
@@ -83,7 +83,7 @@
           type="date"
           id="fecha-nacimiento"
           name="fecha_nacimiento"
-          value="{{ movimiento.empleado.fecha_nacimiento }}"
+          value="{{ movimiento.empleado.fecha_nacimiento|date:'Y-m-d' }}"
           aria-required="true"
           title="Por favor, completa este campo"
           @input="updateResultDate"
@@ -102,7 +102,7 @@
           type="date"
           id="fecha-ingreso"
           name="fecha_ingreso"
-          name="{{ movimiento.empleado.fecha_ingreso }}"
+          value="{{ movimiento.empleado.fecha_ingreso|date:'Y-m-d' }}"
           aria-required="true"
           title="Por favor, completa este campo"
           @input="updateResultDate"
@@ -300,7 +300,7 @@
       <input
         id="serie"
         name="serie"
-        value="{{ serie }}"
+        value="{{ movimiento.serie }}"
         type="text"
         aria-required="true"
         title="Por favor, completa este campo"
@@ -316,7 +316,7 @@
         <input
           id="fecha-recepcion"
           name="fecha_recepcion"
-          value="{{ fecha_recepcion }}"
+          value="{{ movimiento.fecha_recepcion|date:'Y-m-d' }}"
           type="date"
           aria-required="true"
           title="Por favor, completa este campo"
@@ -441,10 +441,9 @@
       <textarea
         id="observaciones"
         name="observaciones"
-        value="{{ movimiento.observaciones }}"
         rows="4"
         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Escribe tus observaciones en este campo..."></textarea>
+        placeholder="Escribe tus observaciones en este campo...">{{ movimiento.observaciones }}</textarea>
     </div>
     <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
     <hr class="divide-y divide-gray-100 mb-4" />
