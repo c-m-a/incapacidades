@@ -382,16 +382,21 @@ def editar_movimiento(request, movimiento_id):
          genera_pago = True if request.POST.get('genera_pago') else False
 
          # Actualizar datos del movimiento
+         movimiento.calendario = request.POST.get('calendario')
          movimiento.centro_costo = centro_costo
          movimiento.cod_incapacidad = request.POST.get('cod_incapacidad')
          movimiento.cuenta_cobrar = request.POST.get('cuenta_cobrar')
          movimiento.concepto = concepto
          movimiento.clase_incapacidad = clase_incapacidad
+         movimiento.cpto_472 = request.POST.get('cpto_472')
          movimiento.diagnostico = diagnostico
          movimiento.estado_incapacidad = estado_incapacidad
          movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
          movimiento.genera_pago = genera_pago
+         movimiento.llevada_gasto = request.POST.get('llevada_gasto')
+         movimiento.mayor_valor = request.POST.get('mayor_valor')
          movimiento.observaciones = request.POST.get('observaciones')
+         movimiento.pagado_entidad = request.POST.get('pagado_entidad')
          movimiento.prorroga = prorroga
          movimiento.serie = request.POST.get('serie')
          movimiento.valor_cia = request.POST.get('valor_cia')
