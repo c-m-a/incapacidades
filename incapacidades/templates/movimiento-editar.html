@@ -215,13 +215,11 @@
     fechaFinalFmt: '{{ movimiento.fecha_fin|date:'Y-m-d' }}',
     numeroDias: {{ movimiento.dias }},
     prorroga: {% if movimiento.prorroga %}true{% else %}false{% endif %},
-    pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad}}{% endif %},
-    pagadoEntidadFmt: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad}}{% endif %},
-    pendienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad }}{% endif %},
-    pendienteEntidadFmt: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad }}{% endif %},
-    llevadaGasto: {% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %},
-    mayorValor: {% if movimiento.mayor_valor is None %}0{% else %}{{ movimiento.mayor_valor }}{% endif %},
-    cpto472: {% if movimiento.cpto_472 is None %}0{% else %}{{ movimiento.cpto_472 }}{% endif %},
+    pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad|unlocalize }}{% endif %},
+    pendienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad|unlocalize }}{% endif %},
+    llevadaGasto: {% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto|unlocalize }}{% endif %},
+    mayorValor: {% if movimiento.mayor_valor is None %}0{% else %}{{ movimiento.mayor_valor|unlocalize }}{% endif %},
+    cpto472: {% if movimiento.cpto_472 is None %}0{% else %}{{ movimiento.cpto_472|unlocalize }}{% endif %},
     generaPago: {% if movimiento.genera_pago %}true{% else %}false{% endif %},
     empresaTotalPagado: {{ movimiento.valor_cia|unlocalize }},
     entidadCuentaXCobrar: {{ movimiento.cuenta_cobrar|unlocalize }},
@@ -324,7 +322,14 @@
 
     calcularValoresFinales() {
       const entidadCuentaXCobrar = this.entidadCuentaXCobrar;
-      this.pendienteEntidad = entidadCuentaXCobrar - this.pagadoEntidad;
+      const pendienteEntidad = entidadCuentaXCobrar - this.pagadoEntidad;
+
+      const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
+      const llevadaGasto = pendienteEntidad > 0 ? pendienteEntidad : 0;
+
+      this.pendienteEntidad = pendienteEntidad;
+      this.mayorValor = mayorValor;
+      this.llevadaGasto = llevadaGasto;
     },
   }"
   x-init="calcularTotalesXPagar()">
@@ -670,6 +675,7 @@
           </tbody>
       </table>
     </div>
+    <hr class="divide-y divide-gray-100 mt-1 mb-4" />
     <div class="font-medium">
       <div class="mx-right">
         <div class="w-1/2 flex justify-between gap-4">
@@ -685,7 +691,7 @@
           </div>
         </div>
         <div class="w-1/2 flex justify-between gap-4">
-          <div>Total Cuenta por Cobrar Entidad</div>
+          <div>Total Cuenta x Cobrar Entidad</div>
           <div>
             $ <span x-text="entidadCuentaXCobrar"></span>
             <input
@@ -697,7 +703,7 @@
           </div>
         </div>
         <div class="w-1/2 flex justify-between gap-4">
-          <div>Total Pagado por Entidad</div>
+          <div>Total Pagado x Entidad</div>
           <div>
             $ <span x-text="pagadoEntidad"></span>
             <input
