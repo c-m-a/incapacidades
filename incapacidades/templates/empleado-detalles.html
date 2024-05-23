@@ -90,7 +90,7 @@
         {% endfor %}
       </select>
     </div>
-    <button type="submit" <button type="submit"
+    <button type="submit"
       class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar
       empleado</button>
   </form>
@@ -98,9 +98,10 @@
 <article>
   <div class="flex justify-between">
     <h2 class="text-lg font-bold dark:text-white">Incapacidades</h2>
-    <button type="submit" <button type="submit"
+    <a 
+      href="/empleados/{{ empleado.id }}/movimientos/"
       class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar
-      incapacidad</button>
+      incapacidad</a>
   </div>
   <hr class="divide-y divide-gray-100 my-4" />
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
