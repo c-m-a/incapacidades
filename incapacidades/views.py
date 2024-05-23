@@ -392,6 +392,7 @@ def editar_movimiento(request, movimiento_id):
          movimiento.diagnostico = diagnostico
          movimiento.estado_incapacidad = estado_incapacidad
          movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
+         movimiento.fecha_pago = request.POST.get('fecha_pago')
          movimiento.genera_pago = genera_pago
          movimiento.llevada_gasto = request.POST.get('llevada_gasto')
          movimiento.mayor_valor = request.POST.get('mayor_valor')
