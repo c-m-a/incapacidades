@@ -39,7 +39,6 @@ def agregar_movimiento(request):
       arl_nit = request.POST.get('arl_nit')
       arl_nombre = request.POST.get('arl_nombre')
       fecha_recepcion = request.POST.get('fecha_recepcion')
-      calendario = request.POST.get('calendario')
       movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
       clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
       cod_incapacidad = request.POST.get('cod_incapacidad')
@@ -103,7 +102,6 @@ def agregar_movimiento(request):
             fecha_fin=fecha_fin,
             prorroga=prorroga,
             dias=dias,
-            calendario=calendario,
             valor_cia=valor_cia,
             cuenta_cobrar=cuenta_cobrar,
             genera_pago=genera_pago,
@@ -120,6 +118,7 @@ def agregar_movimiento(request):
 
          for distribucion in fechas_distribucion:
             fecha_distribucion = FechaDistribucion(
+               calendario=distribucion['calendario'],
                fecha_inicial=distribucion['fechaInicio'],
                fecha_final=distribucion['fechaFin'],
                salario=distribucion['salario'],
