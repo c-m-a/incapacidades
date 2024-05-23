@@ -395,7 +395,22 @@ def editar_movimiento(request, movimiento_id):
          
          movimiento.save()
 
-   return redirect('/')
+         empleado = movimiento.empleado
+
+         empleado.afp = afp
+         empleado.docto_empleado = request.POST.get('docto_empleado')
+         empleado.estado = request.POST.get('estado')
+         empleado.eps = eps
+         empleado.fecha_ingreso = request.POST.get('fecha_ingreso')
+         empleado.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+         empleado.genero = request.POST.get('genero')
+         empleado.nombre = request.POST.get('nombre')
+         empleado.arl_nit = request.POST.get('arl_nit')
+         empleado.arl_nombre = request.POST.get('arl_nombre')
+
+         empleado.save()
+
+      return redirect('/')
 
    movimiento = get_object_or_404(
       Movimiento.objects.select_related('empleado').prefetch_related('fechas_distribucion'),
