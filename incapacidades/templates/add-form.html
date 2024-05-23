@@ -67,7 +67,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona un genero...</option>
+        <option selected disabled>Selecciona un genero...</option>
         <option value="0">Masculino</option>
         <option value="1">Femenino</option>
       </select>
@@ -121,7 +121,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona un estado...</option>
+        <option selected disabled>Selecciona un estado...</option>
         <option value="0">Activo</option>
         <option value="1">Retirado</option>
       </select>
@@ -138,7 +138,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona una EPS...</option>
+        <option selected disabled>Selecciona una EPS...</option>
         {% for eps in epss %}
         <option value="{{ eps.id }}">{{ eps.nombre }}</option>
         {% endfor %}
@@ -154,7 +154,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona un fondo de pensiones...</option>
+        <option selected disabled>Selecciona un fondo de pensiones...</option>
         {% for afp in afps %}
         <option value="{{ afp.id }}">{{ afp.nombre }}</option>
         {% endfor %}
@@ -200,13 +200,13 @@
     fechaFinal: '',
     fechaFinalFmt: '',
     numeroDias: 1,
-    prorroga: false,
+    prorroga: {% if prorroga %}true{% else %}false{% endif %},
     salario: 0,
     valorPagadoEmpresa: 0,
     cuentaXCobrar: 0,
     pagadoXEntidad: 0,
     pedienteEntidad: 0,
-    generaPago: false,
+    generaPago: {% if genera_pago %}true{% else %}false{% endif %},
     empresaTotalPagado: 0,
     entidadCuentaXCobrar: 0,
     fechasDistribucion: [],
@@ -337,7 +337,7 @@
         id="movimiento-centro-costos-id"
         name="movimiento_centro_costos_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona un centro de costos...</option>
+        <option selected disabled>Selecciona un centro de costos...</option>
         {% for ccosto in ccostos %}
         <option value="{{ ccosto.id }}">{{ ccosto.nombre }}</option>
         {% endfor %}
@@ -353,7 +353,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona la clase de incapacidad...</option>
+        <option selected disabled>Selecciona la clase de incapacidad...</option>
         {% for incapacidad in incapacidades %}
         <option value="{{ incapacidad.id }}">{{ incapacidad.nombre }}</option>
         {% endfor %}
@@ -386,7 +386,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona un estado de incapacidad...</option>
+        <option selected disabled>Selecciona un estado de incapacidad...</option>
         {% for estado_incapacidad in estados_incapacidades %}
         <option value="{{ estado_incapacidad.id }}">{{ estado_incapacidad.nombre }}</option>
         {% endfor %}
@@ -404,7 +404,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona el concepto...</option>
+        <option selected disabled>Selecciona el concepto...</option>
         {% for concepto in conceptos %}
         <option value="{{ concepto.id }}">{{ concepto.codigo }} - {{ concepto.nombre }}</option>
         {% endfor %}
@@ -419,7 +419,7 @@
         name="diagnostico_id"
         value="{{ diagnostico_id }}"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Selecciona el diagnostico...</option>
+        <option selected disabled>Selecciona el diagnostico...</option>
         {% for diagnostico in diagnosticos %}
         <option value="{{ diagnostico.id }}">{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
         {% endfor %}
@@ -429,8 +429,9 @@
       <input
         id="genera-pago"
         name="genera_pago"
-        value="{{ genera_pago }}"
+        x-model="generaPago"
         type="checkbox"
+        {% if movimiento.genera_pago %}checked{% endif %}
         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label
         for="genera-pago" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Genera
@@ -515,9 +516,9 @@
         <input
           id="prorroga"
           name="prorroga"
-          value="{{ prorroga }}"
           type="checkbox"
           x-model="prorroga"
+          {% if movimiento.prorroga %}checked{% endif %}
           @change="asignarEmpresaDiasCero"
           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
         />
@@ -568,14 +569,14 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
               </td>
-              <td class="px-6 py-4" x-text="seg.totalDias"></td>
-              <td class="px-6 py-4" x-text="seg.empresaDias"></td>
-              <td class="px-6 py-4">
-                $ <span x-text="seg.empresaValor"></span>
-              </td>
-              <td class="px-6 py-4 text-right" x-text="seg.entidadDias"></td>
+              <td class="px-6 py-4 text-center" x-text="seg.totalDias"></td>
+              <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
               <td class="px-6 py-4 text-right">
-                $ <span x-text="seg.entidadValor"></span>
+                $<span x-text="seg.empresaValor"></span>
+              </td>
+              <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>
+              <td class="px-6 py-4 text-right">
+                $<span x-text="seg.entidadValor"></span>
               </td>
             </tr>
             </template>
@@ -587,7 +588,7 @@
         <div class="flex gap-4">
           <div>Total Valor Empresa</div>
           <div>
-            $ <span x-text="empresaTotalPagado"></span>
+            $<span x-text="empresaTotalPagado"></span>
             <input
               type="hidden"
               name="valor_cia"
@@ -599,7 +600,7 @@
         <div class="flex gap-4">
           <div>Total Cuenta por Cobrar Entidad</div>
           <div>
-            $ <span x-text="entidadCuentaXCobrar"></span>
+            $<span x-text="entidadCuentaXCobrar"></span>
             <input
               type="hidden"
               name="cuenta_cobrar"
