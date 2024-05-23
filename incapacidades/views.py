@@ -326,7 +326,76 @@ def editar_movimiento(request, movimiento_id):
    estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
 
    if request.method == 'POST':
-      return redirect('/')
+      movimiento = get_object_or_404(Movimiento, id=movimiento_id)
+
+      afp_id = request.POST.get('afp_id')
+      eps_id = request.POST.get('eps_id')
+      docto_empleado = request.POST.get('docto_empleado')
+      docto_empleado_ant = request.POST.get('docto_empleado_ant')
+      docto_cambiado = docto_empleado != docto_empleado_ant
+      serie = request.POST.get('serie')
+      serie_ant = request.POST.get('serie_ant')
+      serie_cambiada = serie != serie_ant
+      movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
+      concepto_id = request.POST.get('concepto_id')
+      diagnostico_id = request.POST.get('diagnostico_id')
+      clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
+      estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
+      registros_duplicados = False
+      existe_empleado = False
+      existe_movimiento = False
+
+      if docto_cambiado: 
+         existe_empleado = Empleado.objects.filter(docto_empleado=docto_empleado).exists()
+
+      if serie_cambiada:
+         existe_movimiento = Movimiento.objects.filter(serie=serie).exists()
+
+      error_empleado = 'Número de documento duplicado' if existe_empleado else None
+      error_movimiento = 'Número de serie duplicado' if existe_movimiento else None
+      registros_duplicados = existe_empleado or existe_movimiento
+
+      if registros_duplicados:
+         return render(request, 'movimiento-editar.html', {
+            'error_empleado': error_empleado,
+            'error_movimiento': error_movimiento,
+            'afps': afps,
+            'ccostos': ccostos,
+            'conceptos': conceptos,
+            'diagnosticos': diagnosticos,
+            'epss': epss,
+            'incapacidades': incapacidades,
+            'estados_incapacidades': estados_incapacidades,
+         })
+      else:
+         afp = Afp.objects.get(pk=afp_id)
+         centro_costo = CentroCosto.objects.get(pk=movimiento_centro_costos_id)
+         concepto = Concepto.objects.get(pk=concepto_id)
+         diagnostico = Diagnostico.objects.get(pk=diagnostico_id)
+         eps = Eps.objects.get(pk=eps_id)
+         clase_incapacidad = ClaseIncapacidad.objects.get(pk=clase_incapacidad_id)
+         estado_incapacidad = EstadoIncapacidad.objects.get(pk=estado_incapacidad_id)
+         prorroga = True if request.POST.get('prorroga') else False
+         genera_pago = True if request.POST.get('genera_pago') else False
+
+         # Actualizar datos del movimiento
+         movimiento.centro_costo = centro_costo
+         movimiento.cod_incapacidad = request.POST.get('cod_incapacidad')
+         movimiento.cuenta_cobrar = request.POST.get('cuenta_cobrar')
+         movimiento.concepto = concepto
+         movimiento.clase_incapacidad = clase_incapacidad
+         movimiento.diagnostico = diagnostico
+         movimiento.estado_incapacidad = estado_incapacidad
+         movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
+         movimiento.genera_pago = genera_pago
+         movimiento.observaciones = request.POST.get('observaciones')
+         movimiento.prorroga = prorroga
+         movimiento.serie = request.POST.get('serie')
+         movimiento.valor_cia = request.POST.get('valor_cia')
+         
+         movimiento.save()
+
+   return redirect('/')
 
    movimiento = get_object_or_404(
       Movimiento.objects.select_related('empleado').prefetch_related('fechas_distribucion'),
