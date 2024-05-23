@@ -312,7 +312,6 @@ class Movimiento(models.Model):
     fecha_fin = models.DateField()
     prorroga = models.BooleanField(default=False)
     dias = models.SmallIntegerField()
-    calendario = models.CharField(max_length=32, null=True, blank=True)
     valor_cia = models.DecimalField(decimal_places=2, max_digits=10)
     cuenta_cobrar = models.DecimalField(decimal_places=2, max_digits=10)
     pagado_entidad = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
