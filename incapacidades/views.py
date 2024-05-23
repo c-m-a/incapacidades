@@ -341,6 +341,9 @@ def editar_movimiento(request, movimiento_id):
       diagnostico_id = request.POST.get('diagnostico_id')
       clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
       estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
+      fechas_distribucion = request.POST.get('fechas_distribucion')
+      fechas_distribucion = json.loads(fechas_distribucion)
+
       registros_duplicados = False
       existe_empleado = False
       existe_movimiento = False
@@ -394,6 +397,19 @@ def editar_movimiento(request, movimiento_id):
          movimiento.valor_cia = request.POST.get('valor_cia')
          
          movimiento.save()
+
+         for distribucion in fechas_distribucion:
+            fecha = get_object_or_404(FechaDistribucion, id=distribucion['id'])
+            fecha.fecha_inicial = distribucion['fechaInicio']
+            fecha.fecha_final = distribucion['fechaFin']
+            fecha.salario = distribucion['salario']
+            fecha.total_dias = distribucion['totalDias']
+            fecha.empresa_dias = distribucion['empresaDias']
+            fecha.empresa_valor = distribucion['empresaValor']
+            fecha.entidad_dias = distribucion['entidadDias']
+            fecha.entidad_valor = distribucion['entidadValor']
+            fecha.movimiento = movimiento
+            fecha.save()
 
          empleado = movimiento.empleado
 
