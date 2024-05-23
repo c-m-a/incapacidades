@@ -220,7 +220,7 @@
       return this.fechasDistribucion.map(fecha => ({
         ...fecha,
         fechaInicio: this.formatDate(fecha.fechaInicio),
-        fechaFin: this.formatDate(fecha.fechaFin)
+        fechaFin: this.formatDate(fecha.fechaFin),
       }));
     },
 
@@ -239,6 +239,8 @@
         this.fechasDistribucion[index].entidadDias,
         this.fechasDistribucion[index].entidadValor,
       ] = this.calcularPago(index);
+
+      if (this.fechasDistribucion.length < 2) return;
 
       index = 1;
       [ this.fechasDistribucion[index].empresaDias,
@@ -529,15 +531,16 @@
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                  <th scope="col" class="px-6 py-3">#</th>
-                  <th scope="col" class="px-6 py-3">Fecha Inicial</th>
-                  <th scope="col" class="px-6 py-3">Fecha Final</th>
-                  <th scope="col" class="px-6 py-3">Salario</th>
-                  <th scope="col" class="px-6 py-3">Total Dias</th>
-                  <th scope="col" class="px-6 py-3">Dias Empresa</th>
-                  <th scope="col" class="px-6 py-3">Valor Empresa</th>
-                  <th scope="col" class="px-6 py-3">Dias Entidad</th>
-                  <th scope="col" class="px-6 py-3">Valor Entidad</th>
+                  <th scope="col" class="px-6 py-3 text-center">#</th>
+                  <th scope="col" class="px-6 py-3 text-center">Fecha Inicial</th>
+                  <th scope="col" class="px-6 py-3 text-center">Fecha Final</th>
+                  <th scope="col" class="px-6 py-3 text-center">Calendario</th>
+                  <th scope="col" class="px-6 py-3 text-center">Salario</th>
+                  <th scope="col" class="px-6 py-3 text-center">Total Dias</th>
+                  <th scope="col" class="px-6 py-3 text-center">Dias Empresa</th>
+                  <th scope="col" class="px-6 py-3 text-center">Valor Empresa</th>
+                  <th scope="col" class="px-6 py-3 text-center">Dias Entidad</th>
+                  <th scope="col" class="px-6 py-3 text-center">Valor Entidad</th>
               </tr>
           </thead>
           <tbody>
@@ -553,9 +556,16 @@
               <td class="px-6 py-4" x-text="seg.fechaFin"></td>
               <td class="px-6 py-4">
                 <input
+                  x-model="seg.calendario"
+                  @input="calcularValoresXPagar(idx)"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </td>
+              <td class="px-6 py-4">
+                <input
                   x-model="seg.salario"
                   @input="calcularValoresXPagar(idx)"
-                  class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
               </td>
               <td class="px-6 py-4" x-text="seg.totalDias"></td>
@@ -648,14 +658,15 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
     const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
 
     segmentos.push({
-      fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
-      fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
-      salario: 0,
-      totalDias: numeroDias + 1,
+      calendario: '',
       empresaDias: 0,
       empresaValor: 0,
       entidadDias: 0,
       entidadValor: 0,
+      fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
+      fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
+      salario: 0,
+      totalDias: numeroDias + 1,
     });
 
     fechaActual = fechaFinalSegmento.getTime() + microSegDia;
