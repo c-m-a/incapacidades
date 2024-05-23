@@ -397,6 +397,7 @@ def editar_movimiento(request, movimiento_id):
          movimiento.mayor_valor = request.POST.get('mayor_valor')
          movimiento.observaciones = request.POST.get('observaciones')
          movimiento.pagado_entidad = request.POST.get('pagado_entidad')
+         movimiento.pendiente_entidad = request.POST.get('pendiente_entidad')
          movimiento.prorroga = prorroga
          movimiento.serie = request.POST.get('serie')
          movimiento.valor_cia = request.POST.get('valor_cia')
