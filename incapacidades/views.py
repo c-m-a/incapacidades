@@ -27,33 +27,34 @@ def agregar_movimiento(request):
    if request.method == 'POST':
       fechas_distribucion = request.POST.get('fechas_distribucion')
       fechas_distribucion = json.loads(fechas_distribucion)
-      docto_empleado = request.POST.get('docto_empleado')
-      serie = request.POST.get('serie')
-      nombre = request.POST.get('nombre')
-      fecha_nacimiento = request.POST.get('fecha_nacimiento')
-      fecha_ingreso = request.POST.get('fecha_ingreso')
-      estado = request.POST.get('estado')
-      genero = request.POST.get('genero')
-      eps_id = request.POST.get('eps')
       afp_id = request.POST.get('afp')
       arl_nit = request.POST.get('arl_nit')
       arl_nombre = request.POST.get('arl_nombre')
-      fecha_recepcion = request.POST.get('fecha_recepcion')
-      movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
       clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
       cod_incapacidad = request.POST.get('cod_incapacidad')
+      cpto_472 = request.POST.get('cpto_472')
       concepto_id = request.POST.get('concepto_id')
+      cuenta_cobrar = request.POST.get('cuenta_cobrar')
       diagnostico_id = request.POST.get('diagnostico_id')
+      dias = request.POST.get('dias')
+      docto_empleado = request.POST.get('docto_empleado')
+      eps_id = request.POST.get('eps')
+      estado = request.POST.get('estado')
+      estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
+      genera_pago = True if request.POST.get('genera_pago') else False
+      fecha_ingreso = request.POST.get('fecha_ingreso')
       fecha_inicio = request.POST.get('fecha_inicio')
       fecha_fin = request.POST.get('fecha_fin')
-      dias = request.POST.get('dias')
-      prorroga = False if request.POST.get('prorroga') == '' else True
+      fecha_nacimiento = request.POST.get('fecha_nacimiento')
+      fecha_recepcion = request.POST.get('fecha_recepcion')
+      genero = request.POST.get('genero')
+      movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
+      nombre = request.POST.get('nombre')
+      prorroga = True if request.POST.get('prorroga') else False
       observaciones = request.POST.get('observaciones')
+      serie = request.POST.get('serie')
       valor_cia = request.POST.get('valor_cia')
-      cuenta_cobrar = request.POST.get('cuenta_cobrar')
-      estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
-      genera_pago = False if request.POST.get('genera_pago') == '' else True
-   
+
       existe_empleado = Empleado.objects.filter(docto_empleado=docto_empleado).exists()
       existe_movimiento = Movimiento.objects.filter(serie=serie).exists()
       error_empleado = 'Número de documento duplicado' if existe_empleado else None
@@ -96,6 +97,7 @@ def agregar_movimiento(request):
 
          movimiento = Movimiento.objects.create(
             cod_incapacidad=cod_incapacidad,
+            cpto_472=cpto_472,
             serie=serie,
             fecha_recepcion=fecha_recepcion,
             fecha_inicio=fecha_inicio,
@@ -406,15 +408,17 @@ def editar_movimiento(request, movimiento_id):
 
          for distribucion in fechas_distribucion:
             fecha = get_object_or_404(FechaDistribucion, id=distribucion['id'])
-            fecha.fecha_inicial = distribucion['fechaInicio']
-            fecha.fecha_final = distribucion['fechaFin']
-            fecha.salario = distribucion['salario']
-            fecha.total_dias = distribucion['totalDias']
+            fecha.calendario = distribucion['calendario']
             fecha.empresa_dias = distribucion['empresaDias']
             fecha.empresa_valor = distribucion['empresaValor']
             fecha.entidad_dias = distribucion['entidadDias']
             fecha.entidad_valor = distribucion['entidadValor']
+            fecha.fecha_inicial = distribucion['fechaInicio']
+            fecha.fecha_final = distribucion['fechaFin']
             fecha.movimiento = movimiento
+            fecha.salario = distribucion['salario']
+            fecha.total_dias = distribucion['totalDias']
+
             fecha.save()
 
          empleado = movimiento.empleado
