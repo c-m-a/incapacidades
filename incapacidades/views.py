@@ -120,7 +120,6 @@ def agregar_movimiento(request):
 
          for distribucion in fechas_distribucion:
             fecha_distribucion = FechaDistribucion(
-               calendario=distribucion['calendario'],
                fecha_inicial=distribucion['fechaInicio'],
                fecha_final=distribucion['fechaFin'],
                salario=distribucion['salario'],
