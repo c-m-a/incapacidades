@@ -27,6 +27,12 @@
         title="Por favor, completa este campo"
         class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
       />
+      <input
+        type="hidden"
+        id="docto-empleado-ant"
+        name="docto_empleado_ant"
+        value="{{ movimiento.empleado.docto_empleado }}"
+      />
       <span class="font-medium">Error!</span> {{ error_empleado }}
     </div>
     {% else %}
@@ -44,6 +50,12 @@
         title="Escribe el no. de documento..."
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
+      />
+      <input
+        type="hidden"
+        id="docto-empleado-ant"
+        name="docto_empleado_ant"
+        value="{{ movimiento.empleado.docto_empleado }}"
       />
     </div>
     {% endif %}
@@ -68,7 +80,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option>Selecciona un genero...</option>
+        <option disabled>Selecciona un genero...</option>
         <option value="0" {% if movimiento.empleado.genero == 0 %}selected={% endif %}>Masculino</option>
         <option value="1" {% if movimiento.empleado.genero == 1 %}selected{% endif %}>Femenino</option>
       </select>
@@ -122,7 +134,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option {% if movimiento.empleado.estado > 1 %}selected={% endif %}>Selecciona un estado...</option>
+        <option {% if movimiento.empleado.estado > 1 %}selected={% endif %} disabled>Selecciona un estado...</option>
         <option value="0" {% if movimiento.empleado.estado == 0 %}selected={% endif %}>Activo</option>
         <option value="1" {% if movimiento.empleado.estado == 1 %}selected={% endif %}>Retirado</option>
       </select>
@@ -135,11 +147,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
       <select
         id="eps"
-        name="eps"
+        name="eps_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona una EPS...</option>
+        <option disabled>Selecciona una EPS...</option>
         {% for eps in epss %}
           <option value="{{ eps.id }}" {% if movimiento.empleado.eps.id == eps.id %}selected{% endif %}>{{ eps.nombre }}</option>
         {% endfor %}
@@ -151,11 +163,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
       <select
         id="afp"
-        name="afp"
+        name="afp_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option selected>Selecciona un fondo de pensiones...</option>
+        <option disabled>Selecciona un fondo de pensiones...</option>
         {% for afp in afps %}
           <option value="{{ afp.id }}" {% if movimiento.empleado.afp.id == afp.id %}selected{% endif %}>{{ afp.nombre }}</option>
         {% endfor %}
@@ -322,6 +334,12 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
+      <input
+        id="serie-ant"
+        type="hidden"
+        name="serie_ant"
+        value="{{ movimiento.serie }}"
+      />
     </div>
     <div class="flex-1">
       <label
@@ -348,7 +366,7 @@
         id="movimiento-centro-costos-id"
         name="movimiento_centro_costos_id"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option>Selecciona un centro de costos...</option>
+        <option disabled>Selecciona un centro de costos...</option>
         {% for ccosto in ccostos %}
           <option value="{{ ccosto.id }}" {% if movimiento.centro_costo.id == ccosto.id %}selected{% endif %}>{{ ccosto.nombre }}</option>
         {% endfor %}
@@ -364,7 +382,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option>Selecciona la clase de incapacidad...</option>
+        <option disabled>Selecciona la clase de incapacidad...</option>
         {% for incapacidad in incapacidades %}
           <option value="{{ incapacidad.id }}" {% if movimiento.incapacidad.id == incapacidad.id %}selected{% endif %}>{{ incapacidad.nombre }}</option>
         {% endfor %}
@@ -398,7 +416,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option>Selecciona un estado de incapacidad...</option>
+        <option disabled>Selecciona un estado de incapacidad...</option>
         {% for estado_incapacidad in estados_incapacidades %}
         <option value="{{ estado_incapacidad.id }}" {% if movimiento.estado_incapacidad.id == estado_incapacidad.id %}selected{% endif %}>{{ estado_incapacidad.nombre }}</option>
         {% endfor %}
@@ -416,7 +434,7 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
-        <option>Selecciona el concepto...</option>
+        <option disabled>Selecciona el concepto...</option>
         {% for concepto in conceptos %}
         <option value="{{ concepto.id }}" {% if movimiento.concepto.id == concepto.id %}selected{% endif %}>{{ concepto.codigo }} - {{ concepto.nombre }}</option>
         {% endfor %}
@@ -431,7 +449,7 @@
         name="diagnostico_id"
         value="{{ diagnostico_id }}"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option>Selecciona el diagnostico...</option>
+        <option disabled>Selecciona el diagnostico...</option>
         {% for diagnostico in diagnosticos %}
           <option value="{{ diagnostico.id }}" {% if movimiento.diagnostico.id == diagnostico.id %}selected{% endif %}>{{ diagnostico.codigo }} - {{ diagnostico.nombre }}</option>
         {% endfor %}
