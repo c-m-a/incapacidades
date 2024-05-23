@@ -216,7 +216,12 @@
     numeroDias: {{ movimiento.dias }},
     prorroga: {% if movimiento.prorroga %}true{% else %}false{% endif %},
     pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad}}{% endif %},
-    pedienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad}}{% endif %},
+    pagadoEntidadFmt: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad}}{% endif %},
+    pendienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad }}{% endif %},
+    pendienteEntidadFmt: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad }}{% endif %},
+    llevadaGasto: {% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %},
+    mayorValor: {% if movimiento.mayor_valor is None %}0{% else %}{{ movimiento.mayor_valor }}{% endif %},
+    cpto472: {% if movimiento.cpto_472 is None %}0{% else %}{{ movimiento.cpto_472 }}{% endif %},
     generaPago: {% if movimiento.genera_pago %}true{% else %}false{% endif %},
     empresaTotalPagado: {{ movimiento.valor_cia|unlocalize }},
     entidadCuentaXCobrar: {{ movimiento.cuenta_cobrar|unlocalize }},
@@ -313,7 +318,13 @@
         }
         this.empresaTotalPagado = empresaTotalPagado;
         this.entidadCuentaXCobrar = entidadTotalCuentaXCobrar;
+        this.calcularValoresFinales();
       });
+    },
+
+    calcularValoresFinales() {
+      const entidadCuentaXCobrar = this.entidadCuentaXCobrar;
+      this.pendienteEntidad = entidadCuentaXCobrar - this.pagadoEntidad;
     },
   }"
   x-init="calcularTotalesXPagar()">
@@ -478,7 +489,61 @@
         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Escribe tus observaciones en este campo...">{{ movimiento.observaciones }}</textarea>
     </div>
-    <h2 class="text-lg font-bold dark:text-white">Fecha de Distribucion</h2>
+    <h2 class="text-lg font-bold dark:text-white">Entidad (EPS/ARL)</h2>
+    <hr class="divide-y divide-gray-100 mb-4" />
+    <div class="flex gap-4 mb-4">
+      <div class="flex-1">
+        <label
+          for="calendario"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Calendario</label>
+        <input
+          id="calendario"
+          name="calendario"
+          value="{% if movimiento.calendario == None %}{% else %}{{ movimiento.calendario }}{% endif %}"
+          type="text"
+          aria-required="true"
+          title="Escribe aqui..."
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          required
+        >
+      </div>
+      <div class="flex-1">
+        <label
+          for="pagado-entidad"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor Pagado</label>
+        <input
+          id="pagado-entidad"
+          name="pagado_entidad"
+          value="{% if movimiento.pagado_entidad == None %}0{% else %}{{ movimiento.pagado_entidad }}{% endif %}"
+          type="text"
+          x-model="pagadoEntidad"
+          @input="calcularValoresFinales"
+          aria-required="true"
+          title="Digita el valor pagado por la entidad..."
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          required
+        >
+      </div>
+      <div class="flex-1">
+        <label
+          for="fecha-inicio"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
+        <div class="relative max-w-md">
+          <input
+            id="fecha-pago"
+            name="fecha_pago"
+            value="{{ movimiento.fecha_pago }}"
+            type="date"
+            aria-required="true"
+            title="Por favor, completa este campo"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Selecciona una fecha de inicio..."
+            disabled
+          />
+        </div>
+      </div>
+    </div>
+    <h2 class="text-lg font-bold dark:text-white">Fechas de Distribucion</h2>
     <hr class="divide-y divide-gray-100 mb-4" />
     <div class="flex gap-4 mb-4">
       <div class="flex-1">
@@ -606,8 +671,8 @@
       </table>
     </div>
     <div class="font-medium">
-      <div class="flex justify-end gap-5">
-        <div class="flex gap-4">
+      <div class="mx-right">
+        <div class="w-1/2 flex justify-between gap-4">
           <div>Total Valor Empresa</div>
           <div>
             $ <span x-text="empresaTotalPagado"></span>
@@ -619,7 +684,7 @@
             />
           </div>
         </div>
-        <div class="flex gap-4">
+        <div class="w-1/2 flex justify-between gap-4">
           <div>Total Cuenta por Cobrar Entidad</div>
           <div>
             $ <span x-text="entidadCuentaXCobrar"></span>
@@ -628,6 +693,54 @@
               name="cuenta_cobrar"
               x-model="entidadCuentaXCobrar"
               x-effect="$el.value = entidadCuentaXCobrar"
+            />
+          </div>
+        </div>
+        <div class="w-1/2 flex justify-between gap-4">
+          <div>Total Pagado por Entidad</div>
+          <div>
+            $ <span x-text="pagadoEntidad"></span>
+            <input
+              type="hidden"
+              name="pagado_entidad"
+              x-model="pagadoEntidad"
+              x-effect="$el.value = pagadoEntidad"
+            />
+          </div>
+        </div>
+        <div class="w-1/2 flex justify-between gap-4">
+          <div>Total Pendiente Entidad</div>
+          <div>
+            $ <span x-text="pendienteEntidad"></span>
+            <input
+              type="hidden"
+              name="pendiente_entidad"
+              x-model="pendienteEntidad"
+              x-effect="$el.value = pendienteEntidad"
+            />
+          </div>
+        </div>
+        <div class="w-1/2 flex justify-between gap-4">
+          <div>Mayor Valor</div>
+          <div>
+            $ <span x-text="mayorValor"></span>
+            <input
+              type="hidden"
+              name="mayor_valor"
+              x-model="mayorValor"
+              x-effect="$el.value = mayorValor"
+            />
+          </div>
+        </div>
+        <div class="w-1/2 flex justify-between gap-4">
+          <div>Llevada al gasto</div>
+          <div>
+            $ <span x-text="llevadaGasto"></span>
+            <input
+              type="hidden"
+              name="llevada_gasto"
+              x-model="llevadaGasto"
+              x-effect="$el.value = llevadaGasto"
             />
           </div>
         </div>
