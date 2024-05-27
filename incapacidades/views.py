@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import pandas as pd
 from django.contrib import messages
@@ -6,6 +7,46 @@ from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, E
 
 ARL_NIT = '890903790'
 ARL_NOMBRE = 'Compania Suramericana de Riesgos Profesionales'
+
+MAPPER = {
+   'eps_codigo': 'EPS',
+   'afp_codigo': 'AFP',
+}
+
+EMPLEADO_MAPPER = {
+   'nombre': 'Nombre',
+   'docto_empleado': 'Documento',
+   'genero': 'Genero',
+   'fecha_nacimiento': 'Fecha_Nacimiento',
+   'fecha_ingreso': 'Fecha_Ingreso',
+   'arl_nit': 'ARL',
+   'arl_nombre': 'Nombre_ARL',
+   'estado': 'Estado',
+}
+
+MOVIMIENTO_MAPPER = {
+   'Serie incapacidad': 'serie',
+   'FECHA RECEPCION': 'fecha_ingreso',
+   'Ccosto': 'costos_id',
+   'Clase_incapacidad': 'clase_incapacidad_nombre',
+   'No.incapacidad': 'cod_incapacidad',
+   'EstadoIncapacidad': 'estado_incapacidad_id',
+   'Concepto': 'concepto_id',
+   'Código diagnóstico': 'diagnostico_codigo',
+   'Notas': 'observaciones',
+   'FECHA INICIO REAL TNL': 'fecha_inicio',
+   'FECHA FINAL REAL TNL': 'fecha_fin',
+   'Dias Amortiz': 'dias',
+   'Es prorroga': 'prorroga',
+   'Valor IBC': 'salario',
+}
+
+FECHAS_DIST_MAPPER = {
+   'Valor Cia. 3 Dias': 'empresa_dias',
+   'Valor TNL': 'entidad_dias',
+   'Fecha Inicial': 'fecha_inicial',
+   'Fecha Final': 'fecha_final',
+}
 
 # Create your views here.
 def inicio(request):
@@ -172,57 +213,38 @@ def cargar_incapacidades(request):
       try:
          df = pd.read_excel(file)
          docto_empleado_ant = 0
+         nuevo_empleado = {}
 
          for index, row in df.iterrows():
-            clase_incapacidad_nombre = row['Clase de incapacidad'].strip()
-            diagnostico_codigo = row['Código diagnóstico'].strip()
-            centro_costos_nombre = row['Desc.Proyecto'].strip()
-            docto_empleado = row['Cédula']
-            concepto_codigo = str(row['Concepto']).zfill(3)
-            eps_nombre = row['Desc.EPS Contrato'].strip()
+            docto_empleado = row[EMPLEADO_MAPPER['docto_empleado']]
 
-            clase_incapacidad = ClaseIncapacidad.objects.get(nombre=clase_incapacidad_nombre)
-            diagnostico = Diagnostico.objects.get(codigo=diagnostico_codigo)
-            centro_costos = CentroCosto.objects.get(nombre=centro_costos_nombre)
-            concepto = Concepto.objects.get(codigo=concepto_codigo)
-            eps = Eps.objects.get(nombre=eps_nombre)
-            afp = Afp.objects.get(pk=1)
+            for db_field, excel_field in EMPLEADO_MAPPER.items():
+               value = row[excel_field] 
 
-            if docto_empleado != docto_empleado_ant:
+               if isinstance(value, str):
+                  value = value.strip()
+
+               if db_field == 'fecha_nacimiento' or db_field == 'fecha_ingreso':
+                  value = value.split(' ')[0]
+
+               nuevo_empleado[db_field] = value
+
+            eps_codigo = row['EPS'].strip()
+            afp_codigo = row['AFP'].strip()
+
+            eps = Eps.objects.get(codigo=eps_codigo)
+            afp = Afp.objects.get(codigo=afp_codigo)
+
+            nuevo_empleado['eps'] = eps
+            nuevo_empleado['afp'] = afp
+
+            if nuevo_empleado['docto_empleado'] != docto_empleado_ant:
                try:
-                  new_empleado = {
-                     'nombre': row['Nombres y apellidos'],
-                     # 'genero': row['genero'],
-                     # 'genero': 0,
-                     'fecha_nacimiento': '2024-01-01',
-                     'fecha_ingreso': '2024-01-01',
-                     'estado': 0,
-                     'arl_nit': ARL_NIT,
-                     'arl_nombre': ARL_NOMBRE,
-                     'eps': eps,
-                     'afp': afp,
-                  }
-                  fecha_inicial = row['Fecha Inicial']
-                  fecha_final = row['Fecha Final']
-                  salario = row['Valor IBC']
-                  new_movimiento = {
-                     'serie': int(row['Serie incapacidad']),
-                     'fecha_recepcion': row['FECHA RECEPCION'],
-                     'concepto': row[''],
-                     'cod_incapacidad': row['Nro.incapacidad'],
-                     'diagnostico': 'diagnostico',
-                     'prorroga': True if row['Es prorroga'] == 'Si' else False,
-                     'observaciones': row['notas'],
-                     # '': row[''],
-                  }
                   # Verificar si el empleado existe
                   empleado, created = Empleado.objects.get_or_create(
                      docto_empleado=docto_empleado,
-                     defaults=new_empleado,
+                     defaults=nuevo_empleado,
                   )
-                  print(new_empleado)
-                  print(empleado)
-                  print(created)
 
                except Empleado.DoesNotExist:
                   msg = f"Empleado con documento {docto_empleado} no existe y no pudo ser creado."
@@ -230,9 +252,8 @@ def cargar_incapacidades(request):
                except Exception as e:
                   msg = f"Error al procesar la fila {index + 1}: {e}"
                   messages.error(request, msg)
-            # 
-            # messages.success(request, "Datos cargados exitosamente.")
-            return redirect('/')
+
+         return redirect('/')
 
       except Exception as e:
          msg = f"Error al cargar el archivo: {e}"
