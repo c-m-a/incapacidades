@@ -62,7 +62,8 @@ class Afp(models.Model):
         verbose_name='Nombre de la entidad',
         help_text='Escribe el nombre de la AFP...'
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'AFP'
@@ -84,6 +85,8 @@ class CentroCosto(models.Model):
         unique=True,
         help_text='Escribe el nombre del centro de costos...',
     )
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Centro de Costo'
@@ -105,7 +108,8 @@ class ClaseIncapacidad(models.Model):
         verbose_name='# dias asume empresa',
         help_text='Escribe el numero de dias que va a pagar la empresa',
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Clase de Incapacidad'
@@ -131,7 +135,8 @@ class Concepto(models.Model):
         help_text='0: ARL, 1: Empresa y 2: EPS',
         db_comment='Campo para almacenar el responsable del pago de la incapacidad, si el responsable es la empresa cubrira los dos primeros dias, para el resto de los casos lo cubre la entidad.'
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         db_table = 'conceptos'
@@ -151,7 +156,8 @@ class Diagnostico(models.Model):
         max_length=64,
         help_text='Escribe el nombre del diagnostico...'
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         db_table: 'diagnosticos'
@@ -175,7 +181,8 @@ class Eps(models.Model):
         max_length=64,
         help_text='Escribe el nombre de la EPS...',
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'EPS'
@@ -219,8 +226,8 @@ class Empleado(models.Model):
         verbose_name='Nombre de la ARL',
         help_text='Escribe el nombre de la ARL...'
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
-    actualizado = models.DateTimeField(auto_now=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     eps = models.ForeignKey(
         'Eps',
@@ -242,7 +249,8 @@ class EstadoIncapacidad(models.Model):
         max_length=64,
         help_text='Escribe el estado de la incapacidad...',
     )
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Estado de Incapacidad'
@@ -281,8 +289,8 @@ class FechaDistribucion(models.Model):
         blank=True
     )
 
-    creado = models.DateTimeField(auto_now_add=True, editable=False)
-    actualizado = models.DateTimeField(auto_now=True, editable=False)
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     movimiento = models.ForeignKey(
         'Movimiento',
@@ -329,6 +337,9 @@ class Movimiento(models.Model):
     fecha_estado = models.DateField(null=True, blank=True)
     genera_pago = models.BooleanField(default=False)
     observaciones = models.TextField(max_length=500, null=True, blank=True)
+
+    creado = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    actualizado = models.DateTimeField(auto_now=True, editable=False, null=True, blank=True)
 
     empleado = models.ForeignKey(
         'Empleado',
