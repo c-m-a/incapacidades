@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} Incapacidades | Agregar Movimiento {% endblock %}
 {% block content %}
+<h2 class="text-xl font-bold dark:text-white">Cargar pagos</h2>
+<hr class="divide-y divide-gray-100 mb-4" />
 <section class="max-w-lg mx-auto">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
