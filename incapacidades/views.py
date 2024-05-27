@@ -162,7 +162,7 @@ def buscar_personas(request):
 
 
 def cargar_pagos(request):
-   return render(request, 'cargar-archivo.html')
+   return render(request, 'cargar-pagos.html')
 
 
 def cargar_incapacidades(request):
