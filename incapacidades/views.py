@@ -161,7 +161,11 @@ def buscar_personas(request):
    return render(request, 'search-results.html', {'empleados': empleados})
 
 
-def cargar_movimientos(request):
+def cargar_pagos(request):
+   return render(request, 'cargar-archivo.html')
+
+
+def cargar_incapacidades(request):
    msg = ''
    if request.method == 'POST':
       file = request.FILES['file']
