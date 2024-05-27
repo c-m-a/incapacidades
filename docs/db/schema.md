@@ -3,125 +3,144 @@
 Este esquema es generado con [dbdiagram.io](https://dbdiagram.io/d) solo es copiar y pegar el codigo [Aqui](https://dbdiagram.io/d)
 
 ```sql
+Table afp {
+  id integer [primary key]
+  nit varchar(32)
+  nombre varchar(64)
+  creado date
+  actualizado date
+}
+
+Table ccosto {
+  id integer [primary key]
+  codigo varchar(16)
+  nombre varchar(64)
+  creado datetime
+  actualizado datetime
+}
+
+Table clase_incapacidad {
+  id integer [primary key]
+  nombre varchar(64)
+  dias_empresa smallint
+  creado datetime
+  actualizado datetime
+}
+
+Table conceptos {
+  id integer [primary key]
+  nombre varchar(64)
+  responsable smallint [note: '0: ARL, 1: Empresa y 2: EPS']
+  creado datetime
+  actualizado datetime
+}
+
+Table diagnosticos {
+  id integer [primary key]
+  codigo varchar(16)
+  nombre varchar(64)
+  creado datetime
+  actualizado datetime
+}
+
+Table eps {
+  id integer [primary key]
+  nit varchar(32)
+  nombre varchar(64)
+  creado datetime
+  actualizado datetime
+}
+
 Table empleados {
-  docto_empleado varchar(25) [primary key]
-  nombre_empleado varchar(100)
+  id integer [primary key]
+  docto_empleado varchar(32)
+  nombre_empleado varchar(128)
   genero smallint [note: '1: Femenino, 0: Masculino']
   fecha_nacimiento date [note: 'fecha de nacimiento del empleado']
   fecha_ingreso date 
   estado smallint [note: '0= activo, 1=Retirado']
-  id_eps varchar(20) [note: 'EPS del empleado']
-  id_afp varchar(20) [note: 'Fondo de pensión del empleado']
-  nit_arl varchar(20) [note: 'Nit ARL del empleado']
-  nombre_arl varchar(60) 
+  nit_arl varchar(32) [note: 'Nit ARL del empleado']
+  nombre_arl varchar(64) 
+  creado datetime
+  actualizado datetime
+
+  eps_id varchar(32) [note: 'EPS del empleado']
+  afp_id varchar(32) [note: 'Fondo de pensión del empleado']
+}
+
+Table estado_incapacidad {
+  id integer [primary key]
+  nombre varchar(40)
+  creado datetime
+  actualizado datetime
+}
+
+Table fechas_distribucion {
+  id integer [primary key]
+  movimiento_id integer
+  fecha_i_real date
+  fecha_f_real date
+  cuenta_cobrar double(10, 2)
 }
 
 Table empleados_ccostos { 
   id integer [primary key]
-  docto_empleado varchar(25) 
+  docto_empleado varchar(32) 
   id_ccosto char(15)
-}
-
-Table eps {
-  id_eps varchar(20) [primary key]
-  nit_eps varchar(20)
-  nombre_eps varchar(60)
-}
-
-Table afp {
-  id_afp varchar(20) [primary key]
-  nit_afp varchar(20)
-  nombre_afp varchar(60)
-}
-
-Table diagnosticos {
-  id_diagnostico varchar(20) [primary key]
-  diagnostico varchar(60)
-}
-
-Table conceptos {
-  id_concepto varchar(20) [primary key]
-  concepto varchar(60)
-}
-
-Table ccosto {
-  id_ccosto char(15) [primary key]
-  ccosto varchar(40)
-}
-
-Table clase_incapacidad {
-  id_clase_inc integer [primary key]
-  clase_incapacidad varchar(40)
-}
-
-Table estado_incapacidad {
-  id_estado integer [primary key]
-  estado varchar(40)
+  creado datetime
+  actualizado datetime
 }
 
 Table movimiento { 
-  id_mvto integer [primary key]
-  cod_incapacidad varchar(20)
-  docto_empleado varchar(25)
-  id_ccosto char(15)
+  id integer [primary key]
+  cod_incapacidad varchar(32)
+  docto_empleado varchar(32)
+  ccosto_id integer
   serie varchar(20)
   fecha_recepcion date
-  id_eps varchar(20)
-  id_afp varchar(20)
-  id_clase_inc integer
+  eps_id integer
+  afp_id integer
+  clase_incapacidad_id integer
   fecha_inicio date
   fecha_fin date
-  id_concepto varchar(20)
-  id_diagnostico varchar(20)
-  prorroga integer
-  dias integer
-  salario money
-  calendario varchar(20)
-  valor_cia money
-  cuenta_cobrar money
-  fecha_pago integer
-  pagado_entidad money
-  pendiente_entidad money
-  llevada_gasto money
-  mayor_valor money
-  cpto_472 money
-  id_estado integer
+  concepto_id varchar(20)
+  diagnostico_id varchar(20)
+  prorroga boolean
+  dias smallint
+  salario double(10, 2)
+  calendario varchar(32)
+  fecha_pago double(10, 2)
+  pagado_entidad double(10, 2)
+  pendiente_entidad double(10, 2)
+  llevada_gasto double(10, 2)
+  mayor_valor double(10, 2)
+  cpto_472 double(10, 2)
+  estado_id integer
   fecha_estado date
-  genera_pago integer
-
+  genera_pago boolean
 }
 
-Table fechas_distribucion {
-  id_distribucion integer [primary key]
-  id_mvto integer
-  fecha_i_real date
-  fecha_f_real date
-  cuenta_cobrar money
-}
+Ref: empleados.afp_id > afp.id
 
-Ref: empleados.id_afp > afp.id_afp
+Ref: empleados.eps_id > eps.id
 
-Ref: empleados.id_eps > eps.id_eps
+Ref: empleados_ccostos.id > ccosto.id
 
-Ref: empleados_ccostos.docto_empleado > empleados.docto_empleado
+Ref: movimiento.id > empleados.id
 
-Ref: empleados_ccostos.id_ccosto > ccosto.id_ccosto
+Ref: movimiento.ccosto_id > ccosto.id
 
-Ref: movimiento.docto_empleado > empleados.docto_empleado
+Ref: movimiento.eps_id > eps.id
 
-Ref: movimiento.id_ccosto > ccosto.id_ccosto
+Ref: movimiento.afp_id > afp.id
 
-Ref: movimiento.id_eps > eps.id_eps
+Ref: movimiento.clase_incapacidad_id > clase_incapacidad.id
 
-Ref: movimiento.id_afp > afp.id_afp
+Ref: movimiento.concepto_id > conceptos.id
 
-Ref: movimiento.id_clase_inc > clase_incapacidad.id_clase_inc
+Ref: movimiento.diagnostico_id > diagnosticos.id
 
-Ref: movimiento.id_concepto > conceptos.id_concepto
+Ref: movimiento.clase_incapacidad_id > estado_incapacidad.id
 
-Ref: movimiento.id_diagnostico > diagnosticos.id_diagnostico
-
-Ref: movimiento.id_estado > estado_incapacidad.id_estado
-
-REf: movimiento.id_mvto < fechas_distribucion.id_mvto
+REf: movimiento.id < fechas_distribucion.movimiento_id
 ```
