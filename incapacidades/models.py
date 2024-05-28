@@ -324,11 +324,11 @@ class Movimiento(models.Model):
         unique=True,
         help_text='Escribe el numero de serie',
     )
-    fecha_recepcion = models.DateField()
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
+    fecha_recepcion = models.DateField(auto_now_add=True)
+    fecha_inicio = models.DateField(null=True, blank=True)
+    fecha_fin = models.DateField(null=True, blank=True)
     prorroga = models.BooleanField(default=False)
-    dias = models.SmallIntegerField()
+    dias = models.SmallIntegerField(default=0)
     valor_cia = models.DecimalField(decimal_places=2, max_digits=10)
     cuenta_cobrar = models.DecimalField(decimal_places=2, max_digits=10)
     pagado_entidad = models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
