@@ -245,6 +245,13 @@ class Empleado(models.Model):
 
 
 class EstadoIncapacidad(models.Model):
+    codigo = models.CharField(
+        max_length=3,
+        verbose_name='Codigo estado de incapacidad',
+        help_text='Escribe el codigo del estado de incapacidad...',
+        null=True,
+        blank=True,
+    )
     nombre = models.CharField(
         max_length=64,
         help_text='Escribe el estado de la incapacidad...',
