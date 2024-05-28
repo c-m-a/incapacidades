@@ -314,9 +314,10 @@ class FechaDistribucion(models.Model):
 class Movimiento(models.Model):
     cod_incapacidad = models.CharField(
         max_length=32,
-        unique=True,
         verbose_name='Codigo de la incapacidad',
         help_text='Escribe el codigo de la incapacidad',
+        null=True,
+        blank=True,
     )
     serie = models.CharField(
         max_length=32,
