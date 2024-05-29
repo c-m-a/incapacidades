@@ -124,9 +124,9 @@ class EmpleadoAdmin(admin.ModelAdmin):
     search_fields = ['docto_empleado', 'nombre']
 
 class EstadoIncapacidadAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombre')
+    list_display = ('id', 'codigo', 'nombre')
     list_display_links = ('id',)
-    list_editable = ('nombre',)
+    list_editable = ('codigo', 'nombre',)
     search_fields = ['nombre']
 
 
