@@ -1,51 +1,64 @@
 from datetime import datetime
 import json
+import logging
 import pandas as pd
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, FechaDistribucion, Movimiento
+from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, FechaDistribucion, Movimiento, GenderField, StatusField
+from .utils import generate_series_with_date
+
+logger = logging.getLogger(__name__)
+
+# Set the option to opt-in to the future behavior
+pd.set_option('future.no_silent_downcasting', True)
 
 ARL_NIT = '890903790'
 ARL_NOMBRE = 'Compania Suramericana de Riesgos Profesionales'
 
 MAPPER = {
-   'eps_codigo': 'EPS',
-   'afp_codigo': 'AFP',
+   'afp_codigo': 'afp',
+   'centro_costos_codigo': 'ccostos',
+   'clase_incapacidad_nombre': 'incapacidad_nombre',
+   'concepto_codigo': 'concepto',
+   'diagnostico_codigo': 'diagnostico_codigo',
+   'eps_codigo': 'eps',
+   'estado_incapacidad_codigo': 'estado_incapacidad',
+   'salario': 'salario',
 }
 
 EMPLEADO_MAPPER = {
-   'nombre': 'Nombre',
-   'docto_empleado': 'Documento',
-   'genero': 'Genero',
-   'fecha_nacimiento': 'Fecha_Nacimiento',
-   'fecha_ingreso': 'Fecha_Ingreso',
-   'arl_nit': 'ARL',
-   'arl_nombre': 'Nombre_ARL',
-   'estado': 'Estado',
+   'docto_empleado': 'documento',
+   'genero': 'genero',
+   'fecha_nacimiento': 'fecha_nacimiento',
+   'fecha_ingreso': 'fecha_ingreso',
+   'nombre': 'nombre',
+   'arl_nit': 'arl',
+   'arl_nombre': 'nombre_arl',
+   'estado': 'estado',
 }
 
 MOVIMIENTO_MAPPER = {
-   'Serie incapacidad': 'serie',
-   'FECHA RECEPCION': 'fecha_ingreso',
-   'Ccosto': 'costos_id',
-   'Clase_incapacidad': 'clase_incapacidad_nombre',
-   'No.incapacidad': 'cod_incapacidad',
-   'EstadoIncapacidad': 'estado_incapacidad_id',
-   'Concepto': 'concepto_id',
-   'Código diagnóstico': 'diagnostico_codigo',
-   'Notas': 'observaciones',
-   'FECHA INICIO REAL TNL': 'fecha_inicio',
-   'FECHA FINAL REAL TNL': 'fecha_fin',
-   'Dias Amortiz': 'dias',
-   'Es prorroga': 'prorroga',
-   'Valor IBC': 'salario',
+   'cod_incapacidad': 'cod_incapacidad',
+   'dias': 'dias',
+   'fecha_inicio': 'm_fecha_inicio',
+   'fecha_fin': 'm_fecha_fin',
+   'fecha_recepcion': 'fecha_recepcion',
+   'genera_pago': 'genera_pago',
+   'observaciones': 'observaciones',
+   'prorroga': 'prorroga',
+   'dias': 'dias',
+   'serie': 'serie',
 }
 
 FECHAS_DIST_MAPPER = {
-   'Valor Cia. 3 Dias': 'empresa_dias',
-   'Valor TNL': 'entidad_dias',
-   'Fecha Inicial': 'fecha_inicial',
-   'Fecha Final': 'fecha_final',
+   'fecha_inicial': 'fd_fecha_inicial',
+   'fecha_final': 'fd_fecha_final',
+   'calendario': 'calendario',
+   'empresa_dias': 'empresa_dias',
+   'empresa_valor': 'empresa_valor',
+   'entidad_dias': 'entidad_dias',
+   'entidad_valor': 'entidad_valor',
+   'salario': 'salario',
 }
 
 # Create your views here.
@@ -210,13 +223,29 @@ def cargar_incapacidades(request):
    msg = ''
    if request.method == 'POST':
       file = request.FILES['file']
+      errors = []
       try:
          df = pd.read_excel(file)
          docto_empleado_ant = 0
+         serie_ant = 0
          nuevo_empleado = {}
+         nuevo_movimiento = {}
+
+         df[MAPPER['estado_incapacidad_codigo']] = df[MAPPER['estado_incapacidad_codigo']].fillna(1)
+         df[MOVIMIENTO_MAPPER['serie']] = df[MOVIMIENTO_MAPPER['serie']].fillna(False)
+         df[MOVIMIENTO_MAPPER['dias']] = df[MOVIMIENTO_MAPPER['dias']].fillna(0)
+         df[MOVIMIENTO_MAPPER['cod_incapacidad']] = df[MOVIMIENTO_MAPPER['dias']].fillna(None)
+         df[MOVIMIENTO_MAPPER['genera_pago']] = df[MOVIMIENTO_MAPPER['genera_pago']].fillna(False)
+         df[FECHAS_DIST_MAPPER['empresa_dias']] = df[FECHAS_DIST_MAPPER['empresa_dias']].fillna(0)
+         df[FECHAS_DIST_MAPPER['empresa_valor']] = df[FECHAS_DIST_MAPPER['empresa_valor']].fillna(0)
+         df[FECHAS_DIST_MAPPER['entidad_dias']] = df[FECHAS_DIST_MAPPER['entidad_dias']].fillna(0)
+         df[FECHAS_DIST_MAPPER['entidad_valor']] = df[FECHAS_DIST_MAPPER['entidad_valor']].fillna(0)
+         df[MOVIMIENTO_MAPPER['observaciones']] = df[MOVIMIENTO_MAPPER['observaciones']].fillna('')
+         df[MAPPER['diagnostico_codigo']] = df[MAPPER['diagnostico_codigo']].fillna(9999)
 
          for index, row in df.iterrows():
-            docto_empleado = row[EMPLEADO_MAPPER['docto_empleado']]
+            docto_empleado = str(row[EMPLEADO_MAPPER['docto_empleado']]).strip()
+            serie = row[MOVIMIENTO_MAPPER['serie']] if pd.notna(row[MOVIMIENTO_MAPPER['serie']]) else generate_series_with_date()
 
             for db_field, excel_field in EMPLEADO_MAPPER.items():
                value = row[excel_field] 
@@ -224,34 +253,119 @@ def cargar_incapacidades(request):
                if isinstance(value, str):
                   value = value.strip()
 
+               if db_field == 'nombre':
+                  value = value.lower()
+
                if db_field == 'fecha_nacimiento' or db_field == 'fecha_ingreso':
-                  value = value.split(' ')[0]
+                  value = pd.to_datetime(value.split(' ')[0]).date()
+
+               if db_field == 'arl_nit':
+                  value = str(value)
 
                nuevo_empleado[db_field] = value
 
-            eps_codigo = row['EPS'].strip()
-            afp_codigo = row['AFP'].strip()
+            for db_field, excel_field in MOVIMIENTO_MAPPER.items():
+               value = row[excel_field]
 
-            eps = Eps.objects.get(codigo=eps_codigo)
+               if isinstance(value, str):
+                  value = value.strip()
+
+               if db_field == 'dias':
+                  value = int(value)
+
+               if db_field == 'prorroga':
+                  value = True if value == 'Si' else False
+
+               if db_field == 'serie' or db_field == 'dias':
+                  value = str(int(value))
+
+               if db_field == 'fecha_inicio' or \
+                  db_field == 'fecha_fin' or \
+                  db_field == 'fecha_recepcion':
+                  value = pd.to_datetime(value).date() if pd.notna(value) else None
+
+               if db_field == 'observaciones':
+                  value = value.lower() if pd.notna(value) else None
+
+               nuevo_movimiento[db_field] = value
+
+            afp_codigo = str(row[MAPPER['afp_codigo']]).strip()
+            clase_incapacidad_nombre = str(row[MAPPER['clase_incapacidad_nombre']]).strip()
+            centro_costos_codigo = row[MAPPER['centro_costos_codigo']] 
+            concepto_codigo = str(row[MAPPER['concepto_codigo']]).zfill(3)
+            eps_codigo = row[MAPPER['eps_codigo']].strip()
+            diagnostico_codigo = row[MAPPER['diagnostico_codigo']]
+            estado_incapacidad_codigo = int(row[MAPPER['estado_incapacidad_codigo']])
+
             afp = Afp.objects.get(codigo=afp_codigo)
+            clase_incapacidad = ClaseIncapacidad.objects.get(nombre=clase_incapacidad_nombre)
+            centro_costo = CentroCosto.objects.get(codigo=centro_costos_codigo)
+            concepto = Concepto.objects.get(codigo=concepto_codigo)
+            diagnostico = Diagnostico.objects.get(codigo=diagnostico_codigo)
+            estado_incapacidad = EstadoIncapacidad.objects.get(codigo=estado_incapacidad_codigo)
+            eps = Eps.objects.get(codigo=eps_codigo)
 
-            nuevo_empleado['eps'] = eps
             nuevo_empleado['afp'] = afp
+            nuevo_empleado['eps'] = eps
+
+            nuevo_movimiento['afp'] = afp
+            nuevo_movimiento['eps'] = eps
+            nuevo_movimiento['concepto'] = concepto
+            nuevo_movimiento['diagnostico'] = diagnostico
+            nuevo_movimiento['incapacidad'] = clase_incapacidad
+            nuevo_movimiento['estado_incapacidad'] = estado_incapacidad
+            nuevo_movimiento['centro_costo'] = centro_costo
 
             if nuevo_empleado['docto_empleado'] != docto_empleado_ant:
                try:
                   # Verificar si el empleado existe
+                  docto_empleado = nuevo_empleado['docto_empleado']
+                  nuevo_empleado['genero'] = GenderField.MALE if nuevo_empleado['genero'] == 0 else GenderField.FEMALE
+                  nuevo_empleado['estado'] = StatusField.ACTIVE if nuevo_empleado['estado'] == 0 else StatusField.INACTIVE
+                  del nuevo_empleado['docto_empleado']
+
                   empleado, created = Empleado.objects.get_or_create(
                      docto_empleado=docto_empleado,
-                     defaults=nuevo_empleado,
+                     defaults=nuevo_empleado
                   )
+
+                  serie = nuevo_movimiento['serie'] if int(nuevo_movimiento['serie']) != 0 else generate_series_with_date()
+                  del nuevo_movimiento['serie']
+
+                  nuevo_movimiento['empleado'] = empleado
+                  nuevo_movimiento['valor_cia'] = row[FECHAS_DIST_MAPPER['empresa_valor']]
+                  nuevo_movimiento['cuenta_cobrar'] = row[FECHAS_DIST_MAPPER['entidad_valor']]
+
+                  movimiento, created = Movimiento.objects.get_or_create(
+                     serie=serie,
+                     defaults=nuevo_movimiento,
+                  )
+
+                  nueva_fecha_distribucion = {
+                     'movimiento': movimiento,
+                     'fecha_inicial': row[FECHAS_DIST_MAPPER['fecha_inicial']],
+                     'fecha_final': row[FECHAS_DIST_MAPPER['fecha_final']],
+                     'empresa_dias': row[FECHAS_DIST_MAPPER['empresa_dias']],
+                     'empresa_valor': row[FECHAS_DIST_MAPPER['empresa_valor']],
+                     'entidad_dias': row[FECHAS_DIST_MAPPER['entidad_dias']],
+                     'entidad_valor': row[FECHAS_DIST_MAPPER['entidad_valor']],
+                  }
+
+                  fecha_distribucion = FechaDistribucion.objects.create(**nueva_fecha_distribucion) 
 
                except Empleado.DoesNotExist:
                   msg = f"Empleado con documento {docto_empleado} no existe y no pudo ser creado."
                   messages.error(request, msg)
-               except Exception as e:
-                  msg = f"Error al procesar la fila {index + 1}: {e}"
+               except Movimiento.DoesNotExist:
+                  msg = f"Movimiento con la serie {docto_empleado} no existe y no pudo ser creado."
                   messages.error(request, msg)
+               except Exception as e:
+                  error_msg = f"Error al procesar la fila {index + 1}: {str(e)}"
+                  logger.error(error_msg)
+                  errors.append(error_msg)
+                  # messages.error(request, msg)
+            # 
+            # messages.success(request, "Datos cargados exitosamente.")
 
          return redirect('/')
 
@@ -479,4 +593,3 @@ def editar_movimiento(request, movimiento_id):
    }
 
    return render(request, 'movimiento-editar.html', context)
-
