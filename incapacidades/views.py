@@ -299,7 +299,7 @@ def cargar_incapacidades(request):
 
             afp_codigo = str(row[MAPPER['afp_codigo']]).strip()
             clase_incapacidad_nombre = str(row[MAPPER['clase_incapacidad_nombre']]).strip()
-            centro_costos_codigo = row[MAPPER['centro_costos_codigo']] 
+            centro_costos_codigo = str(row[MAPPER['centro_costos_codigo']]).zfill(6)
             concepto_codigo = str(row[MAPPER['concepto_codigo']]).zfill(3)
             eps_codigo = row[MAPPER['eps_codigo']].strip()
             diagnostico_codigo = row[MAPPER['diagnostico_codigo']]
