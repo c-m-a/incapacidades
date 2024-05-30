@@ -47,7 +47,6 @@ MOVIMIENTO_MAPPER = {
    'genera_pago': 'genera_pago',
    'observaciones': 'observaciones',
    'prorroga': 'prorroga',
-   'dias': 'dias',
    'serie': 'serie',
 }
 
