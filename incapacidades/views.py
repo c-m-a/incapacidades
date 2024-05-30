@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import logging
 import pandas as pd
+import re
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, FechaDistribucion, Movimiento, GenderField, StatusField
@@ -227,25 +228,28 @@ def cargar_incapacidades(request):
       try:
          df = pd.read_excel(file)
          docto_empleado_ant = 0
-         serie_ant = 0
          nuevo_empleado = {}
          nuevo_movimiento = {}
 
-         df[MAPPER['estado_incapacidad_codigo']] = df[MAPPER['estado_incapacidad_codigo']].fillna(1)
-         df[MOVIMIENTO_MAPPER['serie']] = df[MOVIMIENTO_MAPPER['serie']].fillna(False)
-         df[MOVIMIENTO_MAPPER['dias']] = df[MOVIMIENTO_MAPPER['dias']].fillna(0)
-         df[MOVIMIENTO_MAPPER['cod_incapacidad']] = df[MOVIMIENTO_MAPPER['dias']].fillna(None)
-         df[MOVIMIENTO_MAPPER['genera_pago']] = df[MOVIMIENTO_MAPPER['genera_pago']].fillna(False)
-         df[FECHAS_DIST_MAPPER['empresa_dias']] = df[FECHAS_DIST_MAPPER['empresa_dias']].fillna(0)
-         df[FECHAS_DIST_MAPPER['empresa_valor']] = df[FECHAS_DIST_MAPPER['empresa_valor']].fillna(0)
-         df[FECHAS_DIST_MAPPER['entidad_dias']] = df[FECHAS_DIST_MAPPER['entidad_dias']].fillna(0)
-         df[FECHAS_DIST_MAPPER['entidad_valor']] = df[FECHAS_DIST_MAPPER['entidad_valor']].fillna(0)
-         df[MOVIMIENTO_MAPPER['observaciones']] = df[MOVIMIENTO_MAPPER['observaciones']].fillna('')
-         df[MAPPER['diagnostico_codigo']] = df[MAPPER['diagnostico_codigo']].fillna(9999)
+         df = df.fillna({
+            MAPPER['estado_incapacidad_codigo']: 1,
+            MAPPER['diagnostico_codigo']: 9999,
+            MOVIMIENTO_MAPPER['serie']: -1,
+            MOVIMIENTO_MAPPER['dias']: 0,
+            MOVIMIENTO_MAPPER['cod_incapacidad']: -1,
+            MOVIMIENTO_MAPPER['genera_pago']: False,
+            MOVIMIENTO_MAPPER['observaciones']: '',
+            FECHAS_DIST_MAPPER['empresa_dias']: 0,
+            FECHAS_DIST_MAPPER['empresa_valor']: 0,
+            FECHAS_DIST_MAPPER['entidad_dias']: 0,
+            FECHAS_DIST_MAPPER['entidad_valor']: 0,
+         })
+
+         # Inferring objects to avoid future warning
+         df = df.infer_objects(copy=False)
 
          for index, row in df.iterrows():
             docto_empleado = str(row[EMPLEADO_MAPPER['docto_empleado']]).strip()
-            serie = row[MOVIMIENTO_MAPPER['serie']] if pd.notna(row[MOVIMIENTO_MAPPER['serie']]) else generate_series_with_date()
 
             for db_field, excel_field in EMPLEADO_MAPPER.items():
                value = row[excel_field] 
@@ -254,7 +258,8 @@ def cargar_incapacidades(request):
                   value = value.strip()
 
                if db_field == 'nombre':
-                  value = value.lower()
+                  value = value.title()
+                  value = re.sub(r'\s+', ' ', value)
 
                if db_field == 'fecha_nacimiento' or db_field == 'fecha_ingreso':
                   value = pd.to_datetime(value.split(' ')[0]).date()
@@ -276,7 +281,10 @@ def cargar_incapacidades(request):
                if db_field == 'prorroga':
                   value = True if value == 'Si' else False
 
-               if db_field == 'serie' or db_field == 'dias':
+               if db_field == 'dias':
+                  value = str(int(value))
+
+               if db_field == 'serie':
                   value = str(int(value))
 
                if db_field == 'fecha_inicio' or \
@@ -329,7 +337,11 @@ def cargar_incapacidades(request):
                      defaults=nuevo_empleado
                   )
 
-                  serie = nuevo_movimiento['serie'] if int(nuevo_movimiento['serie']) != 0 else generate_series_with_date()
+                  serie = int(nuevo_movimiento['serie'])
+                  print('serie', serie)
+                  serie = serie if serie > 0 else generate_series_with_date()
+                  print('serie after if', serie)
+
                   del nuevo_movimiento['serie']
 
                   nuevo_movimiento['empleado'] = empleado
