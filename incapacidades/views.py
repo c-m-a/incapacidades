@@ -281,10 +281,10 @@ def cargar_incapacidades(request):
                   value = int(value)
 
                if db_field == 'prorroga':
-                  value = True if value.lower() == 'si' else False
+                  value = True if value == 'si' else False
 
                if db_field == 'genera_pago':
-                  value = True if value.lower() == 'si' else False
+                  value = True if value == 'si' else False
 
                if db_field == 'serie':
                   value = str(int(value))
