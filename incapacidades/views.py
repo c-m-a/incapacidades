@@ -3,8 +3,11 @@ import json
 import logging
 import pandas as pd
 import re
+
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils import timezone
+
 from .models import Afp, CentroCosto, ClaseIncapacidad, Concepto, Diagnostico, Empleado, Eps, EstadoIncapacidad, FechaDistribucion, Movimiento, GenderField, StatusField
 from .utils import generate_series_with_date
 
@@ -50,6 +53,13 @@ MOVIMIENTO_MAPPER = {
    'serie': 'serie',
    'valor_cia': 'm_valor_cia',
    'cuenta_cobrar': 'm_cuenta_cobrar',
+}
+
+MOVIMIENTO_MAPPER_UPDATE = {
+   'cod_incapacidad': 'cod_incapacidad',
+   'docto_empleado': 'docto_empleado',
+   'fecha_pago': 'fecha_pago',
+   'pagado_entidad': 'valor_pago',
 }
 
 FECHAS_DIST_MAPPER = {
@@ -216,10 +226,6 @@ def buscar_personas(request):
       empleados = []
 
    return render(request, 'search-results.html', {'empleados': empleados})
-
-
-def cargar_pagos(request):
-   return render(request, 'cargar-pagos.html')
 
 
 def cargar_incapacidades(request):
@@ -605,3 +611,55 @@ def editar_movimiento(request, movimiento_id):
    }
 
    return render(request, 'movimiento-editar.html', context)
+
+
+def cargar_pagos(request):
+   if request.method == 'POST':
+      file = request.FILES['file']
+      df = pd.read_excel(file)
+      # Initialize a list to track records that are not found
+      no_encontrados = []
+
+      # Iterate through each row in the DataFrame
+      for index, row in df.iterrows():
+         cod_incapacidad = row[MOVIMIENTO_MAPPER_UPDATE['cod_incapacidad']]
+         docto_empleado = row[MOVIMIENTO_MAPPER_UPDATE['docto_empleado']]
+         fecha_pago = pd.to_datetime(row[MOVIMIENTO_MAPPER_UPDATE['fecha_pago']]).date()
+         pagado_entidad = row[MOVIMIENTO_MAPPER_UPDATE['pagado_entidad']]
+
+         # Try to find the Movimiento record
+         try:
+            movimiento = Movimiento.objects.get(
+               empleado__docto_empleado=docto_empleado,
+               cod_incapacidad=cod_incapacidad,
+            )
+
+            # Only update if fecha_pago is null
+            if movimiento.fecha_pago is None:
+               movimiento.fecha_pago = fecha_pago
+               movimiento.fecha_estado = timezone.now()
+               movimiento.pagado_entidad = pagado_entidad
+               movimiento.pendiente_entidad = movimiento.cuenta_cobrar - pagado_entidad
+
+               # Save the updated record
+               movimiento.save()
+
+         except Movimiento.DoesNotExist:
+            # If not found, add to the not_found list
+            no_encontrados.append({
+               'fila': index + 1,
+               'docto_empleado': docto_empleado,
+               'cod_incapacidad': cod_incapacidad
+            })
+
+      # Display the records that were not found
+      if no_encontrados:
+         print("The following records were not found:")
+         for record in no_encontrados:
+            print(f"docto_empleado: {record['docto_empleado']}, cod_incapacidad: {record['cod_incapacidad']}")
+      else:
+         print("All records were processed successfully.")
+         return redirect('/')
+
+   return render(request, 'cargar-pagos.html')
+
