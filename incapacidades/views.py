@@ -355,6 +355,7 @@ def cargar_incapacidades(request):
 
                   nueva_fecha_distribucion = {
                      'movimiento': movimiento,
+                     'salario': row[FECHAS_DIST_MAPPER['salario']],
                      'fecha_inicial': row[FECHAS_DIST_MAPPER['fecha_inicial']],
                      'fecha_final': row[FECHAS_DIST_MAPPER['fecha_final']],
                      'empresa_dias': row[FECHAS_DIST_MAPPER['empresa_dias']],
