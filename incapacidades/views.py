@@ -40,7 +40,7 @@ EMPLEADO_MAPPER = {
 
 MOVIMIENTO_MAPPER = {
    'cod_incapacidad': 'cod_incapacidad',
-   'dias': 'dias',
+   'dias': 'm_dias',
    'fecha_inicio': 'm_fecha_inicio',
    'fecha_fin': 'm_fecha_fin',
    'fecha_recepcion': 'fecha_recepcion',
@@ -60,6 +60,7 @@ FECHAS_DIST_MAPPER = {
    'entidad_dias': 'entidad_dias',
    'entidad_valor': 'entidad_valor',
    'salario': 'salario',
+   'total_dias': 'fd_total_dias',
 }
 
 # Create your views here.
@@ -351,6 +352,7 @@ def cargar_incapacidades(request):
                   nueva_fecha_distribucion = {
                      'movimiento': movimiento,
                      'salario': row[FECHAS_DIST_MAPPER['salario']],
+                     'total_dias': int(row[FECHAS_DIST_MAPPER['total_dias']]),
                      'fecha_inicial': row[FECHAS_DIST_MAPPER['fecha_inicial']],
                      'fecha_final': row[FECHAS_DIST_MAPPER['fecha_final']],
                      'empresa_dias': row[FECHAS_DIST_MAPPER['empresa_dias']],
