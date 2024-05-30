@@ -281,9 +281,6 @@ def cargar_incapacidades(request):
                if db_field == 'prorroga':
                   value = True if value == 'Si' else False
 
-               if db_field == 'dias':
-                  value = str(int(value))
-
                if db_field == 'serie':
                   value = str(int(value))
 
@@ -338,9 +335,7 @@ def cargar_incapacidades(request):
                   )
 
                   serie = int(nuevo_movimiento['serie'])
-                  print('serie', serie)
                   serie = serie if serie > 0 else generate_series_with_date()
-                  print('serie after if', serie)
 
                   del nuevo_movimiento['serie']
 
