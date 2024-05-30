@@ -127,7 +127,7 @@ class EstadoIncapacidadAdmin(admin.ModelAdmin):
     list_display = ('id', 'codigo', 'nombre')
     list_display_links = ('id',)
     list_editable = ('codigo', 'nombre',)
-    search_fields = ['nombre']
+    search_fields = ['codigo', 'nombre']
 
 
 class FechaDistribucionAdmin(admin.ModelAdmin):
