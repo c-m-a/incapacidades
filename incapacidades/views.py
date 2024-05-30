@@ -48,6 +48,8 @@ MOVIMIENTO_MAPPER = {
    'observaciones': 'observaciones',
    'prorroga': 'prorroga',
    'serie': 'serie',
+   'valor_cia': 'm_valor_cia',
+   'cuenta_cobrar': 'm_cuenta_cobrar',
 }
 
 FECHAS_DIST_MAPPER = {
@@ -340,8 +342,6 @@ def cargar_incapacidades(request):
                   del nuevo_movimiento['serie']
 
                   nuevo_movimiento['empleado'] = empleado
-                  nuevo_movimiento['valor_cia'] = row[FECHAS_DIST_MAPPER['empresa_valor']]
-                  nuevo_movimiento['cuenta_cobrar'] = row[FECHAS_DIST_MAPPER['entidad_valor']]
 
                   movimiento, created = Movimiento.objects.get_or_create(
                      serie=serie,
