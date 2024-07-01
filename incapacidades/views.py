@@ -20,6 +20,7 @@ ARL_NIT = '890903790'
 ARL_NOMBRE = 'Compania Suramericana de Riesgos Profesionales'
 
 MAPPER = {
+   # campo bd : campo excel
    'afp_codigo': 'afp',
    'centro_costos_codigo': 'ccostos',
    'clase_incapacidad_nombre': 'incapacidad_nombre',
@@ -31,6 +32,7 @@ MAPPER = {
 }
 
 EMPLEADO_MAPPER = {
+   # campo bd : campo excel
    'docto_empleado': 'documento',
    'genero': 'genero',
    'fecha_nacimiento': 'fecha_nacimiento',
@@ -42,20 +44,22 @@ EMPLEADO_MAPPER = {
 }
 
 MOVIMIENTO_MAPPER = {
+   # campo bd : campo excel
    'cod_incapacidad': 'cod_incapacidad',
    'dias': 'm_dias',
    'fecha_inicio': 'm_fecha_inicio',
    'fecha_fin': 'm_fecha_fin',
-   'fecha_recepcion': 'fecha_recepcion',
-   'genera_pago': 'genera_pago',
-   'observaciones': 'observaciones',
-   'prorroga': 'prorroga',
-   'serie': 'serie',
+   'fecha_recepcion': 'm_fecha_recepcion',
+   'genera_pago': 'm_genera_pago',
+   'observaciones': 'm_observaciones',
+   'prorroga': 'm_prorroga',
+   'serie': 'm_serie',
    'valor_cia': 'm_valor_cia',
    'cuenta_cobrar': 'm_cuenta_cobrar',
 }
 
 MOVIMIENTO_MAPPER_UPDATE = {
+   # campo bd : campo excel
    'cod_incapacidad': 'cod_incapacidad',
    'docto_empleado': 'docto_empleado',
    'fecha_pago': 'fecha_pago',
@@ -63,14 +67,15 @@ MOVIMIENTO_MAPPER_UPDATE = {
 }
 
 FECHAS_DIST_MAPPER = {
+   # campo bd : campo excel
    'fecha_inicial': 'fd_fecha_inicial',
    'fecha_final': 'fd_fecha_final',
-   'calendario': 'calendario',
-   'empresa_dias': 'empresa_dias',
-   'empresa_valor': 'empresa_valor',
-   'entidad_dias': 'entidad_dias',
-   'entidad_valor': 'entidad_valor',
-   'salario': 'salario',
+   'calendario': 'fd_calendario',
+   'empresa_dias': 'fd_empresa_dias',
+   'empresa_valor': 'fd_valor_cia',
+   'entidad_dias': 'fd_entidad_dias',
+   'entidad_valor': 'fd_cuenta_cobrar',
+   'salario': 'fd_salario',
    'total_dias': 'fd_total_dias',
 }
 
@@ -270,7 +275,7 @@ def cargar_incapacidades(request):
                   value = re.sub(r'\s+', ' ', value)
 
                if db_field == 'fecha_nacimiento' or db_field == 'fecha_ingreso':
-                  value = pd.to_datetime(value.split(' ')[0]).date()
+                  value = pd.to_datetime(value).date()
 
                if db_field == 'arl_nit':
                   value = str(value)
