@@ -292,7 +292,7 @@ def cargar_incapacidades(request):
                   value = int(value)
 
                if db_field == 'prorroga':
-                  value = True if value == 'si' else False
+                  value = True if value.lower() == 'si' else False
 
                if db_field == 'genera_pago':
                   value = True if value == 'si' else False
@@ -304,6 +304,9 @@ def cargar_incapacidades(request):
                   db_field == 'fecha_fin' or \
                   db_field == 'fecha_recepcion':
                   value = pd.to_datetime(value).date() if pd.notna(value) else None
+
+               if db_field == 'cod_incapacidad':
+                  value = int(value)
 
                if db_field == 'observaciones':
                   value = value.lower() if pd.notna(value) else None
@@ -364,6 +367,7 @@ def cargar_incapacidades(request):
 
                   nueva_fecha_distribucion = {
                      'movimiento': movimiento,
+                     'calendario': row[FECHAS_DIST_MAPPER['calendario']],
                      'salario': row[FECHAS_DIST_MAPPER['salario']],
                      'total_dias': int(row[FECHAS_DIST_MAPPER['total_dias']]),
                      'fecha_inicial': row[FECHAS_DIST_MAPPER['fecha_inicial']],
@@ -544,7 +548,6 @@ def editar_movimiento(request, movimiento_id):
          genera_pago = True if request.POST.get('genera_pago') else False
 
          # Actualizar datos del movimiento
-         movimiento.calendario = request.POST.get('calendario')
          movimiento.centro_costo = centro_costo
          movimiento.cod_incapacidad = request.POST.get('cod_incapacidad')
          movimiento.cuenta_cobrar = request.POST.get('cuenta_cobrar')
