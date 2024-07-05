@@ -495,6 +495,8 @@ def editar_movimiento(request, movimiento_id):
       movimiento = get_object_or_404(Movimiento, id=movimiento_id)
 
       afp_id = request.POST.get('afp_id')
+      cpto_472 = request.POST.get('cpto_472')
+      cpto_472 = None if cpto_472.strip('') == '' else cpto_472
       eps_id = request.POST.get('eps_id')
       docto_empleado = request.POST.get('docto_empleado')
       docto_empleado_ant = request.POST.get('docto_empleado_ant')
@@ -553,7 +555,7 @@ def editar_movimiento(request, movimiento_id):
          movimiento.cuenta_cobrar = request.POST.get('cuenta_cobrar')
          movimiento.concepto = concepto
          movimiento.clase_incapacidad = clase_incapacidad
-         movimiento.cpto_472 = request.POST.get('cpto_472')
+         movimiento.cpto_472 = cpto_472
          movimiento.diagnostico = diagnostico
          movimiento.estado_incapacidad = estado_incapacidad
          movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
