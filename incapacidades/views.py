@@ -501,6 +501,8 @@ def editar_movimiento(request, movimiento_id):
       docto_empleado = request.POST.get('docto_empleado')
       docto_empleado_ant = request.POST.get('docto_empleado_ant')
       docto_cambiado = docto_empleado != docto_empleado_ant
+      fecha_pago = request.POST.get('fecha_pago')
+      fecha_pago = None if fecha_pago.strip('') == '' else fecha_pago
       serie = request.POST.get('serie')
       serie_ant = request.POST.get('serie_ant')
       serie_cambiada = serie != serie_ant
@@ -559,7 +561,7 @@ def editar_movimiento(request, movimiento_id):
          movimiento.diagnostico = diagnostico
          movimiento.estado_incapacidad = estado_incapacidad
          movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
-         movimiento.fecha_pago = request.POST.get('fecha_pago')
+         movimiento.fecha_pago = fecha_pago 
          movimiento.genera_pago = genera_pago
          movimiento.llevada_gasto = request.POST.get('llevada_gasto')
          movimiento.mayor_valor = request.POST.get('mayor_valor')
