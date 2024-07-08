@@ -318,10 +318,11 @@
     },
 
     calcularValoresFinales() {
-      const entidadCuentaXCobrar = this.entidadCuentaXCobrar;
+      const entidadCuentaXCobrar = +this.entidadCuentaXCobrar;
       const pendienteEntidad = entidadCuentaXCobrar - this.pagadoEntidad;
-      const llevadaGasto = this.pagadoEntidad === 0 ? 0 :
-        this.pagadoEntidad - (this.entidadCuentaXCobrar + this.pagadoEntidad);
+
+      const llevadaGasto = +this.pagadoEntidad === 0 ? 0 :
+        +this.pagadoEntidad - (+this.entidadCuentaXCobrar + +this.pagadoEntidad);
 
       const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
 
