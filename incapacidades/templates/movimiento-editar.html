@@ -513,7 +513,7 @@
         <input
           id="pagado-entidad"
           name="pagado_entidad"
-          value="{% if movimiento.pagado_entidad == None %}0{% else %}{{ movimiento.pagado_entidad }}{% endif %}"
+          value="{% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad }}{% endif %}"
           type="text"
           x-model="pagadoEntidad"
           @input="calcularValoresFinales"
@@ -530,10 +530,8 @@
         <input
           id="llevada-gasto"
           name="llevada_gasto"
-          value="{% if movimiento.llevada_gasto == None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %}"
+          value="{% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %}"
           type="text"
-          x-model="pagadoEntidad"
-          @input="calcularValoresFinales"
           aria-required="true"
           title="Digita el valor pagado por la entidad..."
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
