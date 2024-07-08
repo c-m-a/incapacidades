@@ -625,6 +625,144 @@ def editar_movimiento(request, movimiento_id):
    return render(request, 'movimiento-editar.html', context)
 
 
+def crear_incapacidad_empleado(request, id):
+   afps = Afp.objects.all().order_by('nombre')
+   epss = Eps.objects.all().order_by('nombre')
+   ccostos = CentroCosto.objects.all().order_by('nombre')
+   conceptos = Concepto.objects.all().order_by('codigo')
+   diagnosticos = Diagnostico.objects.all().order_by('codigo')
+   incapacidades = ClaseIncapacidad.objects.all().order_by('nombre')
+   estados_incapacidades = EstadoIncapacidad.objects.all().order_by('nombre')
+   empleado = get_object_or_404(Empleado, pk=id)
+
+   if request.method == 'POST':
+      afp_id = request.POST.get('afp_id')
+      cpto_472 = request.POST.get('cpto_472')
+      cpto_472 = None if cpto_472.strip('') == '' else cpto_472
+      eps_id = request.POST.get('eps_id')
+      docto_empleado = request.POST.get('docto_empleado')
+      docto_empleado_ant = request.POST.get('docto_empleado_ant')
+      docto_cambiado = docto_empleado != docto_empleado_ant
+      fecha_pago = request.POST.get('fecha_pago')
+      fecha_pago = None if fecha_pago.strip('') == '' else fecha_pago
+      serie = request.POST.get('serie')
+      movimiento_centro_costos_id = request.POST.get('movimiento_centro_costos_id')
+      concepto_id = request.POST.get('concepto_id')
+      diagnostico_id = request.POST.get('diagnostico_id')
+      clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
+      estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
+      fechas_distribucion = request.POST.get('fechas_distribucion')
+      fechas_distribucion = json.loads(fechas_distribucion)
+
+      registros_duplicados = False
+      existe_empleado = False
+      existe_movimiento = False
+
+      if docto_cambiado:
+         existe_empleado = Empleado.objects.filter(docto_empleado=docto_empleado).exists()
+
+      existe_movimiento = Movimiento.objects.filter(serie=serie).exists()
+
+      error_empleado = 'Número de documento duplicado' if existe_empleado else None
+      error_movimiento = 'Número de serie duplicado' if existe_movimiento else None
+      registros_duplicados = existe_empleado or existe_movimiento
+
+      if registros_duplicados:
+         return render(request, 'incapacidad-crear.html', {
+            'error_empleado': error_empleado,
+            'error_movimiento': error_movimiento,
+            'afps': afps,
+            'ccostos': ccostos,
+            'conceptos': conceptos,
+            'diagnosticos': diagnosticos,
+            'epss': epss,
+            'incapacidades': incapacidades,
+            'estados_incapacidades': estados_incapacidades,
+         })
+      else:
+         afp = Afp.objects.get(pk=afp_id)
+         centro_costo = CentroCosto.objects.get(pk=movimiento_centro_costos_id)
+         concepto = Concepto.objects.get(pk=concepto_id)
+         diagnostico = Diagnostico.objects.get(pk=diagnostico_id)
+         eps = Eps.objects.get(pk=eps_id)
+         clase_incapacidad = ClaseIncapacidad.objects.get(pk=clase_incapacidad_id)
+         estado_incapacidad = EstadoIncapacidad.objects.get(pk=estado_incapacidad_id)
+         prorroga = True if request.POST.get('prorroga') else False
+         genera_pago = True if request.POST.get('genera_pago') else False
+
+         # Actualizar datos del movimiento
+         movimiento.centro_costo = centro_costo
+         movimiento.cod_incapacidad = request.POST.get('cod_incapacidad')
+         movimiento.cuenta_cobrar = request.POST.get('cuenta_cobrar')
+         movimiento.concepto = concepto
+         movimiento.clase_incapacidad = clase_incapacidad
+         movimiento.cpto_472 = cpto_472
+         movimiento.diagnostico = diagnostico
+         movimiento.estado_incapacidad = estado_incapacidad
+         movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
+         movimiento.fecha_pago = fecha_pago
+         movimiento.genera_pago = genera_pago
+         movimiento.llevada_gasto = request.POST.get('llevada_gasto')
+         movimiento.mayor_valor = request.POST.get('mayor_valor')
+         movimiento.observaciones = request.POST.get('observaciones')
+         movimiento.pagado_entidad = request.POST.get('pagado_entidad')
+         movimiento.pendiente_entidad = request.POST.get('pendiente_entidad')
+         movimiento.prorroga = prorroga
+         movimiento.serie = request.POST.get('serie')
+         movimiento.valor_cia = request.POST.get('valor_cia')
+
+         movimiento.save()
+
+         for distribucion in fechas_distribucion:
+            fecha = get_object_or_404(FechaDistribucion, id=distribucion['id'])
+            fecha.calendario = distribucion['calendario']
+            fecha.empresa_dias = distribucion['empresaDias']
+            fecha.empresa_valor = distribucion['empresaValor']
+            fecha.entidad_dias = distribucion['entidadDias']
+            fecha.entidad_valor = distribucion['entidadValor']
+            fecha.fecha_inicial = distribucion['fechaInicio']
+            fecha.fecha_final = distribucion['fechaFin']
+            fecha.movimiento = movimiento
+            fecha.salario = distribucion['salario']
+            fecha.total_dias = distribucion['totalDias']
+
+            fecha.save()
+
+         empleado = movimiento.empleado
+
+         empleado.afp = afp
+         empleado.docto_empleado = request.POST.get('docto_empleado')
+         empleado.estado = request.POST.get('estado')
+         empleado.eps = eps
+         empleado.fecha_ingreso = request.POST.get('fecha_ingreso')
+         empleado.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+         empleado.genero = request.POST.get('genero')
+         empleado.nombre = request.POST.get('nombre')
+         empleado.arl_nit = request.POST.get('arl_nit')
+         empleado.arl_nombre = request.POST.get('arl_nombre')
+
+         empleado.save()
+
+      return redirect('/')
+
+   # movimiento = get_object_or_404(
+   #    Movimiento.objects.select_related('empleado').prefetch_related('fechas_distribucion'),
+   # )
+
+   context = {
+      'afps': afps,
+      'epss': epss,
+      'ccostos': ccostos,
+      'conceptos': conceptos,
+      'diagnosticos': diagnosticos,
+      'incapacidades': incapacidades,
+      'estados_incapacidades': estados_incapacidades,
+      'empleado': empleado,
+   }
+
+   return render(request, 'incapacidad-crear.html', context)
+
+
 def cargar_pagos(request):
    if request.method == 'POST':
       file = request.FILES['file']
