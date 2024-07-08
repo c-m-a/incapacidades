@@ -11,6 +11,7 @@ urlpatterns = [
 
     # Empleados
     path('empleados/<int:id>/', views.empleado_detalles, name='empleado_detalles'),
+    path('empleados/<int:id>/movimientos/', views.crear_incapacidad_empleado, name='crear_incapacidad_empleado'),
     path('b/empleados/', views.buscar_personas, name='buscar_persona'),
     path('b/empleados/movimientos/', views.buscar_personas_movimientos, name='buscar_personas_movimientos'),
 
