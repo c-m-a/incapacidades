@@ -213,6 +213,7 @@
     numeroDias: {{ movimiento.dias }},
     prorroga: {% if movimiento.prorroga %}true{% else %}false{% endif %},
     pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad|unlocalize }}{% endif %},
+    llevadaGasto: {% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto|unlocalize }}{% endif %},
     pendienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad|unlocalize }}{% endif %},
     mayorValor: {% if movimiento.mayor_valor is None %}0{% else %}{{ movimiento.mayor_valor|unlocalize }}{% endif %},
     generaPago: {% if movimiento.genera_pago %}true{% else %}false{% endif %},
@@ -319,11 +320,14 @@
     calcularValoresFinales() {
       const entidadCuentaXCobrar = this.entidadCuentaXCobrar;
       const pendienteEntidad = entidadCuentaXCobrar - this.pagadoEntidad;
+      const llevadaGasto = this.pagadoEntidad === 0 ? 0 :
+        this.pagadoEntidad - (this.entidadCuentaXCobrar + this.pagadoEntidad);
 
       const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
 
-      this.pendienteEntidad = pendienteEntidad;
-      this.mayorValor = mayorValor;
+      this.pendienteEntidad = parseFloat(pendienteEntidad).toFixed(2);
+      this.mayorValor = parseFloat(mayorValor).toFixed(2);
+      this.llevadaGasto = parseFloat(llevadaGasto).toFixed(2);
     },
   }"
   x-init="calcularTotalesXPagar()">
@@ -532,10 +536,11 @@
           name="llevada_gasto"
           value="{% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %}"
           type="text"
+          x-model="llevadaGasto"
           aria-required="true"
           title="Digita el valor pagado por la entidad..."
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          required
+          disabled
         >
       </div>
       <div class="flex-1">
