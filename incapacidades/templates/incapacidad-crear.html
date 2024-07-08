@@ -167,7 +167,7 @@
       >
         <option disabled>Selecciona un fondo de pensiones...</option>
         {% for afp in afps %}
-          <option value="{{ afp.id }}" {% if movimiento.empleado.afp.id == afp.id %}selected{% endif %}>{{ afp.nombre }}</option>
+          <option value="{{ afp.id }}" {% if empleado.afp.id == afp.id %}selected{% endif %}>{{ afp.nombre }}</option>
         {% endfor %}
       </select>
     </div>
