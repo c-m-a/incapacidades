@@ -19,13 +19,12 @@
         for="docto-empleado"
         class="block mb-2 text-sm font-medium text-red-700 dark:text-red-500">Numero de documento</label>
       <input
+        class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
         type="text"
         id="docto-empleado"
         name="docto_empleado"
         value="{{ movimiento.empleado.docto_empleado }}"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
+        required
       />
       <input
         type="hidden"
@@ -42,13 +41,11 @@
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero
         documento</label>
       <input
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         type="text"
         id="docto-empleado"
         name="docto_empleado"
         value="{{ movimiento.empleado.docto_empleado }}"
-        aria-required="true"
-        title="Escribe el no. de documento..."
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
       <input
@@ -63,21 +60,19 @@
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
         completo</label>
       <input
+        class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         type="text"
         name="nombre"
         value="{{ movimiento.empleado.nombre }}"
-        aria-required="true"
-        title="Escribe el nombre completo..."
-        class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
     </div>
     <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Genero</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="genero"
         name="genero"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option disabled>Selecciona un genero...</option>
@@ -93,13 +88,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha nacimiento</label>
       <div class="relative max-w-md">
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           type="date"
           id="fecha-nacimiento"
           name="fecha_nacimiento"
           value="{{ movimiento.empleado.fecha_nacimiento|date:'Y-m-d' }}"
-          aria-required="true"
-          title="Por favor, completa la fecha de nacimiento..."
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Selecciona una fecha de inicio..."
           required
         />
@@ -111,13 +104,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha ingreso</label>
       <div class="relative max-w-md">
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           type="date"
           id="fecha-ingreso"
           name="fecha_ingreso"
           value="{{ movimiento.empleado.fecha_ingreso|date:'Y-m-d' }}"
-          aria-required="true"
-          title="Por favor, completa este campo"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Selecciona una fecha de ingreso..."
           required
         />
@@ -126,10 +117,10 @@
     <div class="flex-1">
       <label for="estado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="estado"
         name="estado"
         value="{{ estado }}"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option {% if movimiento.empleado.estado > 1 %}selected={% endif %} disabled>Selecciona un estado...</option>
@@ -144,9 +135,9 @@
         for="eps"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">EPS</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="eps"
         name="eps_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option disabled>Selecciona una EPS...</option>
@@ -160,9 +151,9 @@
         for="afp"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fondo de Pension</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="afp"
         name="afp_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option disabled>Selecciona un fondo de pensiones...</option>
@@ -189,13 +180,11 @@
         for="arl-nombre"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre ARL</label>
       <input
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         type="text"
         id="arl-nombre"
         name="arl_nombre"
         value="Compania Suramericana de Riesgos Profesionales"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         readonly
       />
     </div>
@@ -340,13 +329,11 @@
         for="serie"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
       <input
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="serie"
         name="serie"
         value="{{ movimiento.serie }}"
         type="text"
-        aria-required="true"
-        title="Por favor, completa este campo"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
       <input
@@ -362,13 +349,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de recepcion</label>
       <div class="relative max-w-md">
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="fecha-recepcion"
           name="fecha_recepcion"
           value="{{ movimiento.fecha_recepcion|date:'Y-m-d' }}"
           type="date"
-          aria-required="true"
-          title="Por favor, completa este campo"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Selecciona una fecha de recepcion..."
           required
         >
@@ -409,13 +394,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero incapacidad</label>
       <div class="relative">
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="cod-incapacidad"
           name="cod_incapacidad"
           type="text"
-          value={{ movimiento.cod_incapacidad }}
-          aria-required="true"
-          title="Por favor, completa este campo"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          value="{{ movimiento.cod_incapacidad }}"
           placeholder="Digita el numero de la incapacidad..."
           required
         />
@@ -426,9 +409,9 @@
         for="estado-incapacidad"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado de Incapacidad</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="estado-incapacidad"
         name="estado_incapacidad_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option disabled>Selecciona un estado de incapacidad...</option>
@@ -444,9 +427,9 @@
         for="concepto-id"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Concepto</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="concepto-id"
  e      name="concepto_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option disabled>Selecciona el concepto...</option>
@@ -501,14 +484,13 @@
           for="cpto-472"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cpto 472</label>
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="cpto-472"
           name="cpto_472"
           value="{{ movimiento.cpto_472 | unlocalize }}"
           type="number"
           step="0.1"
-          aria-required="true"
-          title="Escribe el valor aqui..."
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          required
         >
       </div>
       <div class="flex-1">
@@ -516,15 +498,13 @@
           for="pagado-entidad"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor Pagado</label>
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="pagado-entidad"
           name="pagado_entidad"
           value="{% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad }}{% endif %}"
           type="text"
           x-model="pagadoEntidad"
           @input="calcularValoresFinales"
-          aria-required="true"
-          title="Digita el valor pagado por la entidad..."
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           required
         >
       </div>
@@ -533,14 +513,12 @@
           for="llevada-gasto"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Llevada al Gasto</label>
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="llevada-gasto"
           name="llevada_gasto"
           value="{% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %}"
           type="text"
           x-model="llevadaGasto"
-          aria-required="true"
-          title="Digita el valor pagado por la entidad..."
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           disabled
         >
       </div>
@@ -550,14 +528,13 @@
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de Pago</label>
         <div class="relative max-w-md">
           <input
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             id="fecha-pago"
             name="fecha_pago"
             type="date"
             value="{{ movimiento.fecha_pago|date:'Y-m-d' }}"
-            aria-required="true"
-            title="Por favor, completa este campo"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Selecciona una fecha de inicio..."
+            required
           />
         </div>
       </div>
@@ -571,14 +548,13 @@
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
         <div class="relative max-w-md">
           <input
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             id="fecha-inicio"
             value="{{ movimiento.fecha_inicial }}"
             type="date"
-            aria-required="true"
             title="Por favor, completa este campo"
             x-model="fechaInicial"
             @change="updateResultDate"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Selecciona una fecha de inicio..."
             disabled
           />
@@ -594,16 +570,14 @@
           for="dias"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numero de dias</label>
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="dias"
           name="dias"
           value="{{ movimiento.dias }}"
           type="number"
-          aria-required="true"
-          title="Por favor, completa este campo"
           x-model="numeroDias"
           @input="updateResultDate"
           min="1"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           disabled
         />
       </div>
@@ -643,6 +617,11 @@
       </div>
     </div>
     <div class="mb-5 relative overflow-x-auto shadow-md sm:rounded-lg">
+      <input
+        type="hidden"
+        name="fechas_distribucion"
+        x-effect="$el.value = JSON.stringify(formatFechasDistribucion())"
+      />
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -659,11 +638,6 @@
               </tr>
           </thead>
           <tbody>
-            <input
-              type="hidden"
-              name="fechas_distribucion"
-              x-effect="$el.value = JSON.stringify(formatFechasDistribucion())"
-            />
             <template x-for="(seg, idx) in fechasDistribucion">
             <tr :key="idx" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" x-text="idx+1"></th>
