@@ -210,15 +210,15 @@
     fechaInicialFmt: '{{ movimiento.fecha_inicio|date:'Y-m-d' }}',
     fechaFinal: '{{ movimiento.fecha_fin|date:'d/m/Y' }}',
     fechaFinalFmt: '{{ movimiento.fecha_fin|date:'Y-m-d' }}',
-    numeroDias: {{ movimiento.dias }},
+    numeroDias: {% if movimiento.dias %}{{ movimiento.dias }}{% else %}0{% endif %},
     prorroga: {% if movimiento.prorroga %}true{% else %}false{% endif %},
     pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad|unlocalize }}{% endif %},
     llevadaGasto: {% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto|unlocalize }}{% endif %},
     pendienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad|unlocalize }}{% endif %},
     mayorValor: {% if movimiento.mayor_valor is None %}0{% else %}{{ movimiento.mayor_valor|unlocalize }}{% endif %},
     generaPago: {% if movimiento.genera_pago %}true{% else %}false{% endif %},
-    empresaTotalPagado: {{ movimiento.valor_cia|unlocalize }},
-    entidadCuentaXCobrar: {{ movimiento.cuenta_cobrar|unlocalize }},
+    empresaTotalPagado: {% if movimiento.valor_cia %}{{ movimiento.valor_cia|unlocalize }}{% else %}0{% endif %},
+    entidadCuentaXCobrar: {% if movimiento.cuenta_cobrar %}{{ movimiento.cuenta_cobrar|unlocalize }}{% else %}0{% endif %},
     fechasDistribucion: [
       {% for fecha in movimiento.fechas_distribucion.all %}
       {
