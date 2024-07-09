@@ -690,45 +690,50 @@ def crear_incapacidad_empleado(request, id):
          prorroga = True if request.POST.get('prorroga') else False
          genera_pago = True if request.POST.get('genera_pago') else False
 
-         # Actualizar datos del movimiento
-         movimiento.centro_costo = centro_costo
-         movimiento.cod_incapacidad = request.POST.get('cod_incapacidad')
-         movimiento.cuenta_cobrar = request.POST.get('cuenta_cobrar')
-         movimiento.concepto = concepto
-         movimiento.clase_incapacidad = clase_incapacidad
-         movimiento.cpto_472 = cpto_472
-         movimiento.diagnostico = diagnostico
-         movimiento.estado_incapacidad = estado_incapacidad
-         movimiento.fecha_recepcion = request.POST.get('fecha_recepcion')
-         movimiento.fecha_pago = fecha_pago
-         movimiento.genera_pago = genera_pago
-         movimiento.llevada_gasto = request.POST.get('llevada_gasto')
-         movimiento.mayor_valor = request.POST.get('mayor_valor')
-         movimiento.observaciones = request.POST.get('observaciones')
-         movimiento.pagado_entidad = request.POST.get('pagado_entidad')
-         movimiento.pendiente_entidad = request.POST.get('pendiente_entidad')
-         movimiento.prorroga = prorroga
-         movimiento.serie = request.POST.get('serie')
-         movimiento.valor_cia = request.POST.get('valor_cia')
+         movimiento = {
+            'afp': afp,
+            'centro_costo': centro_costo,
+            'cod_incapacidad': request.POST.get('cod_incapacidad'),
+            'concepto': concepto,
+            'cpto_472': cpto_472,
+            'cuenta_cobrar': request.POST.get('cuenta_cobrar'),
+            'diagnostico': diagnostico,
+            'empleado': empleado,
+            'eps': eps,
+            'estado_incapacidad': estado_incapacidad,
+            'fecha_recepcion': request.POST.get('fecha_recepcion'),
+            'fecha_pago': fecha_pago,
+            'genera_pago': genera_pago,
+            'incapacidad': clase_incapacidad,
+            'llevada_gasto': request.POST.get('llevada_gasto'),
+            'mayor_valor': request.POST.get('mayor_valor'),
+            'observaciones': request.POST.get('observaciones'),
+            'pagado_entidad': request.POST.get('pagado_entidad'),
+            'pendiente_entidad': request.POST.get('pendiente_entidad'),
+            'prorroga': prorroga,
+            'serie': request.POST.get('serie'),
+            'valor_cia': request.POST.get('valor_cia'),
+         }
 
-         movimiento.save()
+         nuevo_movimiento = Movimiento.objects.create(**movimiento)
+
 
          for distribucion in fechas_distribucion:
-            fecha = get_object_or_404(FechaDistribucion, id=distribucion['id'])
-            fecha.calendario = distribucion['calendario']
-            fecha.empresa_dias = distribucion['empresaDias']
-            fecha.empresa_valor = distribucion['empresaValor']
-            fecha.entidad_dias = distribucion['entidadDias']
-            fecha.entidad_valor = distribucion['entidadValor']
-            fecha.fecha_inicial = distribucion['fechaInicio']
-            fecha.fecha_final = distribucion['fechaFin']
-            fecha.movimiento = movimiento
-            fecha.salario = distribucion['salario']
-            fecha.total_dias = distribucion['totalDias']
+            fecha = {
+               'calendario': distribucion['calendario'],
+               'empresa_dias': distribucion['empresaDias'],
+               'empresa_valor': distribucion['empresaValor'],
+               'entidad_dias': distribucion['entidadDias'],
+               'entidad_valor': distribucion['entidadValor'],
+               'fecha_inicial': distribucion['fechaInicio'],
+               'fecha_final': distribucion['fechaFin'],
+               'movimiento': nuevo_movimiento,
+               'salario': distribucion['salario'],
+               'total_dias': distribucion['totalDias'],
+            }
+            FechaDistribucion.objects.create(**fecha)
 
-            fecha.save()
-
-         empleado = movimiento.empleado
+         empleado = nuevo_movimiento.empleado
 
          empleado.afp = afp
          empleado.docto_empleado = request.POST.get('docto_empleado')
