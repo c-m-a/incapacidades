@@ -554,7 +554,6 @@
             x-model="fechaInicial"
             @change="updateResultDate"
             placeholder="Selecciona una fecha de inicio..."
-            disabled
           />
           <input
             type="hidden"
@@ -576,7 +575,6 @@
           x-model="numeroDias"
           @input="updateResultDate"
           min="1"
-          disabled
         />
       </div>
       <div class="flex-1">
@@ -584,12 +582,12 @@
           for="fecha-fin"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Final</label>
         <input
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           id="fecha-fin"
           name="fecha_fin"
           value="{{ movimiento.fecha_final }}"
           type="text"
           x-model="fechaFinal"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           readonly
         />
         <input
@@ -600,13 +598,13 @@
       </div>
       <div class="flex flex-1 pt-10 justify-center">
         <input
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
           id="prorroga"
           name="prorroga"
           type="checkbox"
           x-model="prorroga"
           {% if movimiento.prorroga %}checked{% endif %}
           @change="asignarEmpresaDiasCero"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
         />
         <label
           for="prorroga"
@@ -650,24 +648,24 @@
               </td>
               <td class="px-6 py-4">
                 <input
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   x-model="seg.salario"
                   @input="calcularValoresXPagar(idx)"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
               </td>
               <td class="px-6 py-4 text-center" x-text="seg.totalDias"></td>
               <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
               <td class="px-6 py-4 text-right">
                 <input
-                  x-model="seg.empresaValor"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  x-model="seg.empresaValor"
                 />
               </td>
               <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>
               <td class="px-6 py-4 text-right">
                 <input
-                  x-model="seg.entidadValor"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  x-model="seg.entidadValor"
                 />
               </td>
             </tr>
@@ -743,8 +741,9 @@
     <hr class="divide-y divide-gray-100 mt-1 mb-4" />
     <div class="text-right">
       <button
+        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="submit"
-        class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar incapacidad</button>
+      >Guardar incapacidad</button>
     </div>
 </section>
 </form>
