@@ -320,7 +320,7 @@
       const pendienteEntidad = entidadCuentaXCobrar - this.pagadoEntidad;
 
       const llevadaGasto = +this.pagadoEntidad === 0 ? 0 :
-        +this.pagadoEntidad - (+this.entidadCuentaXCobrar + +this.pagadoEntidad);
+        +this.pagadoEntidad - (+this.entidadCuentaXCobrar + +this.mayorValor);
 
       const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
 
