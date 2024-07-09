@@ -187,7 +187,6 @@
         id="arl-nombre"
         name="arl_nombre"
         value="Compania Suramericana de Riesgos Profesionales"
-        title="Por favor, completa este campo"
         readonly
       />
     </div>
@@ -250,6 +249,8 @@
     },
 
     asignarEmpresaDiasCero() {
+      if (this.fechasDistribucion.length === 0) return 0;
+
       let index = 0;
       [ this.fechasDistribucion[index].empresaDias,
         this.fechasDistribucion[index].empresaValor,
@@ -257,12 +258,15 @@
         this.fechasDistribucion[index].entidadValor,
       ] = this.calcularPago(index);
 
-      index = 1;
-      [ this.fechasDistribucion[index].empresaDias,
-        this.fechasDistribucion[index].empresaValor,
-        this.fechasDistribucion[index].entidadDias,
-        this.fechasDistribucion[index].entidadValor,
-      ] = this.calcularPago(index);
+      if (this.fechasDistribucion.length > 1) {
+        index = 1;
+
+        [ this.fechasDistribucion[index].empresaDias,
+          this.fechasDistribucion[index].empresaValor,
+          this.fechasDistribucion[index].entidadDias,
+          this.fechasDistribucion[index].entidadValor,
+        ] = this.calcularPago(index);
+      }
     },
 
     calcularPago(index) {
@@ -276,9 +280,13 @@
       if (index === 1) {
         const totalDiasAntSeg = this.fechasDistribucion[0].totalDias;
         const empresaDiasAntSeg = this.fechasDistribucion[0].empresaDias;
-        if (totalDiasAntSeg <= empresaTotalDias)
+
+        if (totalDiasAntSeg <= empresaTotalDias) {
           empresaDias = empresaTotalDias - totalDiasAntSeg;
-        empresaDias = prorroga ? 0 : empresaDias;
+          empresaDias = prorroga ? 0 : empresaDias;
+        } else {
+          empresaDias = 0;
+        }
       }
 
       if (index > 1) empresaDias = 0;
@@ -303,8 +311,8 @@
           empresaTotalPagado += +f.empresaValor;
           entidadTotalCuentaXCobrar += +f.entidadValor;
         }
-        this.empresaTotalPagado = empresaTotalPagado;
-        this.entidadCuentaXCobrar = entidadTotalCuentaXCobrar;
+        this.empresaTotalPagado = +parseFloat(empresaTotalPagado).toFixed(2);
+        this.entidadCuentaXCobrar = +parseFloat(entidadTotalCuentaXCobrar).toFixed(2);
         this.calcularValoresFinales();
       });
     },
@@ -318,9 +326,9 @@
 
       const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
 
-      this.pendienteEntidad = parseFloat(pendienteEntidad).toFixed(2);
-      this.mayorValor = parseFloat(mayorValor).toFixed(2);
-      this.llevadaGasto = parseFloat(llevadaGasto).toFixed(2);
+      this.pendienteEntidad = +parseFloat(pendienteEntidad).toFixed(2);
+      this.mayorValor = +parseFloat(mayorValor).toFixed(2);
+      this.llevadaGasto = +parseFloat(llevadaGasto).toFixed(2);
     },
   }"
   x-init="calcularTotalesXPagar()">
@@ -337,7 +345,6 @@
         name="serie"
         value="{{ movimiento.serie }}"
         type="text"
-        title="Por favor, completa este campo"
         required
       >
       <input
@@ -403,7 +410,6 @@
           name="cod_incapacidad"
           type="text"
           value="{{ movimiento.cod_incapacidad }}"
-          required="true"
           placeholder="Digita el numero de la incapacidad..."
           required
         />
@@ -523,7 +529,6 @@
           value="{% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %}"
           type="text"
           x-model="llevadaGasto"
-          required="true"
           disabled
         >
       </div>
@@ -533,12 +538,11 @@
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de Pago</label>
         <div class="relative max-w-md">
           <input
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             id="fecha-pago"
             name="fecha_pago"
             type="date"
             value="{{ movimiento.fecha_pago|date:'Y-m-d' }}"
-            title="Por favor, completa este campo"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Selecciona una fecha de inicio..."
           />
         </div>
@@ -553,12 +557,12 @@
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha Inicial</label>
         <div class="relative max-w-md">
           <input
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             id="fecha-inicio"
             value="{{ movimiento.fecha_inicial }}"
             type="date"
             x-model="fechaInicial"
             @change="updateResultDate"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Selecciona una fecha de inicio..."
           />
           <input
@@ -664,8 +668,8 @@
               <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
               <td class="px-6 py-4 text-right">
                 <input
-                  x-model="seg.empresaValor"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  x-model="seg.empresaValor"
                 />
               </td>
               <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>

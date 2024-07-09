@@ -76,7 +76,7 @@
         required
       >
         <option disabled>Selecciona un genero...</option>
-        <option value="0" {% if movimiento.empleado.genero == 0 %}selected={% endif %}>Masculino</option>
+        <option value="0" {% if movimiento.empleado.genero == 0 %}selected{% endif %}>Masculino</option>
         <option value="1" {% if movimiento.empleado.genero == 1 %}selected{% endif %}>Femenino</option>
       </select>
     </div>
@@ -123,9 +123,9 @@
         value="{{ estado }}"
         required
       >
-        <option {% if movimiento.empleado.estado > 1 %}selected={% endif %} disabled>Selecciona un estado...</option>
-        <option value="0" {% if movimiento.empleado.estado == 0 %}selected={% endif %}>Activo</option>
-        <option value="1" {% if movimiento.empleado.estado == 1 %}selected={% endif %}>Retirado</option>
+        <option {% if movimiento.empleado.estado > 1 %}selected{% endif %} disabled>Selecciona un estado...</option>
+        <option value="0" {% if movimiento.empleado.estado == 0 %}selected{% endif %}>Activo</option>
+        <option value="1" {% if movimiento.empleado.estado == 1 %}selected{% endif %}>Retirado</option>
       </select>
     </div>
   </div>
@@ -247,6 +247,8 @@
     },
 
     asignarEmpresaDiasCero() {
+      if (this.fechasDistribucion.length === 0) return 0;
+
       let index = 0;
       [ this.fechasDistribucion[index].empresaDias,
         this.fechasDistribucion[index].empresaValor,
@@ -254,12 +256,15 @@
         this.fechasDistribucion[index].entidadValor,
       ] = this.calcularPago(index);
 
-      index = 1;
-      [ this.fechasDistribucion[index].empresaDias,
-        this.fechasDistribucion[index].empresaValor,
-        this.fechasDistribucion[index].entidadDias,
-        this.fechasDistribucion[index].entidadValor,
-      ] = this.calcularPago(index);
+      if (this.fechasDistribucion.length > 1) {
+        index = 1;
+
+        [ this.fechasDistribucion[index].empresaDias,
+          this.fechasDistribucion[index].empresaValor,
+          this.fechasDistribucion[index].entidadDias,
+          this.fechasDistribucion[index].entidadValor,
+        ] = this.calcularPago(index);
+      }
     },
 
     calcularPago(index) {
@@ -273,9 +278,13 @@
       if (index === 1) {
         const totalDiasAntSeg = this.fechasDistribucion[0].totalDias;
         const empresaDiasAntSeg = this.fechasDistribucion[0].empresaDias;
-        if (totalDiasAntSeg <= empresaTotalDias)
+
+        if (totalDiasAntSeg <= empresaTotalDias) {
           empresaDias = empresaTotalDias - totalDiasAntSeg;
-        empresaDias = prorroga ? 0 : empresaDias;
+          empresaDias = prorroga ? 0 : empresaDias;
+        } else {
+          empresaDias = 0;
+        }
       }
 
       if (index > 1) empresaDias = 0;
@@ -377,9 +386,9 @@
     <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clase de incapacidad</label>
       <select
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         id="incapacidad"
         name="clase_incapacidad_id"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       >
         <option disabled>Selecciona la clase de incapacidad...</option>
@@ -550,7 +559,6 @@
             id="fecha-inicio"
             value="{{ movimiento.fecha_inicial }}"
             type="date"
-            title="Por favor, completa este campo"
             x-model="fechaInicial"
             @change="updateResultDate"
             placeholder="Selecciona una fecha de inicio..."
@@ -575,6 +583,7 @@
           x-model="numeroDias"
           @input="updateResultDate"
           min="1"
+          required
         />
       </div>
       <div class="flex-1">
@@ -641,9 +650,9 @@
               <td class="px-6 py-4" x-text="seg.fechaFin"></td>
               <td class="px-6 py-4">
                 <input
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   x-model="seg.calendario"
                   @input="calcularValoresXPagar(idx)"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
               </td>
               <td class="px-6 py-4">
