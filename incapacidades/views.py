@@ -99,7 +99,7 @@ def agregar_movimiento(request):
    if request.method == 'POST':
       fechas_distribucion = request.POST.get('fechas_distribucion')
       fechas_distribucion = json.loads(fechas_distribucion)
-      afp_id = request.POST.get('afp')
+      afp_id = request.POST.get('afp_id')
       arl_nit = request.POST.get('arl_nit')
       arl_nombre = request.POST.get('arl_nombre')
       clase_incapacidad_id = request.POST.get('clase_incapacidad_id')
@@ -110,7 +110,7 @@ def agregar_movimiento(request):
       diagnostico_id = request.POST.get('diagnostico_id')
       dias = request.POST.get('dias')
       docto_empleado = request.POST.get('docto_empleado')
-      eps_id = request.POST.get('eps')
+      eps_id = request.POST.get('eps_id')
       estado = request.POST.get('estado')
       estado_incapacidad_id = request.POST.get('estado_incapacidad_id')
       genera_pago = True if request.POST.get('genera_pago') else False
