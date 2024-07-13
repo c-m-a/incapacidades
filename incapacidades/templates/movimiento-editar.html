@@ -267,6 +267,42 @@
       }
     },
 
+    handleKeydown(e) {
+      const allowedKey = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'];
+      const anyAllowedKey = allowedKey.indexOf(e.key) === -1;
+
+      if (!/[0-9]/.test(e.key) && anyAllowedKey) e.preventDefault();
+    },
+
+    recalcularValorEmpresa(e, index) {
+      const empresaDiasMax = 2;
+      let empresaDias = e.target.value === '' ? 0 : +e.target.value;
+      const totalDias = this.fechasDistribucion[index].totalDias;
+      const salario = this.fechasDistribucion[index].salario;
+
+      if (empresaDias <= 0) {
+        empresaDias = 0;
+      }
+
+      if (empresaDias > empresaDiasMax) {
+        empresaDias = empresaDiasMax;
+      }
+
+      const salarioDiario = salario / 30;
+      const entidadDias = totalDias - empresaDias;
+
+      let entidadValor = entidadDias * salarioDiario;
+      entidadValor = +entidadValor.toFixed(2);
+
+      let empresaValor = empresaDias * salarioDiario;
+      empresaValor = +empresaValor.toFixed(2);
+
+      this.fechasDistribucion[index].empresaValor = empresaValor;
+      this.fechasDistribucion[index].empresaDias = empresaDias;
+      this.fechasDistribucion[index].entidadDias = entidadDias;
+      this.fechasDistribucion[index].entidadValor = entidadValor;
+    },
+
     calcularPago(index) {
       const empresaTotalDias = 2;
       const prorroga = this.prorroga;
@@ -657,24 +693,46 @@
               </td>
               <td class="px-6 py-4">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.salario"
                   @input="calcularValoresXPagar(idx)"
+                  @keydown="handleKeydown($event)"
                 />
               </td>
               <td class="px-6 py-4 text-center" x-text="seg.totalDias"></td>
-              <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
-              <td class="px-6 py-4 text-right">
+              <template x-if="idx === 0">
+              <td class="px-6 py-4 text-center">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  x-model="seg.empresaValor"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                  type="text"
+                  min="0"
+                  x-model.number="seg.empresaDias"
+                  @input="recalcularValorEmpresa($event, idx)"
+                  @keydown="handleKeydown($event)"
                 />
               </td>
+              </template>
+              <template x-if="idx !== 0">
+                <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
+              </template>
+              <template x-if="seg.empresaDias !== 0">
+              <td class="px-6 py-4 text-right">
+                <input
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                  x-model="seg.empresaValor"
+                  @keydown="handleKeydown($event)"
+                />
+              </td>
+              </template>
+              <template x-if="seg.empresaDias === 0">
+                <td class="px-6 py-4 text-right" x-text="seg.empresaValor"></td>
+              </template>
               <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>
               <td class="px-6 py-4 text-right">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.entidadValor"
+                  @keydown="handleKeydown($event)"
                 />
               </td>
             </tr>
