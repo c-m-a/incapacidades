@@ -247,6 +247,8 @@
     },
 
     asignarEmpresaDiasCero() {
+      this.prorroga = !this.prorroga;
+
       if (this.fechasDistribucion.length === 0) return 0;
 
       let index = 0;
@@ -649,7 +651,7 @@
           type="checkbox"
           x-model="prorroga"
           {% if movimiento.prorroga %}checked{% endif %}
-          @change="asignarEmpresaDiasCero"
+          @click="asignarEmpresaDiasCero"
         />
         <label
           for="prorroga"
@@ -700,17 +702,20 @@
                 />
               </td>
               <td class="px-6 py-4 text-center" x-text="seg.totalDias"></td>
-              <template x-if="idx === 0">
-              <td class="px-6 py-4 text-center">
-                <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
-                  type="text"
-                  min="0"
-                  x-model.number="seg.empresaDias"
-                  @input="recalcularValorEmpresa($event, idx)"
-                  @keydown="handleKeydown($event)"
-                />
-              </td>
+              <template x-if="idx === 0 && !prorroga">
+                <td class="px-6 py-4 text-center">
+                  <input
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                    type="text"
+                    min="0"
+                    x-model.number="seg.empresaDias"
+                    @input="recalcularValorEmpresa($event, idx)"
+                    @keydown="handleKeydown($event)"
+                  />
+                </td>
+              </template>
+              <template x-if="idx === 0 && prorroga">
+                <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
               </template>
               <template x-if="idx !== 0">
                 <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
