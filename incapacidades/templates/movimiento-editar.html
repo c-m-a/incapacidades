@@ -13,28 +13,6 @@
   <h2 class="text-lg font-bold dark:text-white">Datos empleado</h2>
   <hr class="divide-y divide-gray-100 mb-4" />
   <div class="flex flex-wrap gap-4">
-    {%if error_empleado %}
-    <div class="flex-1">
-      <label
-        for="docto-empleado"
-        class="block mb-2 text-sm font-medium text-red-700 dark:text-red-500">Numero de documento</label>
-      <input
-        class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500"
-        type="text"
-        id="docto-empleado"
-        name="docto_empleado"
-        value="{{ movimiento.empleado.docto_empleado }}"
-        required
-      />
-      <input
-        type="hidden"
-        id="docto-empleado-ant"
-        name="docto_empleado_ant"
-        value="{{ movimiento.empleado.docto_empleado }}"
-      />
-      <span class="font-medium">Error!</span> {{ error_empleado }}
-    </div>
-    {% else %}
     <div class="flex-1">
       <label
           for="docto-empleado"
@@ -46,7 +24,7 @@
         id="docto-empleado"
         name="docto_empleado"
         value="{{ movimiento.empleado.docto_empleado }}"
-        required
+        readonly
       />
       <input
         type="hidden"
@@ -55,7 +33,6 @@
         value="{{ movimiento.empleado.docto_empleado }}"
       />
     </div>
-    {% endif %}
     <div class="flex-1">
       <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre
         completo</label>
@@ -377,16 +354,17 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
       <input
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        type="text"
         id="serie"
         name="serie"
         value="{{ movimiento.serie }}"
-        type="text"
+        maxlength="32"
         required
       >
       <input
         id="serie-ant"
-        type="hidden"
         name="serie_ant"
+        type="hidden"
         value="{{ movimiento.serie }}"
       />
     </div>
@@ -544,13 +522,14 @@
           for="pagado-entidad"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Valor Pagado</label>
         <input
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
           id="pagado-entidad"
           name="pagado_entidad"
           value="{% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad }}{% endif %}"
           type="text"
           x-model="pagadoEntidad"
           @input="calcularValoresFinales"
+          @keydown="handleKeydown"
           required
         >
       </div>
@@ -559,7 +538,7 @@
           for="llevada-gasto"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Llevada al Gasto</label>
         <input
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
           id="llevada-gasto"
           name="llevada_gasto"
           value="{% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto }}{% endif %}"
@@ -676,7 +655,7 @@
                   <th scope="col" class="px-6 py-3 text-center">Total Dias</th>
                   <th scope="col" class="px-6 py-3 text-center">Dias Empresa</th>
                   <th scope="col" class="px-6 py-3 text-center">Valor Empresa</th>
-                  <th scope="col" class="px-6 py-3 text-center">Dias Entidad</th>
+                  <th scope="col" class="px-3 py-3 text-center">Dias Entidad</th>
                   <th scope="col" class="px-6 py-3 text-center">Valor Entidad</th>
               </tr>
           </thead>
@@ -705,7 +684,7 @@
               <template x-if="idx === 0 && !prorroga">
                 <td class="px-6 py-4 text-center">
                   <input
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-10 p-2.5 mx-auto dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                     type="text"
                     min="0"
                     x-model.number="seg.empresaDias"
@@ -721,9 +700,9 @@
                 <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
               </template>
               <template x-if="seg.empresaDias !== 0">
-              <td class="px-6 py-4 text-right">
+              <td class="px-1 py-4 text-right">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 mx-auto dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.empresaValor"
                   @keydown="handleKeydown($event)"
                 />
@@ -733,7 +712,7 @@
                 <td class="px-6 py-4 text-right" x-text="seg.empresaValor"></td>
               </template>
               <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>
-              <td class="px-6 py-4 text-right">
+              <td class="px-3 py-4 text-right">
                 <input
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.entidadValor"
