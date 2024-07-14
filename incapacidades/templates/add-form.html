@@ -39,7 +39,7 @@
         type="text"
         id="docto-empleado"
         name="docto_empleado"
-        value="{{ docto_empleado}}"
+        value="{{ docto_empleado }}"
         required
       />
     </div>
@@ -64,8 +64,8 @@
         required
       >
         <option selected disabled>Selecciona un genero...</option>
-        <option value="0">Masculino</option>
-        <option value="1">Femenino</option>
+        <option value="0" {% if genero == 0 %}seleted{% endif %}>Masculino</option>
+        <option value="1" {% if genero == 1 %}seleted{% endif %}>Femenino</option>
       </select>
     </div>
   </div>
