@@ -697,7 +697,16 @@
                 <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
               </template>
               <template x-if="idx !== 0">
-                <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
+                <td class="px-6 py-4 text-center">
+                  <input
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-10 p-2.5 mx-auto dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                    type="text"
+                    min="0"
+                    x-model.number="seg.empresaDias"
+                    @input="recalcularValorEmpresa($event, idx)"
+                    @keydown="handleKeydown($event)"
+                  />
+                </td>
               </template>
               <template x-if="seg.empresaDias !== 0">
               <td class="px-1 py-4 text-right">
