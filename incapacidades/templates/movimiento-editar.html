@@ -179,12 +179,17 @@
     numeroDias: {% if movimiento.dias %}{{ movimiento.dias }}{% else %}0{% endif %},
     prorroga: {% if movimiento.prorroga %}true{% else %}false{% endif %},
     pagadoEntidad: {% if movimiento.pagado_entidad is None %}0{% else %}{{ movimiento.pagado_entidad|unlocalize }}{% endif %},
+    fmtPagadoEntidad: 0,
     llevadaGasto: {% if movimiento.llevada_gasto is None %}0{% else %}{{ movimiento.llevada_gasto|unlocalize }}{% endif %},
     pendienteEntidad: {% if movimiento.pendiente_entidad is None %}0{% else %}{{ movimiento.pendiente_entidad|unlocalize }}{% endif %},
+    fmtPendienteEntidad: 0,
     mayorValor: {% if movimiento.mayor_valor is None %}0{% else %}{{ movimiento.mayor_valor|unlocalize }}{% endif %},
+    fmtMayorValor: 0,
     generaPago: {% if movimiento.genera_pago %}true{% else %}false{% endif %},
     empresaTotalPagado: {% if movimiento.valor_cia %}{{ movimiento.valor_cia|unlocalize }}{% else %}0{% endif %},
+    fmtEmpresaTotalPagado: 0,
     entidadCuentaXCobrar: {% if movimiento.cuenta_cobrar %}{{ movimiento.cuenta_cobrar|unlocalize }}{% else %}0{% endif %},
+    fmtEntidadCuentaXCobrar: 0,
     fechasDistribucion: [
       {% for fecha in movimiento.fechas_distribucion.all %}
       {
@@ -213,6 +218,16 @@
         fechaInicio: this.formatDate(fecha.fechaInicio),
         fechaFin: this.formatDate(fecha.fechaFin)
       }));
+    },
+
+    fmtCurrency(value) {
+      const locale = 'es-CO';
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
     },
 
     calcularValoresXPagar(index) {
@@ -316,16 +331,26 @@
     },
 
     calcularTotalesXPagar() {
+      this.fmtEmpresaTotalPagado = this.fmtCurrency(this.empresaTotalPagado);
+      this.fmtEntidadCuentaXCobrar = this.fmtCurrency(this.entidadCuentaXCobrar);
+      this.fmtPagadoEntidad = this.fmtCurrency(this.pagadoEntidad);
+      this.fmtPendienteEntidad = this.fmtCurrency(this.pendienteEntidad);
+      this.fmtMayorValor = this.fmtCurrency(this.mayorValor);
+
       return this.$watch('fechasDistribucion', (newValue, oldValue) => {
         const fechas = JSON.parse(JSON.stringify(newValue, null, 2));
         let empresaTotalPagado = 0;
         let entidadTotalCuentaXCobrar = 0;
+
         for (const f of fechas) {
           empresaTotalPagado += +f.empresaValor;
           entidadTotalCuentaXCobrar += +f.entidadValor;
         }
+
         this.empresaTotalPagado = +parseFloat(empresaTotalPagado).toFixed(2);
+        this.fmtEmpresaTotalPagado = this.fmtCurrency(this.empresaTotalPagado);
         this.entidadCuentaXCobrar = +parseFloat(entidadTotalCuentaXCobrar).toFixed(2);
+        this.fmtEntidadCuentaXCobrar = this.fmtCurrency(this.entidadCuentaXCobrar);
         this.calcularValoresFinales();
       });
     },
@@ -339,8 +364,11 @@
 
       const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
 
+      this.fmtPagadoEntidad = this.fmtCurrency(this.pagadoEntidad);
       this.pendienteEntidad = +parseFloat(pendienteEntidad).toFixed(2);
+      this.fmtPendienteEntidad = this.fmtCurrency(this.pendienteEntidad);
       this.mayorValor = +parseFloat(mayorValor).toFixed(2);
+      this.fmtMayorValor = this.fmtCurrency(this.mayorValor);
       this.llevadaGasto = +parseFloat(llevadaGasto).toFixed(2);
     },
   }"
@@ -739,7 +767,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Valor Empresa</div>
           <div>
-            $<span x-text="empresaTotalPagado"></span>
+            <span x-text="fmtEmpresaTotalPagado"></span>
             <input
               type="hidden"
               name="valor_cia"
@@ -751,7 +779,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Cuenta x Cobrar Entidad</div>
           <div>
-            $<span x-text="entidadCuentaXCobrar"></span>
+            <span x-text="fmtEntidadCuentaXCobrar"></span>
             <input
               type="hidden"
               name="cuenta_cobrar"
@@ -763,7 +791,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Pagado x Entidad</div>
           <div>
-            $<span x-text="pagadoEntidad"></span>
+            <span x-text="fmtPagadoEntidad"></span>
             <input
               type="hidden"
               name="pagado_entidad"
@@ -775,7 +803,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Pendiente Entidad</div>
           <div>
-            $<span x-text="pendienteEntidad"></span>
+            <span x-text="fmtPendienteEntidad"></span>
             <input
               type="hidden"
               name="pendiente_entidad"
@@ -787,7 +815,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Mayor Valor</div>
           <div>
-            $<span x-text="mayorValor"></span>
+            <span x-text="fmtMayorValor"></span>
             <input
               type="hidden"
               name="mayor_valor"
