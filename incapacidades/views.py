@@ -133,6 +133,7 @@ def agregar_movimiento(request):
       error_movimiento = 'Número de serie duplicado' if existe_movimiento else None
       registros_duplicados = existe_empleado or existe_movimiento
 
+
       if registros_duplicados:
          return render(request, 'add-form.html', {
             'error_empleado': error_empleado,
@@ -144,6 +145,9 @@ def agregar_movimiento(request):
             'epss': epss,
             'incapacidades': incapacidades,
             'estados_incapacidades': estados_incapacidades,
+            'docto_empleado': docto_empleado,
+            'nombre': nombre,
+            'genero': genero,
          })
       else:
          afp = Afp.objects.get(pk=afp_id)
@@ -518,9 +522,6 @@ def editar_movimiento(request, movimiento_id):
       existe_empleado = False
       existe_movimiento = False
 
-      if docto_cambiado: 
-         existe_empleado = Empleado.objects.filter(docto_empleado=docto_empleado).exists()
-
       if serie_cambiada:
          existe_movimiento = Movimiento.objects.filter(serie=serie).exists()
 
@@ -539,6 +540,7 @@ def editar_movimiento(request, movimiento_id):
             'epss': epss,
             'incapacidades': incapacidades,
             'estados_incapacidades': estados_incapacidades,
+            'movimiento': movimiento,
          })
       else:
          afp = Afp.objects.get(pk=afp_id)
