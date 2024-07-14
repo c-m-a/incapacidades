@@ -3,7 +3,7 @@
 {% block content %}
 <h2 class="text-xl font-bold dark:text-white">Cargar pagos</h2>
 <hr class="divide-y divide-gray-100 mb-4" />
-<section class="max-w-lg mx-auto">
+<section class="max-w-lg mx-auto" x-data="{ fileName: '' }">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3">
@@ -16,12 +16,28 @@
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
             </svg>
-            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Haz click aqui para
-                subir
-                archivo Excel</span> o arrastralo a esta zona</p>
+            <template x-if="fileName === ''">
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="font-semibold">Haz click aqui para subir archivo Excel</span>
+               o arrastralo a esta zona
+            </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">XLS, XLSX (MAX. 1MByte)</p>
+            </template>
+            <template x-if="fileName !== ''">
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="font-semibold" x-text="fileName"></span>
+            </p>
+            </template>
           </div>
-          <input id="dropzone-file" class="hidden" name="file" type="file" accept=".xls,.xlsx" required />
+          <input
+            id="dropzone-file"
+            class="hidden"
+            name="file"
+            type="file"
+            accept=".xls,.xlsx"
+            @change="fileName = $event.target.files[0].name"
+            required
+          />
         </label>
       </div>
     </div>
