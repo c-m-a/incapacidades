@@ -5,6 +5,7 @@ import pandas as pd
 import re
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 
@@ -80,6 +81,7 @@ FECHAS_DIST_MAPPER = {
 }
 
 # Create your views here.
+@login_required
 def inicio(request):
    movimientos = Movimiento.objects.select_related('empleado').all()
    return render(request, 'home.html', {
@@ -87,6 +89,7 @@ def inicio(request):
    })
 
 
+@login_required
 def agregar_movimiento(request):
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
@@ -223,6 +226,7 @@ def agregar_movimiento(request):
    return render(request, 'add-form.html', context)
 
 
+@login_required
 def buscar_personas(request):
    query = request.GET.get('query')
    if query:
@@ -237,6 +241,7 @@ def buscar_personas(request):
    return render(request, 'search-results.html', {'empleados': empleados})
 
 
+@login_required
 def cargar_incapacidades(request):
    msg = ''
    if request.method == 'POST':
@@ -406,6 +411,8 @@ def cargar_incapacidades(request):
 
    return render(request, 'cargar-archivo.html', {'msg': msg})
 
+
+@login_required
 def empleado_detalles(request, id):
    # Obtener el empleado con el ID proporcionado
    afps = Afp.objects.all().order_by('nombre')
@@ -430,6 +437,7 @@ def empleado_detalles(request, id):
    return render(request, 'empleado-detalles.html', context)
 
 
+@login_required
 def buscar_personas_movimientos(request):
    query = request.GET.get('query')
    if query:
@@ -448,6 +456,7 @@ def buscar_personas_movimientos(request):
    return render(request, 'resultados-personas-movimientos.html', {'movimientos': movimientos})
 
 
+@login_required
 def buscar_conceptos(request):
    query = request.GET.get('query')
    if query:
@@ -472,6 +481,7 @@ def buscar_incapacidades(request):
    return render(request, 'resultados-conceptos.html', {'incapacidades': incapacidades})
 
 
+@login_required
 def buscar_diagnosticos(request):
    query = request.GET.get('query')
    if query:
@@ -486,6 +496,7 @@ def buscar_diagnosticos(request):
    return render(request, 'resultados-diagnosticos.html', {'diagnosticos': diagnosticos})
 
 
+@login_required
 def editar_movimiento(request, movimiento_id):
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
@@ -627,6 +638,7 @@ def editar_movimiento(request, movimiento_id):
    return render(request, 'movimiento-editar.html', context)
 
 
+@login_required
 def crear_incapacidad_empleado(request, id):
    afps = Afp.objects.all().order_by('nombre')
    epss = Eps.objects.all().order_by('nombre')
@@ -770,6 +782,7 @@ def crear_incapacidad_empleado(request, id):
    return render(request, 'incapacidad-crear.html', context)
 
 
+@login_required
 def cargar_pagos(request):
    if request.method == 'POST':
       file = request.FILES['file']
