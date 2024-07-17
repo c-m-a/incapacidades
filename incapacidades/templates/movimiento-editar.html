@@ -238,6 +238,31 @@
       this.fechasDistribucion[index].entidadValor = entidadValor;
     },
 
+    updateResultDate() {
+      const diaMicroSeg = 86_400_000;
+      const valorFechaInicial = new Date(this.fechaInicial);
+      const valorFechaInicialFmt = new Date(this.fechaInicial);
+      valorFechaInicialFmt.setTime(valorFechaInicial.getTime() + diaMicroSeg);
+      const valorNumeroDias = parseInt(this.numeroDias);
+      const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
+
+      const fechaInicialDay = String(valorFechaInicialFmt.getDate()).padStart(2, '0');
+      const fechaInicialMonth = String(valorFechaInicialFmt.getMonth() + 1).padStart(2, '0');
+      const fechaInicialYear = valorFechaInicialFmt.getFullYear();
+
+      const fechaFinalDay = String(valorFechaFinal.getDate()).padStart(2, '0');
+      const fechaFinalMonth = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
+      const fechaFinalYear = valorFechaFinal.getFullYear();
+
+      this.fechaInicialFmt = `${fechaInicialYear}-${fechaInicialMonth}-${fechaInicialDay}`;
+      this.fechaFinalFmt = `${fechaFinalYear}-${fechaFinalMonth}-${fechaFinalDay}`;
+      this.fechaFinal = `${fechaFinalDay}/${fechaFinalMonth}/${fechaFinalYear}`;
+
+      const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias, this.fechaDistribucion);
+      const fechasDistribucionOld = this.fechasDistribucion;
+      this.fechasDistribucion = distribucion;
+    },
+
     asignarEmpresaDiasCero() {
       this.prorroga = !this.prorroga;
 
@@ -845,7 +870,7 @@ function calcularValorIncapacidad() {
   const diasPagadoXEmpresa = 2;
 }
 
-function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
+function crearSegmentosQuincenales(fechaInicial, valorNumeroDias, fechasDistribucionPrev) {
   const diasXSegmento = 15;
   const microSegDia = 86_400_000;
   const segmentos = [];
@@ -872,8 +897,8 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
     }
 
     const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
-
-    segmentos.push({
+    
+    const fecha = {
       fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
       fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
       salario: 0,
@@ -882,36 +907,15 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
       empresaValor: 0,
       entidadDias: 0,
       entidadValor: 0,
-    });
+    };
+
+    segmentos.push(fecha);
 
     fechaActual = fechaFinalSegmento.getTime() + microSegDia;
   }
   return segmentos;
 }
 
-function updateResultDate() {
-  const diaMicroSeg = 86_400_000;
-  const valorFechaInicial = new Date(this.fechaInicial);
-  const valorFechaInicialFmt = new Date(this.fechaInicial);
-  valorFechaInicialFmt.setTime(valorFechaInicial.getTime() + diaMicroSeg);
-  const valorNumeroDias = parseInt(this.numeroDias);
-  const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
-
-  const fechaInicialDay = String(valorFechaInicialFmt.getDate()).padStart(2, '0');
-  const fechaInicialMonth = String(valorFechaInicialFmt.getMonth() + 1).padStart(2, '0');
-  const fechaInicialYear = valorFechaInicialFmt.getFullYear();
-
-  const fechaFinalDay = String(valorFechaFinal.getDate()).padStart(2, '0');
-  const fechaFinalMonth = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
-  const fechaFinalYear = valorFechaFinal.getFullYear();
-
-  this.fechaInicialFmt = `${fechaInicialYear}-${fechaInicialMonth}-${fechaInicialDay}`;
-  this.fechaFinalFmt = `${fechaFinalYear}-${fechaFinalMonth}-${fechaFinalDay}`;
-  this.fechaFinal = `${fechaFinalDay}/${fechaFinalMonth}/${fechaFinalYear}`;
-
-  const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias);
-  this.fechasDistribucion = distribucion;
-}
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
 {% endblock %}
