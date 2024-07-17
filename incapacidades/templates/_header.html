@@ -9,20 +9,20 @@
         id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
         data-dropdown-placement="bottom">
         <span class="sr-only">Open user menu</span>
-        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
-          alt="user photo">
+        <span class="w-8 h-8 border rounded-full bg-white font-semibold text-center py-1">
+          {% if request.user.email is not None %}{{ request.user.email.0 }}{% else %}No{% endif %}
+        </span>
       </button>
       <!-- Dropdown menu -->
       <div
         class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
         id="user-dropdown">
-        <div class="px-4 py-3">
-          <span class="block text-sm text-gray-900 dark:text-white">Usuario</span>
-          <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">usuario@ays.com.co</span>
+        <div class="px-4 py-3"> 
+          <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">{{ request.user.email }}</span>
         </div>
         <ul class="py-2" aria-labelledby="user-menu-button">
           <li>
-            <a href="#"
+            <a href="/logout"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Salir</a>
           </li>
         </ul>
