@@ -1,29 +1,48 @@
-<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<table
+  class="w-full text-sm text-left text-gray-500 dark:text-gray-400 rtl:text-right"
+>
+  <thead
+    class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400 dark:bg-gray-700"
+  >
     <tr>
-      <th scope="col" class="px-6 py-3">serie</th>
-      <th scope="col" class="px-6 py-3">cedula</th>
-      <th scope="col" class="px-6 py-3">persona</th>
-      <th scope="col" class="px-6 py-3">fecha inicial</th>
-      <th scope="col" class="px-6 py-3">dias otorgados</th>
-      <th scope="col" class="px-6 py-3">
+      <th scope="col" class="py-3 px-6">serie</th>
+      <th scope="col" class="py-3 px-6">cedula</th>
+      <th scope="col" class="py-3 px-6">persona</th>
+      <th scope="col" class="py-3 px-6">fecha inicial</th>
+      <th scope="col" class="py-3 px-6">dias otorgados</th>
+      <th scope="col" class="py-3 px-6">
         <span class="sr-only">Edit</span>
       </th>
     </tr>
   </thead>
   <tbody>
     {% for movimiento in movimientos %}
-    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+    <tr
+      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+    >
+      <th
+        scope="row"
+        class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      >
         {{ movimiento.serie }}
       </th>
-      <td class="px-6 py-4">{{ movimiento.empleado.docto_empleado }}</td>
-      <td class="px-6 py-4">{{ movimiento.empleado.nombre}}</td>
-      <td class="px-6 py-4">{{ movimiento.fecha_inicio}}</td>
-      <td class="px-6 py-4 text-center">{{ movimiento.dias}}</td>
-      <td class="px-6 py-4 text-right">
-        <a href="empleados/{{ movimiento.empleado.id }}"
-          class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consultar</a>
+      <td class="py-4 px-6">{{ movimiento.empleado.docto_empleado }}</td>
+      <td class="py-4 px-6">
+        <a
+          href="empleados/{{ movimiento.empleado.id }}"
+          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        >
+          {{ movimiento.empleado.nombre}}
+        </a>
+      </td>
+      <td class="py-4 px-6">{{ movimiento.fecha_inicio}}</td>
+      <td class="py-4 px-6 text-center">{{ movimiento.dias}}</td>
+      <td class="py-4 px-6 text-right">
+        <a
+          href="empleados/{{ movimiento.empleado.id }}"
+          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >Consultar</a
+        >
       </td>
     </tr>
     {% endfor %}
