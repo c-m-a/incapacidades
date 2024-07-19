@@ -192,12 +192,17 @@
     numeroDias: 1,
     prorroga: {% if prorroga %}true{% else %}false{% endif %},
     pagadoEntidad: 0,
+    fmtPagadoEntidad: 0,
     llevadaGasto: 0,
     pendienteEntidad: 0,
+    fmtPendienteEntidad: 0,
     mayorValor: 0,
+    fmtMayorValor: 0,
     generaPago: false,
     empresaTotalPagado: 0,
+    fmtEmpresaTotalPagado: 0,
     entidadCuentaXCobrar: 0,
+    fmtEntidadCuentaXCobrar: 0,
     fechasDistribucion: [],
 
     formatDate(date) {
@@ -213,6 +218,16 @@
       }));
     },
 
+    fmtCurrency(value) {
+      const locale = 'es-CO';
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    },
+
     calcularValoresXPagar(index) {
       const [empresaDias, empresaValor, entidadDias, entidadValor] = this.calcularPago(index);
       this.fechasDistribucion[index].empresaDias = empresaDias;
@@ -221,7 +236,34 @@
       this.fechasDistribucion[index].entidadValor = entidadValor;
     },
 
+    updateResultDate() {
+      const diaMicroSeg = 86_400_000;
+      const valorFechaInicial = new Date(this.fechaInicial);
+      const valorFechaInicialFmt = new Date(this.fechaInicial);
+      valorFechaInicialFmt.setTime(valorFechaInicial.getTime() + diaMicroSeg);
+      const valorNumeroDias = parseInt(this.numeroDias);
+      const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
+
+      const fechaInicialDay = String(valorFechaInicialFmt.getDate()).padStart(2, '0');
+      const fechaInicialMonth = String(valorFechaInicialFmt.getMonth() + 1).padStart(2, '0');
+      const fechaInicialYear = valorFechaInicialFmt.getFullYear();
+
+      const fechaFinalDay = String(valorFechaFinal.getDate()).padStart(2, '0');
+      const fechaFinalMonth = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
+      const fechaFinalYear = valorFechaFinal.getFullYear();
+
+      this.fechaInicialFmt = `${fechaInicialYear}-${fechaInicialMonth}-${fechaInicialDay}`;
+      this.fechaFinalFmt = `${fechaFinalYear}-${fechaFinalMonth}-${fechaFinalDay}`;
+      this.fechaFinal = `${fechaFinalDay}/${fechaFinalMonth}/${fechaFinalYear}`;
+
+      const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias, this.fechaDistribucion);
+      const fechasDistribucionOld = this.fechasDistribucion;
+      this.fechasDistribucion = distribucion;
+    },
+
     asignarEmpresaDiasCero() {
+      this.prorroga = !this.prorroga;
+
       if (this.fechasDistribucion.length === 0) return 0;
 
       let index = 0;
@@ -240,6 +282,42 @@
           this.fechasDistribucion[index].entidadValor,
         ] = this.calcularPago(index);
       }
+    },
+
+    handleKeydown(e) {
+      const allowedKey = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'];
+      const anyAllowedKey = allowedKey.indexOf(e.key) === -1;
+
+      if (!/[0-9]/.test(e.key) && anyAllowedKey) e.preventDefault();
+    },
+
+    recalcularValorEmpresa(e, index) {
+      const empresaDiasMax = 2;
+      let empresaDias = e.target.value === '' ? 0 : +e.target.value;
+      const totalDias = this.fechasDistribucion[index].totalDias;
+      const salario = this.fechasDistribucion[index].salario;
+
+      if (empresaDias <= 0) {
+        empresaDias = 0;
+      }
+
+      if (empresaDias > empresaDiasMax) {
+        empresaDias = empresaDiasMax;
+      }
+
+      const salarioDiario = salario / 30;
+      const entidadDias = totalDias - empresaDias;
+
+      let entidadValor = entidadDias * salarioDiario;
+      entidadValor = +entidadValor.toFixed(2);
+
+      let empresaValor = empresaDias * salarioDiario;
+      empresaValor = +empresaValor.toFixed(2);
+
+      this.fechasDistribucion[index].empresaValor = empresaValor;
+      this.fechasDistribucion[index].empresaDias = empresaDias;
+      this.fechasDistribucion[index].entidadDias = entidadDias;
+      this.fechasDistribucion[index].entidadValor = entidadValor;
     },
 
     calcularPago(index) {
@@ -276,16 +354,26 @@
     },
 
     calcularTotalesXPagar() {
+      this.fmtEmpresaTotalPagado = this.fmtCurrency(this.empresaTotalPagado);
+      this.fmtEntidadCuentaXCobrar = this.fmtCurrency(this.entidadCuentaXCobrar);
+      this.fmtPagadoEntidad = this.fmtCurrency(this.pagadoEntidad);
+      this.fmtPendienteEntidad = this.fmtCurrency(this.pendienteEntidad);
+      this.fmtMayorValor = this.fmtCurrency(this.mayorValor);
+
       return this.$watch('fechasDistribucion', (newValue, oldValue) => {
         const fechas = JSON.parse(JSON.stringify(newValue, null, 2));
         let empresaTotalPagado = 0;
         let entidadTotalCuentaXCobrar = 0;
+
         for (const f of fechas) {
           empresaTotalPagado += +f.empresaValor;
           entidadTotalCuentaXCobrar += +f.entidadValor;
         }
+
         this.empresaTotalPagado = +parseFloat(empresaTotalPagado).toFixed(2);
+        this.fmtEmpresaTotalPagado = this.fmtCurrency(this.empresaTotalPagado);
         this.entidadCuentaXCobrar = +parseFloat(entidadTotalCuentaXCobrar).toFixed(2);
+        this.fmtEntidadCuentaXCobrar = this.fmtCurrency(this.entidadCuentaXCobrar);
         this.calcularValoresFinales();
       });
     },
@@ -297,10 +385,13 @@
       const llevadaGasto = +this.pagadoEntidad === 0 ? 0 :
         +this.pagadoEntidad - (+this.entidadCuentaXCobrar + +this.mayorValor);
 
-      const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
+      const mayorValor = Math.abs(pendienteEntidad);
 
+      this.fmtPagadoEntidad = this.fmtCurrency(this.pagadoEntidad);
       this.pendienteEntidad = +parseFloat(pendienteEntidad).toFixed(2);
+      this.fmtPendienteEntidad = this.fmtCurrency(this.pendienteEntidad);
       this.mayorValor = +parseFloat(mayorValor).toFixed(2);
+      this.fmtMayorValor = this.fmtCurrency(this.mayorValor);
       this.llevadaGasto = +parseFloat(llevadaGasto).toFixed(2);
     },
   }"
@@ -314,10 +405,11 @@
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Serie</label>
       <input
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        type="text"
         id="serie"
         name="serie"
         value="{{ serie }}"
-        type="text"
+        maxlength="32"
         required
       >
     </div>
@@ -522,7 +614,7 @@
           type="checkbox"
           x-model="prorroga"
           {% if movimiento.prorroga %}checked{% endif %}
-          @change="asignarEmpresaDiasCero"
+          @click="asignarEmpresaDiasCero"
         />
         <label
           for="prorroga"
@@ -547,7 +639,7 @@
                   <th scope="col" class="px-6 py-3 text-center">Total Dias</th>
                   <th scope="col" class="px-6 py-3 text-center">Dias Empresa</th>
                   <th scope="col" class="px-6 py-3 text-center">Valor Empresa</th>
-                  <th scope="col" class="px-6 py-3 text-center">Dias Entidad</th>
+                  <th scope="col" class="px-3 py-3 text-center">Dias Entidad</th>
                   <th scope="col" class="px-6 py-3 text-center">Valor Entidad</th>
               </tr>
           </thead>
@@ -566,24 +658,58 @@
               </td>
               <td class="px-6 py-4">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.salario"
                   @input="calcularValoresXPagar(idx)"
+                  @keydown="handleKeydown($event)"
                 />
               </td>
               <td class="px-6 py-4 text-center" x-text="seg.totalDias"></td>
-              <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
-              <td class="px-6 py-4 text-right">
+              <template x-if="idx === 0 && !prorroga">
+                <td class="px-6 py-4 text-center">
+                  <input
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-10 p-2.5 mx-auto dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                    type="text"
+                    min="0"
+                    x-model.number="seg.empresaDias"
+                    @input="recalcularValorEmpresa($event, idx)"
+                    @keydown="handleKeydown($event)"
+                  />
+                </td>
+              </template>
+              <template x-if="idx === 0 && prorroga">
+                <td class="px-6 py-4 text-center" x-text="seg.empresaDias"></td>
+              </template>
+              <template x-if="idx !== 0">
+                <td class="px-6 py-4 text-center">
+                  <input
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-10 p-2.5 mx-auto dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
+                    type="text"
+                    min="0"
+                    x-model.number="seg.empresaDias"
+                    @input="recalcularValorEmpresa($event, idx)"
+                    @keydown="handleKeydown($event)"
+                  />
+                </td>
+              </template>
+              <template x-if="seg.empresaDias !== 0">
+              <td class="px-1 py-4 text-right">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 mx-auto dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.empresaValor"
+                  @keydown="handleKeydown($event)"
                 />
               </td>
+              </template>
+              <template x-if="seg.empresaDias === 0">
+                <td class="px-6 py-4 text-right" x-text="seg.empresaValor"></td>
+              </template>
               <td class="px-6 py-4 text-center" x-text="seg.entidadDias"></td>
-              <td class="px-6 py-4 text-right">
+              <td class="px-3 py-4 text-right">
                 <input
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-right"
                   x-model="seg.entidadValor"
+                  @keydown="handleKeydown($event)"
                 />
               </td>
             </tr>
@@ -597,7 +723,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Valor Empresa</div>
           <div>
-            $<span x-text="empresaTotalPagado"></span>
+            <span x-text="fmtEmpresaTotalPagado"></span>
             <input
               type="hidden"
               name="valor_cia"
@@ -609,7 +735,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Cuenta x Cobrar Entidad</div>
           <div>
-            $<span x-text="entidadCuentaXCobrar"></span>
+            <span x-text="fmtEntidadCuentaXCobrar"></span>
             <input
               type="hidden"
               name="cuenta_cobrar"
@@ -621,7 +747,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Pagado x Entidad</div>
           <div>
-            $<span x-text="pagadoEntidad"></span>
+            <span x-text="fmtPagadoEntidad"></span>
             <input
               type="hidden"
               name="pagado_entidad"
@@ -633,7 +759,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Total Pendiente Entidad</div>
           <div>
-            $<span x-text="pendienteEntidad"></span>
+            <span x-text="fmtPendienteEntidad"></span>
             <input
               type="hidden"
               name="pendiente_entidad"
@@ -645,7 +771,7 @@
         <div class="w-1/2 flex justify-between gap-4">
           <div>Mayor Valor</div>
           <div>
-            $<span x-text="mayorValor"></span>
+            <span x-text="fmtMayorValor"></span>
             <input
               type="hidden"
               name="mayor_valor"
@@ -675,7 +801,7 @@ function calcularValorIncapacidad() {
   const diasPagadoXEmpresa = 2;
 }
 
-function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
+function crearSegmentosQuincenales(fechaInicial, valorNumeroDias, fechasDistribucionPrev) {
   const diasXSegmento = 15;
   const microSegDia = 86_400_000;
   const segmentos = [];
@@ -702,8 +828,8 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
     }
 
     const numeroDias = Math.ceil((fechaFinalSegmento - fechaInicialSegmento) / (1000 * 60 * 60 * 24));
-
-    segmentos.push({
+    
+    const fecha = {
       fechaInicio: fechaInicialSegmento.toLocaleDateString('es-CO'),
       fechaFin: fechaFinalSegmento.toLocaleDateString('es-CO'),
       salario: 0,
@@ -712,36 +838,15 @@ function crearSegmentosQuincenales(fechaInicial, valorNumeroDias) {
       empresaValor: 0,
       entidadDias: 0,
       entidadValor: 0,
-    });
+    };
+
+    segmentos.push(fecha);
 
     fechaActual = fechaFinalSegmento.getTime() + microSegDia;
   }
   return segmentos;
 }
 
-function updateResultDate() {
-  const diaMicroSeg = 86_400_000;
-  const valorFechaInicial = new Date(this.fechaInicial);
-  const valorFechaInicialFmt = new Date(this.fechaInicial);
-  valorFechaInicialFmt.setTime(valorFechaInicial.getTime() + diaMicroSeg);
-  const valorNumeroDias = parseInt(this.numeroDias);
-  const valorFechaFinal = new Date(valorFechaInicial.getTime() + valorNumeroDias * 86400000); // 86400000 milisegundos en un día
-
-  const fechaInicialDay = String(valorFechaInicialFmt.getDate()).padStart(2, '0');
-  const fechaInicialMonth = String(valorFechaInicialFmt.getMonth() + 1).padStart(2, '0');
-  const fechaInicialYear = valorFechaInicialFmt.getFullYear();
-
-  const fechaFinalDay = String(valorFechaFinal.getDate()).padStart(2, '0');
-  const fechaFinalMonth = String(valorFechaFinal.getMonth() + 1).padStart(2, '0');
-  const fechaFinalYear = valorFechaFinal.getFullYear();
-
-  this.fechaInicialFmt = `${fechaInicialYear}-${fechaInicialMonth}-${fechaInicialDay}`;
-  this.fechaFinalFmt = `${fechaFinalYear}-${fechaFinalMonth}-${fechaFinalDay}`;
-  this.fechaFinal = `${fechaFinalDay}/${fechaFinalMonth}/${fechaFinalYear}`;
-
-  const distribucion = crearSegmentosQuincenales(valorFechaInicial, valorNumeroDias);
-  this.fechasDistribucion = distribucion;
-}
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
 {% endblock %}
