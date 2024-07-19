@@ -387,7 +387,7 @@
       const llevadaGasto = +this.pagadoEntidad === 0 ? 0 :
         +this.pagadoEntidad - (+this.entidadCuentaXCobrar + +this.mayorValor);
 
-      const mayorValor = pendienteEntidad < 0 ? Math.abs(pendienteEntidad) : 0;
+      const mayorValor = Math.abs(pendienteEntidad);
 
       this.fmtPagadoEntidad = this.fmtCurrency(this.pagadoEntidad);
       this.pendienteEntidad = +parseFloat(pendienteEntidad).toFixed(2);
